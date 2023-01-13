@@ -11,15 +11,33 @@ interface FullButtonProps extends ChakraProps {
   bottomText?: string;
   icon?: string;
   href?: string;
+  children?: React.ReactNode;
 }
-// FullButton is a React functional component(React.FC) that takes in FullButtonProps and returns a JSX.Element
-// React.FC gives us access to children so we can pass in children to the component without having to define them in the props
-const FullButton: React.FC<FullButtonProps> = (
-  props,
-  children
-): JSX.Element => {
-  // destructure the known props and spread the rest of the props to the Flex component
-  const { topText, bottomText, icon, href, ...rest } = props;
+
+// JSDoc for the component
+/**
+ * A full button component that takes in a top text, bottom text, icon, href, and children
+ * @param {FullButtonProps} props - The props for the component
+ * @param {string} [props.topText] - The top text for the button
+ * @param {string} [props.bottomText] - The bottom text for the button
+ * @param {string} [props.icon] - The icon for the button
+ * @param {string} [props.href] - The href for the button
+ * @param {React.ReactNode} [props.children] - The children for the button
+ * @returns {JSX.Element} - The full button component
+ * @example
+ * <FullButton
+ *  bgColor={'green.300'}
+ * height='50vh'
+ * topText='i'm above the icon'
+ * bottomText='i'm below the icon'
+ * icon='plant'
+ * href='/plants'
+ * >
+ * <Text>This is a child</Text>
+ * </FullButton>
+ */
+const FullButton: React.FC<FullButtonProps> = (props): JSX.Element => {
+  const { topText, bottomText, icon, href, children, ...rest } = props;
   return (
     <Link href={href || '#'}>
       <Flex
