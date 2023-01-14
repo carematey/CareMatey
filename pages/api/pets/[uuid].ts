@@ -12,11 +12,14 @@ type Data = {
 
 export default function petsHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Data | {error: string}>
 ) {
+  // simulate a slow response
+  setTimeout(() => {
    // switch case for different methods (GET, POST, PUT, DELETE)
    switch (req.method) {
     case 'GET':
+      // res.status(500).json({error: 'Error: Something went wrong'}) simulate an error
       res.status(200).json({
         sections: [
           {
@@ -38,7 +41,6 @@ export default function petsHandler(
               - My cat, [cat's name], is indoor cat and doesn't need to be walked. 
               - If you have any questions or concerns, don't hesitate to contact me.`
               }
-            
           ]})
       break
     case 'POST':
@@ -54,5 +56,6 @@ export default function petsHandler(
       res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE'])
       res.status(405).end(`Method ${req.method} Not Allowed`)
   }
+}, 2500)
   
 }
