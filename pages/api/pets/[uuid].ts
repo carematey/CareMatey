@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Section = {
+  id: number
   title: string
   content: string
 }
@@ -14,15 +15,16 @@ export default function petsHandler(
   req: NextApiRequest,
   res: NextApiResponse<Data | {error: string}>
 ) {
+  
   // simulate a slow response
   setTimeout(() => {
    // switch case for different methods (GET, POST, PUT, DELETE)
    switch (req.method) {
     case 'GET':
-      // res.status(500).json({error: 'Error: Something went wrong'}) simulate an error
       res.status(200).json({
         sections: [
           {
+            "id": 1,
             "title": "Feeding Instructions",
             "content": `Here are the instructions on how to feed my pets while I am away:
             - My dog, [dog's name], needs to be fed twice a day, once in the morning and once in the evening. 
@@ -33,6 +35,7 @@ export default function petsHandler(
             - If you're unsure about anything, don't hesitate to contact me.`
             },
             {
+              "id": 2,
               "title": "Walking Instructions",
               "content": `Here are the instructions on how to walk my pets while I am away:
               - My dog, [dog's name], needs to be walked twice a day, once in the morning and once in the evening. 
@@ -42,6 +45,7 @@ export default function petsHandler(
               - If you have any questions or concerns, don't hesitate to contact me.`
               }
           ]})
+
       break
     case 'POST':
       // postHouse(req, res)
@@ -57,5 +61,4 @@ export default function petsHandler(
       res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 }, 2500)
-  
 }
