@@ -16,15 +16,12 @@ export default function petsHandler(
   res: NextApiResponse<Data>
 ) {
 
-const prisma = new PrismaClient({
-
-})
+const prisma = new PrismaClient({})
 
 
 async function findMany() {
   // ... you will write your Prisma Client queries here
   const pets = await prisma.pets.findMany()
-  console.log("🚀 ~ file: [uuid].ts:34 ~ findMany ~ pets", pets)
   return pets
 }
 async function createPet() {
@@ -41,7 +38,6 @@ async function createPet() {
           }]} 
          
 }})
-console.log("🚀 ~ file: [uuid].ts:42 ~ createPet ~ pet", pet)
 }
 
    // switch case for different methods (GET, POST, PUT, DELETE)
