@@ -5,9 +5,12 @@ import {
     Container,
     Button,
     Text,
+    Center,
 } from '@chakra-ui/react';
 import InfoCard from './InfoCard';
 import React, { useEffect } from 'react';
+import useSWR from 'swr';
+import { fetcher } from '../utils/fetcher';
 
 /*
     dataSource is used to define where the data is coming from.
@@ -22,37 +25,26 @@ interface InfoCardCollectionProps extends ChakraProps {
     title?: string;
     id?: string;
     category?: string;
+    uuid?: number;
     dataSource: string;
 }
 
 const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     props
 ): JSX.Element => {
-    const { text, title, category, dataSource, ...rest } = props;
-    const [response, setResponse] = React.useState<any>();
-    const [isLoading, setIsLoading] = React.useState<boolean>(true);
+    const { text, title, category, uuid, dataSource, ...rest } = props;
 
-    useEffect(() => {
-        async function getResponse(uuid: string) {
-            const res = await fetch(`/api/${dataSource}/${uuid}`);
-            const data = await res.json();
-            setResponse(data);
-            setIsLoading(false);
-        }
-        const categories = [];
-        // make an array of the categories returned in the response to build the filte buttons
-        // response.userContent.map((content) => {
-        //     categories.push(content.cateogry);
-        // });
-        getResponse('123');
-
-        return () => {};
-    }, [dataSource]);
+    const { data, error, isLoading } = useSWR(
+        `/api/${dataSource}/${uuid}`,
+        fetcher
+    );
 
     return (
         <>
             {isLoading ? (
-                <CircularProgress isIndeterminate />
+                <Center>
+                    <CircularProgress isIndeterminate />
+                </Center>
             ) : (
                 <Container>
                     <SimpleGrid minChildWidth={'12rem'} spacing={3}>
@@ -64,7 +56,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                         </Button>
                     </SimpleGrid>
                     <SimpleGrid minChildWidth={'12rem'} spacing={3}>
-                        {response.userContent.map(
+                        {data.userContent.map(
                             (content: InfoCardCollectionProps) => {
                                 return (
                                     <InfoCard
@@ -82,4 +74,5 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         </>
     );
 };
+
 export default InfoCardCollection;
