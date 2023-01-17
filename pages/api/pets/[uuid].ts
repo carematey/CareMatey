@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client'
 
 type Section = {
+  id: number
   title: string
   content: string
 }
@@ -13,11 +14,10 @@ type Data = {
 
 export default function petsHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Data | {error: string}>
 ) {
 
 const prisma = new PrismaClient({})
-
 
 async function findMany() {
   // ... you will write your Prisma Client queries here
@@ -55,6 +55,7 @@ async function createPet() {
           process.exit(1)
         })
       
+
       break
     case 'POST':
       // postHouse(req, res)
@@ -69,5 +70,5 @@ async function createPet() {
       res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE'])
       res.status(405).end(`Method ${req.method} Not Allowed`)
   }
-  
+}, 2500)
 }
