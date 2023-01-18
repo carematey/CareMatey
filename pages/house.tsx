@@ -1,25 +1,12 @@
-import { Text } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { fetcher } from '../utils/fetcher';
-import useSWR from 'swr';
+import { Container } from '@chakra-ui/react';
+import React from 'react';
+import InfoCardCollection from '../components/InfoCardCollection';
 
 const House = () => {
-    const {
-        data: house, // change data variable to house
-        isLoading,
-        error,
-    } = useSWR(`/api/house/${123}`, fetcher);
-
     return (
-        <div>
-            {house && (
-                <>
-                    {' '}
-                    <Text>{house.emergencyContact?.name}</Text>
-                    <Text>{house.address?.street}</Text>
-                </>
-            )}
-        </div>
+        <Container m={3}>
+            <InfoCardCollection dataSource={'house'} uuid={1} />
+        </Container>
     );
 };
 
