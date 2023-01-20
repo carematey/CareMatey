@@ -3,14 +3,13 @@ import {
     CircularProgress,
     SimpleGrid,
     Container,
-    Button,
-    Text,
     Center,
 } from '@chakra-ui/react';
 import InfoCard from './InfoCard';
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
+import InfoFilterButtons from './InfoFilterButtons';
 
 /*
     dataSource is used to define where the data is coming from.
@@ -38,6 +37,25 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         `/api/${dataSource}/${uuid}`,
         fetcher
     );
+    const [filter, setFilter] = useState('');
+
+    // filter of all items for the InfoCard component
+    let filteredItems = data?.userContent.filter(
+        (item: InfoCardCollectionProps) => {
+            if (!filter) {
+                return item;
+            } else {
+                return item.category?.includes(filter);
+            }
+        }
+    );
+
+    // get the categories of the data to make category filter cards. Not working yet @todo
+    let filteredCategories = data?.userContent.filter(
+        (component: InfoCardCollectionProps, index: number) => {
+            return data?.userContent.indexOf(component.category) === index;
+        }
+    );
 
     return (
         <>
@@ -47,16 +65,21 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                 </Center>
             ) : (
                 <Container>
-                    <SimpleGrid minChildWidth={'12rem'} spacing={3}>
-                        {/* Make a component of this based on the values of the buttons inside of it.
-                        Do a repeat of buttons based on the category titles. 
-                    Button cause filters do filter the category content. */}
-                        <Button h={20}>
-                            <Text>Category name</Text>
-                        </Button>
+                    <SimpleGrid minChildWidth={'6rem'} spacing={3}>
+                        {filteredItems.map(
+                            (content: InfoCardCollectionProps) => {
+                                return (
+                                    <InfoFilterButtons
+                                        key={'12'}
+                                        category={content.category}
+                                        h={'20'}
+                                    />
+                                );
+                            }
+                        )}
                     </SimpleGrid>
                     <SimpleGrid minChildWidth={'12rem'} spacing={3}>
-                        {data.userContent.map(
+                        {filteredItems.map(
                             (content: InfoCardCollectionProps) => {
                                 return (
                                     <InfoCard
