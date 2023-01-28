@@ -4,12 +4,12 @@ import {
     SimpleGrid,
     Container,
     Center,
+    Button,
 } from '@chakra-ui/react';
 import InfoCard from './InfoCard';
 import React, { useState } from 'react';
 import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
-import InfoFilterButtons from './InfoFilterButtons';
 
 /*
     dataSource is used to define where the data is coming from.
@@ -37,25 +37,28 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         `/api/${dataSource}/${uuid}`,
         fetcher
     );
-    const [filter, setFilter] = useState('');
+    const [filteredCards, setFilteredCards] = useState<string>('');
 
     // filter of all items for the InfoCard component
     let filteredItems = data?.userContent.filter(
         (item: InfoCardCollectionProps) => {
-            if (!filter) {
+            if (!filteredCards) {
                 return item;
             } else {
-                return item.category?.includes(filter);
+                return item.category?.includes(filteredCards);
             }
         }
     );
 
     // get the categories of the data to make category filter cards. Not working yet @todo
-    let filteredCategories = data?.userContent.filter(
+    const filteredCategories = data?.userContent.filter(
         (component: InfoCardCollectionProps, index: number) => {
-            return data?.userContent.indexOf(component.category) === index;
+            const arr = [];
+            arr.push(component.category);
         }
     );
+
+    console.log(filteredCategories);
 
     return (
         <>
@@ -67,13 +70,20 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                 <Container>
                     <SimpleGrid minChildWidth={'6rem'} spacing={3}>
                         {filteredItems.map(
-                            (content: InfoCardCollectionProps) => {
+                            (content: InfoCardCollectionProps, id: number) => {
                                 return (
-                                    <InfoFilterButtons
-                                        key={'12'}
-                                        category={content.category}
+                                    <Button
+                                        key={id}
                                         h={'20'}
-                                    />
+                                        onClick={() =>
+                                            content.category &&
+                                            setFilteredCards(
+                                                content.category[0]
+                                            )
+                                        }
+                                    >
+                                        {content.category}
+                                    </Button>
                                 );
                             }
                         )}
