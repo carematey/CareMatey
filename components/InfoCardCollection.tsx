@@ -23,9 +23,10 @@ interface InfoCardCollectionProps extends ChakraProps {
     text?: string;
     title?: string;
     id?: string;
-    category?: string;
+    category?: any;
     uuid?: number;
     dataSource: string;
+    content: string[];
 }
 
 const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
@@ -50,15 +51,13 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         }
     );
 
-    // get the categories of the data to make category filter cards. Not working yet @todo
-    const filteredCategories = data?.userContent.filter(
-        (component: InfoCardCollectionProps, index: number) => {
-            const arr = [];
-            arr.push(component.category);
+    const filteredCategories: any = data?.userContent.map(
+        (component: InfoCardCollectionProps) => {
+            return component.category.map((item: string) => {
+                return item;
+            });
         }
     );
-
-    console.log(filteredCategories);
 
     return (
         <>
@@ -69,8 +68,8 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
             ) : (
                 <Container>
                     <SimpleGrid minChildWidth={'6rem'} spacing={3}>
-                        {filteredItems.map(
-                            (content: InfoCardCollectionProps, id: number) => {
+                        {filteredCategories?.map((content: any, id: number) => {
+                            return content?.map((button: string) => {
                                 return (
                                     <Button
                                         key={id}
@@ -82,11 +81,11 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                             )
                                         }
                                     >
-                                        {content.category}
+                                        {button}
                                     </Button>
                                 );
-                            }
-                        )}
+                            });
+                        })}
                     </SimpleGrid>
                     <SimpleGrid minChildWidth={'12rem'} spacing={3}>
                         {filteredItems.map(
