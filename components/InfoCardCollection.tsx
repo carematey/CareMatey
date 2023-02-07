@@ -94,7 +94,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                             h={'20'}
                             onClick={() => handleClickCategory('')}
                         >
-                            Clear
+                            CLEAR FILTER
                         </Button>
                     </SimpleGrid>
                     <SimpleGrid minChildWidth={'12rem'} spacing={3}>
