@@ -4,12 +4,12 @@ import {
     SimpleGrid,
     Container,
     Center,
+    Button,
 } from '@chakra-ui/react';
 import InfoCard from './InfoCard';
 import React, { useState } from 'react';
 import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
-import InfoFilterButtons from './InfoFilterButtons';
 
 /*
     dataSource is used to define where the data is coming from.
@@ -23,9 +23,10 @@ interface InfoCardCollectionProps extends ChakraProps {
     text?: string;
     title?: string;
     id?: string;
-    category?: string;
+    category?: any;
     uuid?: number;
     dataSource: string;
+    content?: string[];
 }
 
 const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
@@ -37,25 +38,34 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         `/api/${dataSource}/${uuid}`,
         fetcher
     );
-    const [filter, setFilter] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const handleClickCategory = (category: string) => {
+        setSelectedCategory(category);
+    };
 
     // filter of all items for the InfoCard component
     let filteredItems = data?.userContent.filter(
         (item: InfoCardCollectionProps) => {
-            if (!filter) {
+            if (!selectedCategory) {
                 return item;
             } else {
-                return item.category?.includes(filter);
+                return item.category?.includes(selectedCategory);
             }
         }
     );
 
-    // get the categories of the data to make category filter cards. Not working yet @todo
-    let filteredCategories = data?.userContent.filter(
-        (component: InfoCardCollectionProps, index: number) => {
-            return data?.userContent.indexOf(component.category) === index;
+    const filteredCategories: any = data?.userContent.map(
+        (component: InfoCardCollectionProps) => {
+            return component.category.map((item: string) => {
+                return item.toString();
+            });
         }
     );
+    const uniqueCategories: any = [
+        ...new Set(
+            filteredCategories?.flat().sort((a: number, b: number) => a - b)
+        ),
+    ];
 
     return (
         <>
@@ -66,17 +76,26 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
             ) : (
                 <Container>
                     <SimpleGrid minChildWidth={'6rem'} spacing={3}>
-                        {filteredItems.map(
-                            (content: InfoCardCollectionProps) => {
-                                return (
-                                    <InfoFilterButtons
-                                        key={'12'}
-                                        category={content.category}
-                                        h={'20'}
-                                    />
-                                );
-                            }
-                        )}
+                        {uniqueCategories?.map((category: any, id: number) => {
+                            return (
+                                <Button
+                                    key={id}
+                                    h={'20'}
+                                    onClick={() =>
+                                        handleClickCategory(category)
+                                    }
+                                >
+                                    {category.toUpperCase()}
+                                </Button>
+                            );
+                        })}
+                        <Button
+                            key={0}
+                            h={'20'}
+                            onClick={() => handleClickCategory('')}
+                        >
+                            CLEAR FILTER
+                        </Button>
                     </SimpleGrid>
                     <SimpleGrid minChildWidth={'12rem'} spacing={3}>
                         {filteredItems.map(

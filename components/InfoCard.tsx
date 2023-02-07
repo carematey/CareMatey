@@ -5,14 +5,13 @@ interface InfoCardProps extends ChakraProps {
     text?: string;
     title?: string;
     category?: string;
-    key?: string;
 }
 
 const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
-    const { key, category, text, title, ...rest } = props;
+    const { category, text, title, ...rest } = props;
     return (
         <>
-            <Card p={3} key={key?.toString()} className={category} {...rest}>
+            <Card p={3} className={category} {...rest}>
                 <Heading>{title}</Heading>
                 <Text>{text}</Text>
             </Card>
