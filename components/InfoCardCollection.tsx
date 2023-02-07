@@ -62,8 +62,11 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         }
     );
     const uniqueCategories: any = [
-        ...new Set(filteredCategories.flatMap((cat: any) => cat)),
+        ...new Set(
+            filteredCategories?.flat().sort((a: number, b: number) => a - b)
+        ),
     ];
+
     return (
         <>
             {isLoading ? (
@@ -75,17 +78,26 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                     <SimpleGrid minChildWidth={'6rem'} spacing={3}>
                         {uniqueCategories?.map((category: any, id: number) => {
                             return (
-                                <Button
-                                    key={id}
-                                    h={'20'}
-                                    onClick={() =>
-                                        handleClickCategory(category)
-                                    }
-                                >
-                                    {category}
-                                </Button>
+                                <>
+                                    <Button
+                                        key={id}
+                                        h={'20'}
+                                        onClick={() =>
+                                            handleClickCategory(category)
+                                        }
+                                    >
+                                        {category.toUpperCase()}
+                                    </Button>
+                                </>
                             );
                         })}
+                        <Button
+                            key={0}
+                            h={'20'}
+                            onClick={() => handleClickCategory('')}
+                        >
+                            Clear
+                        </Button>
                     </SimpleGrid>
                     <SimpleGrid minChildWidth={'12rem'} spacing={3}>
                         {filteredItems.map(
