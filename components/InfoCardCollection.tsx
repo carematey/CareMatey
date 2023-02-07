@@ -38,15 +38,18 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         `/api/${dataSource}/${uuid}`,
         fetcher
     );
-    const [filteredCards, setFilteredCards] = useState<string>('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const handleClickCategory = (category: string) => {
+        setSelectedCategory(category);
+    };
 
     // filter of all items for the InfoCard component
     let filteredItems = data?.userContent.filter(
         (item: InfoCardCollectionProps) => {
-            if (!filteredCards) {
+            if (!selectedCategory) {
                 return item;
             } else {
-                return item.category?.includes(filteredCards);
+                return item.category?.includes(selectedCategory);
             }
         }
     );
@@ -59,11 +62,8 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         }
     );
     const uniqueCategories: any = [
-        ...new Set(
-            filteredCategories?.flat().sort((a: number, b: number) => a - b)
-        ),
+        ...new Set(filteredCategories.flatMap((cat: any) => cat)),
     ];
-
     return (
         <>
             {isLoading ? (
@@ -73,17 +73,16 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
             ) : (
                 <Container>
                     <SimpleGrid minChildWidth={'6rem'} spacing={3}>
-                        {uniqueCategories?.map((content: any, id: number) => {
+                        {uniqueCategories?.map((category: any, id: number) => {
                             return (
                                 <Button
                                     key={id}
                                     h={'20'}
                                     onClick={() =>
-                                        content.category &&
-                                        setFilteredCards(content.category[0])
+                                        handleClickCategory(category)
                                     }
                                 >
-                                    {content}
+                                    {category}
                                 </Button>
                             );
                         })}

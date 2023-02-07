@@ -21,20 +21,20 @@ export default function houseHandler(
             userContent: [
                 {
                     id: 12333,
-                    category: ['pets', 'food'],
+                    category: ['pets', 'food', 'emergency'],
                     title: `CJ's food`,
                     text: 'feed cj sometimes',
                 },
                 {
                     title: 'John Doe',
                     text: '555-555-5555',
-                    category: ['emergancy', 'house', 'phone'],
+                    category: ['emergency', 'house', 'phone'],
                     id: 101,
                 },
                 {
                     title: '123 Main St',
                     text: 'Anytown',
-                    category: ['CA'],
+                    category: ['CA', 'house'],
                     id: 102,
                 },
                 {
