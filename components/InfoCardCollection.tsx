@@ -64,6 +64,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     const uniqueCategories: any = [
         ...new Set(filteredCategories.flatMap((cat: any) => cat)),
     ];
+
     return (
         <>
             {isLoading ? (
@@ -82,10 +83,18 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                         handleClickCategory(category)
                                     }
                                 >
-                                    {category}
+                                    {category.toUpperCase()}
                                 </Button>
                             );
                         })}
+
+                        <Button
+                            key={0}
+                            h={'20'}
+                            onClick={() => handleClickCategory('')}
+                        >
+                            Clear
+                        </Button>
                     </SimpleGrid>
                     <SimpleGrid minChildWidth={'12rem'} spacing={3}>
                         {filteredItems.map(
