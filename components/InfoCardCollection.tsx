@@ -78,17 +78,15 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                     <SimpleGrid minChildWidth={'6rem'} spacing={3}>
                         {uniqueCategories?.map((category: any, id: number) => {
                             return (
-                                <>
-                                    <Button
-                                        key={id}
-                                        h={'20'}
-                                        onClick={() =>
-                                            handleClickCategory(category)
-                                        }
-                                    >
-                                        {category.toUpperCase()}
-                                    </Button>
-                                </>
+                                <Button
+                                    key={id}
+                                    h={'20'}
+                                    onClick={() =>
+                                        handleClickCategory(category)
+                                    }
+                                >
+                                    {category.toUpperCase()}
+                                </Button>
                             );
                         })}
                         <Button
