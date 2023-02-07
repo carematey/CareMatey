@@ -26,7 +26,7 @@ interface InfoCardCollectionProps extends ChakraProps {
     category?: any;
     uuid?: number;
     dataSource: string;
-    content: string[];
+    content?: string[];
 }
 
 const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
@@ -54,10 +54,15 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     const filteredCategories: any = data?.userContent.map(
         (component: InfoCardCollectionProps) => {
             return component.category.map((item: string) => {
-                return item;
+                return item.toString();
             });
         }
     );
+    const uniqueCategories: any = [
+        ...new Set(
+            filteredCategories?.flat().sort((a: number, b: number) => a - b)
+        ),
+    ];
 
     return (
         <>
@@ -68,23 +73,19 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
             ) : (
                 <Container>
                     <SimpleGrid minChildWidth={'6rem'} spacing={3}>
-                        {filteredCategories?.map((content: any, id: number) => {
-                            return content?.map((button: string) => {
-                                return (
-                                    <Button
-                                        key={id}
-                                        h={'20'}
-                                        onClick={() =>
-                                            content.category &&
-                                            setFilteredCards(
-                                                content.category[0]
-                                            )
-                                        }
-                                    >
-                                        {button}
-                                    </Button>
-                                );
-                            });
+                        {uniqueCategories?.map((content: any, id: number) => {
+                            return (
+                                <Button
+                                    key={id}
+                                    h={'20'}
+                                    onClick={() =>
+                                        content.category &&
+                                        setFilteredCards(content.category[0])
+                                    }
+                                >
+                                    {content}
+                                </Button>
+                            );
                         })}
                     </SimpleGrid>
                     <SimpleGrid minChildWidth={'12rem'} spacing={3}>
