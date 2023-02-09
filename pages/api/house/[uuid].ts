@@ -3,8 +3,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 type userContentObject = {
     title: string;
+    category: string;
     text: string;
-    category: string[];
+    tags: string[];
     id: number;
 };
 
@@ -21,56 +22,73 @@ export default function houseHandler(
             userContent: [
                 {
                     id: 12333,
-                    category: ['pets', 'food', 'emergency'],
+                    category: 'pets',
+                    tags: ['pets', 'food', 'emergency'],
                     title: `CJ's food`,
                     text: 'feed cj sometimes',
                 },
                 {
                     title: 'John Doe',
+                    category: 'pets',
+
                     text: '555-555-5555',
-                    category: ['emergency', 'house', 'phone'],
+                    tags: ['emergency', 'house', 'phone'],
                     id: 101,
                 },
                 {
                     title: '123 Main St',
+                    category: 'pets',
+
                     text: 'Anytown',
-                    category: ['CA', 'house'],
+                    tags: ['CA', 'house'],
                     id: 102,
                 },
                 {
                     title: '123 Main St',
+                    category: 'pets',
+
                     text: 'Anytown',
-                    category: ['CA'],
+                    tags: ['CA'],
                     id: 108,
                 },
                 {
                     title: '123 Main St',
+                    category: 'pets',
+
                     text: 'Anytown',
-                    category: ['CA'],
+                    tags: ['CA'],
                     id: 107,
                 },
                 {
                     title: '123 Main St',
+                    category: 'pets',
+
                     text: 'Anytown',
-                    category: ['CA'],
+                    tags: ['CA'],
                     id: 106,
                 },
                 {
                     title: '123 Main St',
+                    category: 'pets',
+
                     text: 'Anytown',
-                    category: ['CA'],
+                    tags: ['CA'],
                     id: 105,
                 },
                 {
                     title: '123 Main St',
+                    category: 'house',
+
                     text: 'Anytown',
-                    category: ['CA'],
+                    tags: ['CA'],
                     id: 103,
                 },
                 {
                     title: '123 Main St',
+                    category: 'plants',
+
                     text: 'Anytown',
-                    category: ['CA'],
+                    tags: ['CA'],
                     id: 104,
                 },
             ],

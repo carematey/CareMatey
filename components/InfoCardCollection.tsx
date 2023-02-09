@@ -23,7 +23,8 @@ interface InfoCardCollectionProps extends ChakraProps {
     text?: string;
     title?: string;
     id?: string;
-    category?: any;
+    tags?: any;
+    category?: string;
     uuid?: number;
     dataSource: string;
     content?: string[];
@@ -32,31 +33,31 @@ interface InfoCardCollectionProps extends ChakraProps {
 const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     props
 ): JSX.Element => {
-    const { text, title, category, uuid, dataSource, ...rest } = props;
+    const { text, title, tags, category, uuid, dataSource, ...rest } = props;
 
     const { data, error, isLoading } = useSWR(
         `/api/${dataSource}/${uuid}`,
         fetcher
     );
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const handleClickCategory = (category: string) => {
-        setSelectedCategory(category);
+    const [selectedTags, setSelectedTags] = useState('');
+    const handleClickTags = (tags: string) => {
+        setSelectedTags(tags);
     };
 
     // filter of all items for the InfoCard component
     let filteredItems = data?.userContent.filter(
         (item: InfoCardCollectionProps) => {
-            if (!selectedCategory) {
+            if (!selectedTags) {
                 return item;
             } else {
-                return item.category?.includes(selectedCategory);
+                return item.tags?.includes(selectedTags);
             }
         }
     );
 
     const filteredCategories: any = data?.userContent.map(
         (component: InfoCardCollectionProps) => {
-            return component.category.map((item: string) => {
+            return component.tags.map((item: string) => {
                 return item.toString();
             });
         }
@@ -76,23 +77,21 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
             ) : (
                 <Container>
                     <SimpleGrid minChildWidth={'6rem'} spacing={3}>
-                        {uniqueCategories?.map((category: any, id: number) => {
+                        {uniqueCategories?.map((tags: any, id: number) => {
                             return (
                                 <Button
                                     key={id}
                                     h={'20'}
-                                    onClick={() =>
-                                        handleClickCategory(category)
-                                    }
+                                    onClick={() => handleClickTags(tags)}
                                 >
-                                    {category.toUpperCase()}
+                                    {tags.toUpperCase()}
                                 </Button>
                             );
                         })}
                         <Button
                             key={0}
                             h={'20'}
-                            onClick={() => handleClickCategory('')}
+                            onClick={() => handleClickTags('')}
                         >
                             CLEAR FILTER
                         </Button>
@@ -103,7 +102,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 return (
                                     <InfoCard
                                         key={content.id}
-                                        category={content.category}
+                                        tags={content.tags}
                                         title={content.title}
                                         text={content.text}
                                     />
