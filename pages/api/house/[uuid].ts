@@ -25,38 +25,41 @@ export default function houseHandler(
                     category: 'pets',
                     tags: ['pets', 'food', 'emergency'],
                     title: `CJ's food`,
-                    text: 'feed cj sometimes',
+                    text: 'feed cj sometimes. Per day: 3 cups food, 1 tablet medicine, 1 old man treat. All split in half for morning and evening meals',
                 },
                 {
                     title: 'John Doe',
                     category: 'pets',
-
                     text: '555-555-5555',
-                    tags: ['emergency', 'house', 'phone'],
+                    tags: ['Villavicencio', 'house', 'phone'],
                     id: 101,
                 },
                 {
-                    title: '123 Main St',
+                    title: 'Rich text',
                     category: 'pets',
-
-                    text: 'Anytown',
-                    tags: ['CA', 'house'],
+                    text: `<div>somewhere <h1>over a rainbow</h1>we can handle <span color="red">rich text</span></div>`,
+                    tags: ['Future Features', 'rich text'],
                     id: 102,
                 },
                 {
-                    title: '123 Main St',
+                    title: 'Contact info',
                     category: 'pets',
-
-                    text: 'Anytown',
-                    tags: ['CA'],
+                    text: `Call tayler or Mikey if there are any issues. If you can't reach us, please call our emergency contacts`,
+                    tags: [
+                        'CA',
+                        'Villavicencio',
+                        'bugs',
+                        'food',
+                        'CA',
+                        'Phone',
+                    ],
                     id: 108,
                 },
                 {
-                    title: '123 Main St',
+                    title: 'control casing of tags on input',
                     category: 'pets',
-
-                    text: 'Anytown',
-                    tags: ['CA'],
+                    text: `that way we don't have to think about or handle for tags with different casing on display`,
+                    tags: ['Phone', 'bugs'],
                     id: 107,
                 },
                 {

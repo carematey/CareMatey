@@ -41,7 +41,11 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     );
     const [selectedTags, setSelectedTags] = useState('');
     const handleClickTags = (tags: string) => {
-        setSelectedTags(tags);
+        if (selectedTags === tags) {
+            setSelectedTags('');
+        } else {
+            setSelectedTags(tags);
+        }
     };
 
     // filter of all items for the InfoCard component
@@ -75,14 +79,25 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                     <CircularProgress isIndeterminate />
                 </Center>
             ) : (
-                <Container>
-                    <SimpleGrid minChildWidth={'6rem'} spacing={3}>
+                <Container height={'100vh'}>
+                    <SimpleGrid minChildWidth={'6rem'} spacing={3} pb={6}>
                         {uniqueCategories?.map((tags: any, id: number) => {
                             return (
                                 <Button
                                     key={id}
                                     h={'20'}
                                     onClick={() => handleClickTags(tags)}
+                                    bg={
+                                        selectedTags === tags
+                                            ? 'white'
+                                            : 'whiteAlpha.500'
+                                    }
+                                    outlineColor={
+                                        selectedTags === tags
+                                            ? 'whiteAlpha.700'
+                                            : ''
+                                    }
+                                    whiteSpace={'normal'}
                                 >
                                     {tags.toUpperCase()}
                                 </Button>

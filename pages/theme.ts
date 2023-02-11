@@ -8,16 +8,35 @@ const theme = extendTheme({
     styles: {
         global: {
             body: {
-                bg: 'brand.blue',
+                bg: 'brand.robin.lite',
+                color: 'brand.blue.dark',
             },
         },
     },
+    fonts: {
+        mono: 'Menlo, monospace',
+    },
     colors: {
         brand: {
-            yellow: '#FFC95C',
-            blue: '#033F63',
-            teal: '#28666E',
-            robin: '#50C9CE',
+            yellow: {
+                lite: '#FFECBF',
+                main: '#FFE78E',
+            },
+            blue: {
+                lite: '#066F96',
+                main: '#044F74',
+                dark: '#022F52',
+            },
+            teal: {
+                lite: '#30868F',
+                main: '#28666E',
+                dark: '#26464C',
+            },
+            robin: {
+                lite: '#51D9DF',
+                main: '#50C9CE',
+                dark: '#40A7AF',
+            },
         },
     },
 });

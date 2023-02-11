@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Inter } from '@next/font/google';
 import FullButton from '../components/FullButton';
 import { Box, Stack, Wrap, SimpleGrid } from '@chakra-ui/react';
+import theme from './theme';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -12,7 +13,7 @@ export default function Home() {
             <Box>
                 <SimpleGrid column={2} minChildWidth={'50%'}>
                     <FullButton
-                        bgColor={'brand.blue'}
+                        bgColor={theme.colors.brand.blue.dark}
                         // topText='plant'
                         // bottomText='BotHome'
                         icon="plant"
