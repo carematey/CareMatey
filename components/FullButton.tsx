@@ -7,11 +7,11 @@ import Link from 'next/link'; // use the link from next.js for its prefetching h
 
 // extend the props from chakra-ui to have access to all the props from chakra-ui
 interface FullButtonProps extends ChakraProps {
-  topText?: string;
-  bottomText?: string;
-  icon?: string;
-  href?: string;
-  children?: React.ReactNode;
+    topText?: string;
+    bottomText?: string;
+    icon?: string;
+    href?: string;
+    children?: React.ReactNode;
 }
 
 // JSDoc for the component
@@ -37,31 +37,34 @@ interface FullButtonProps extends ChakraProps {
  * </FullButton>
  */
 const FullButton: React.FC<FullButtonProps> = (props): JSX.Element => {
-  const { topText, bottomText, icon, href, children, ...rest } = props;
-  return (
-    <Link href={href || '#'}>
-      <Flex
-        justifyContent={'center'}
-        alignItems={'center'}
-        width={'100%'}
-        flexDir={'column'}
-        {...rest}
-      >
-        {topText && <Heading>{topText}</Heading>}
-        {icon
-          ? {
-              house: <GiHouse className='fullButtonIcon' />,
-              home: <GiHouse className='fullButtonIcon' />,
-              plant: <RiPlantFill className='fullButtonIcon' />,
-              cat: <FaCat className='fullButtonIcon' />,
-              dog: <FaDog className='fullButtonIcon' />,
-            }[icon]
-          : undefined}
-        {children}
-        {bottomText && <Heading textAlign={'center'}>{bottomText}</Heading>}
-      </Flex>
-    </Link>
-  );
+    const { topText, bottomText, icon, href, children, ...rest } = props;
+
+    return (
+        <Link href={href || '#'}>
+            <Flex
+                justifyContent={'center'}
+                alignItems={'center'}
+                width={'100%'}
+                flexDir={'column'}
+                {...rest}
+            >
+                {topText && <Heading>{topText}</Heading>}
+                {icon
+                    ? {
+                          house: <GiHouse className="fullButtonIcon" />,
+                          home: <GiHouse className="fullButtonIcon" />,
+                          plant: <RiPlantFill className="fullButtonIcon" />,
+                          cat: <FaCat className="fullButtonIcon" />,
+                          dog: <FaDog className="fullButtonIcon" />,
+                      }[icon]
+                    : undefined}
+                {children}
+                {bottomText && (
+                    <Heading textAlign={'center'}>{bottomText}</Heading>
+                )}
+            </Flex>
+        </Link>
+    );
 };
 
 export default FullButton;

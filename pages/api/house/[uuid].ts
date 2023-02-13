@@ -3,8 +3,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 type userContentObject = {
     title: string;
+    category: string;
     text: string;
-    category: string[];
+    tags: string[];
     id: number;
 };
 
@@ -21,56 +22,76 @@ export default function houseHandler(
             userContent: [
                 {
                     id: 12333,
-                    category: ['pets', 'food', 'emergency'],
+                    category: 'pets',
+                    tags: ['pets', 'food', 'emergency'],
                     title: `CJ's food`,
-                    text: 'feed cj sometimes',
+                    text: 'feed cj sometimes. Per day: 3 cups food, 1 tablet medicine, 1 old man treat. All split in half for morning and evening meals',
                 },
                 {
                     title: 'John Doe',
+                    category: 'pets',
                     text: '555-555-5555',
-                    category: ['emergency', 'house', 'phone'],
+                    tags: ['Villavicencio', 'house', 'phone'],
                     id: 101,
                 },
                 {
-                    title: '123 Main St',
-                    text: 'Anytown',
-                    category: ['CA', 'house'],
+                    title: 'Rich text',
+                    category: 'pets',
+                    text: `<div>somewhere <h1>over a rainbow</h1>we can handle <span color="red">rich text</span></div>`,
+                    tags: ['Future Features', 'rich text'],
                     id: 102,
                 },
                 {
-                    title: '123 Main St',
-                    text: 'Anytown',
-                    category: ['CA'],
+                    title: 'Contact info',
+                    category: 'pets',
+                    text: `Call tayler or Mikey if there are any issues. If you can't reach us, please call our emergency contacts`,
+                    tags: [
+                        'CA',
+                        'Villavicencio',
+                        'bugs',
+                        'food',
+                        'CA',
+                        'Phone',
+                    ],
                     id: 108,
                 },
                 {
-                    title: '123 Main St',
-                    text: 'Anytown',
-                    category: ['CA'],
+                    title: 'control casing of tags on input',
+                    category: 'pets',
+                    text: `that way we don't have to think about or handle for tags with different casing on display`,
+                    tags: ['Phone', 'bugs'],
                     id: 107,
                 },
                 {
                     title: '123 Main St',
+                    category: 'pets',
+
                     text: 'Anytown',
-                    category: ['CA'],
+                    tags: ['CA'],
                     id: 106,
                 },
                 {
                     title: '123 Main St',
+                    category: 'pets',
+
                     text: 'Anytown',
-                    category: ['CA'],
+                    tags: ['CA'],
                     id: 105,
                 },
                 {
                     title: '123 Main St',
+                    category: 'house',
+
                     text: 'Anytown',
-                    category: ['CA'],
+                    tags: ['CA'],
                     id: 103,
                 },
                 {
                     title: '123 Main St',
+                    category: 'plants',
+
                     text: 'Anytown',
-                    category: ['CA'],
+                    tags: ['CA'],
                     id: 104,
                 },
             ],
