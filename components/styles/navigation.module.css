@@ -1,0 +1,22 @@
+.navigation {
+    background: white;
+    position: fixed;
+}
+@media screen and (max-width: 479px) {
+    .navigation {
+        margin: auto;
+        padding-top: 1em;
+        padding-bottom: 0;
+        bottom: 0;
+        height: 7em;
+        right: 0;
+        width: 4em;
+    }
+}
+@media screen and (min-width: 480px) {
+    .navigation {
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+}

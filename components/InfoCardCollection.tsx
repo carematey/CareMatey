@@ -79,8 +79,13 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                     <CircularProgress isIndeterminate />
                 </Center>
             ) : (
-                <Container height={'100vh'}>
-                    <SimpleGrid minChildWidth={'6rem'} spacing={3} pb={6}>
+                <>
+                    <SimpleGrid
+                        minChildWidth={'6rem'}
+                        spacing={3}
+                        pb={6}
+                        {...rest}
+                    >
                         {uniqueCategories?.map((tags: any, id: number) => {
                             return (
                                 <Button
@@ -125,7 +130,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                             }
                         )}
                     </SimpleGrid>
-                </Container>
+                </>
             )}
         </>
     );
