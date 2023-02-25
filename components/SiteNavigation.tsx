@@ -1,40 +1,52 @@
 import { ReactNode } from 'react';
 import {
-    Box,
-    Flex,
     Avatar,
+    Box,
+    Button,
+    Flex,
     HStack,
+    IconButton,
     Image,
     Link,
-    IconButton,
-    Button,
     Menu,
     MenuButton,
-    MenuList,
-    MenuItem,
     MenuDivider,
-    useDisclosure,
-    useColorModeValue,
+    MenuItem,
+    MenuList,
     Stack,
+    useDisclosure,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import theme from '../pages/theme';
 
-const Links = ['Home', 'Contact'];
+const Links = [
+    ['Home', ''],
+    ['Contact', 'contact'],
+];
 
-const NavLink = ({ children }: { children: ReactNode }) => (
+const NavLink = ({ href, children }: { href: string; children: ReactNode }) => (
     <Link
-        px={3}
-        py={2}
+        p={4}
+        px={5}
         rounded={'md'}
         _hover={{
             textDecoration: 'none',
-            bg: useColorModeValue('#555', '#eee'),
+            bg: '#eee',
         }}
-        href={'#'}
+        href={href}
     >
         {children}
     </Link>
+);
+
+const NavLinks = () => (
+    <>
+        {Links.map((linking: string[]) => (
+            <NavLink key={linking[0]} href={linking[1]}>
+                {linking[0]}
+            </NavLink>
+        ))}
+    </>
 );
 
 export default function Navigation() {
@@ -75,9 +87,7 @@ export default function Navigation() {
                             spacing={4}
                             display={{ base: 'none', md: 'flex' }}
                         >
-                            {Links.map((link) => (
-                                <NavLink key={link}>{link}</NavLink>
-                            ))}
+                            <NavLinks />
                         </HStack>
                     </HStack>
                     <Flex alignItems={'center'}>
@@ -111,9 +121,7 @@ export default function Navigation() {
                 {isOpen ? (
                     <Box pb={4} display={{ md: 'none' }}>
                         <Stack as={'nav'} spacing={4}>
-                            {Links.map((link) => (
-                                <NavLink key={link}>{link}</NavLink>
-                            ))}
+                            <NavLinks />
                         </Stack>
                     </Box>
                 ) : null}
