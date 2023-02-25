@@ -2,9 +2,9 @@ import {
     ChakraProps,
     CircularProgress,
     SimpleGrid,
-    Container,
     Center,
     Button,
+    Heading,
 } from '@chakra-ui/react';
 import InfoCard from './InfoCard';
 import React, { useState } from 'react';
@@ -28,6 +28,9 @@ interface InfoCardCollectionProps extends ChakraProps {
     uuid?: number;
     dataSource: string;
     content?: string[];
+    index?: number;
+    lastUpdated?: string;
+    createdAt: string;
 }
 
 const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
@@ -72,6 +75,9 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         ),
     ];
 
+    // Pull this from the DB
+    const homeName: string = 'Mikeys house';
+
     return (
         <>
             {isLoading ? (
@@ -80,34 +86,40 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                 </Center>
             ) : (
                 <>
+                    <Center mt={4}>
+                        <Heading>{homeName}</Heading>
+                    </Center>
                     <SimpleGrid
                         minChildWidth={'6rem'}
                         spacing={3}
                         pb={6}
                         {...rest}
                     >
-                        {uniqueCategories?.map((tags: any, id: number) => {
-                            return (
-                                <Button
-                                    key={id}
-                                    h={'20'}
-                                    onClick={() => handleClickTags(tags)}
-                                    bg={
-                                        selectedTags === tags
-                                            ? 'white'
-                                            : 'whiteAlpha.500'
-                                    }
-                                    outlineColor={
-                                        selectedTags === tags
-                                            ? 'whiteAlpha.700'
-                                            : ''
-                                    }
-                                    whiteSpace={'normal'}
-                                >
-                                    {tags.toUpperCase()}
-                                </Button>
-                            );
-                        })}
+                        {uniqueCategories?.map(
+                            (tags: any, id: string, index: number) => {
+                                return (
+                                    <Button
+                                        key={index}
+                                        id={id}
+                                        h={'20'}
+                                        onClick={() => handleClickTags(tags)}
+                                        bg={
+                                            selectedTags === tags
+                                                ? 'white'
+                                                : 'whiteAlpha.500'
+                                        }
+                                        outlineColor={
+                                            selectedTags === tags
+                                                ? 'whiteAlpha.700'
+                                                : ''
+                                        }
+                                        whiteSpace={'normal'}
+                                    >
+                                        {tags.toUpperCase()}
+                                    </Button>
+                                );
+                            }
+                        )}
                         <Button
                             key={0}
                             h={'20'}
@@ -120,12 +132,19 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                         {filteredItems.map(
                             (content: InfoCardCollectionProps) => {
                                 return (
-                                    <InfoCard
-                                        key={content.id}
-                                        tags={content.tags}
-                                        title={content.title}
-                                        text={content.text}
-                                    />
+                                    <>
+                                        <InfoCard
+                                            key={content.id}
+                                            tags={content.tags}
+                                            title={content.title}
+                                            text={content.text}
+                                            date={
+                                                content.lastUpdated
+                                                    ? content.lastUpdated
+                                                    : content.createdAt
+                                            }
+                                        />
+                                    </>
                                 );
                             }
                         )}
