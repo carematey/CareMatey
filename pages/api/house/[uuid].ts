@@ -7,6 +7,8 @@ type userContentObject = {
     text: string;
     tags: string[];
     id: number;
+    lastUpdated?: string | null;
+    createdAt: string;
 };
 
 type Data = {
@@ -26,6 +28,8 @@ export default function houseHandler(
                     tags: ['pets', 'food', 'emergency'],
                     title: `CJ's food`,
                     text: 'feed cj sometimes. Per day: 3 cups food, 1 tablet medicine, 1 old man treat. All split in half for morning and evening meals',
+                    lastUpdated: '2023-02-25T06:19:19.169Z',
+                    createdAt: '2023-01-25T06:19:19.169Z',
                 },
                 {
                     title: 'John Doe',
@@ -33,6 +37,8 @@ export default function houseHandler(
                     text: '555-555-5555',
                     tags: ['Villavicencio', 'house', 'phone'],
                     id: 101,
+                    lastUpdated: null,
+                    createdAt: '2022-09-25T06:19:19.169Z',
                 },
                 {
                     title: 'Rich text',
@@ -40,6 +46,8 @@ export default function houseHandler(
                     text: `<div>somewhere <h1>over a rainbow</h1>we can handle <span color="red">rich text</span></div>`,
                     tags: ['Future Features', 'rich text'],
                     id: 102,
+                    lastUpdated: null,
+                    createdAt: '2023-01-15T06:19:19.169Z',
                 },
                 {
                     title: 'Contact info',
@@ -54,6 +62,7 @@ export default function houseHandler(
                         'Phone',
                     ],
                     id: 108,
+                    createdAt: '2023-01-25T06:19:19.169Z',
                 },
                 {
                     title: 'control casing of tags on input',
@@ -61,6 +70,7 @@ export default function houseHandler(
                     text: `that way we don't have to think about or handle for tags with different casing on display`,
                     tags: ['Phone', 'bugs'],
                     id: 107,
+                    createdAt: '2023-01-25T06:19:19.169Z',
                 },
                 {
                     title: '123 Main St',
@@ -69,10 +79,12 @@ export default function houseHandler(
                     text: 'Anytown',
                     tags: ['CA'],
                     id: 106,
+                    createdAt: '2023-01-25T06:19:19.169Z',
                 },
                 {
                     title: '123 Main St',
                     category: 'pets',
+                    createdAt: '2023-01-25T06:19:19.169Z',
 
                     text: 'Anytown',
                     tags: ['CA'],
@@ -81,6 +93,7 @@ export default function houseHandler(
                 {
                     title: '123 Main St',
                     category: 'house',
+                    createdAt: '2023-01-25T06:19:19.169Z',
 
                     text: 'Anytown',
                     tags: ['CA'],
@@ -89,6 +102,7 @@ export default function houseHandler(
                 {
                     title: '123 Main St',
                     category: 'plants',
+                    createdAt: '2023-01-25T06:19:19.169Z',
 
                     text: 'Anytown',
                     tags: ['CA'],
