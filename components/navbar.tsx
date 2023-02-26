@@ -45,37 +45,6 @@ const Navbar = () => {
                         [App Name]
                     </Text>
                 </Box>
-                <Stack direction="row" spacing={4}>
-                    <Button colorScheme="purple" size="md">
-                        Sign Up
-                    </Button>
-                    {!session ? (
-                        <Button
-                            colorScheme="gray"
-                            size="md"
-                            onClick={() => signIn()}
-                        >
-                            Sign in
-                        </Button>
-                    ) : (
-                        <Menu>
-                            <MenuButton
-                                as={Avatar}
-                                aria-label="Options"
-                                icon={
-                                    <Avatar src={session.user?.image || ''} />
-                                }
-                                variant="outline"
-                            />
-                            <MenuList>
-                                <MenuItem onClick={() => signOut()}>
-                                    {' '}
-                                    Sign out
-                                </MenuItem>
-                            </MenuList>
-                        </Menu>
-                    )}
-                </Stack>
             </Flex>
         </Box>
     );

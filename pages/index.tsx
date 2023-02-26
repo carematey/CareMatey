@@ -29,7 +29,6 @@ const LandingPage = () => {
 
     return (
         <Box bg={bg}>
-            <Navbar />
             <Flex justify="center" align="center" h="100vh">
                 <Container maxW="container.lg">
                     <Stack
