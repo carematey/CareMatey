@@ -4,7 +4,7 @@ import InfoCardCollection from '../components/InfoCardCollection';
 
 const House = () => {
     return (
-        <Container m={3}>
+        <Container>
             <InfoCardCollection dataSource={'house'} uuid={1} />
         </Container>
     );
