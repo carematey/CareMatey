@@ -8,7 +8,8 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     session({ session, user }) {
       if (session.user) {
-        session.user.id = "1234";
+
+        session.user.email = "1234";
       }
       return session;
     },
@@ -19,6 +20,7 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.DISCORD_CLIENT_ID || "",
       clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
     }),
+    
     /**
      * ...add more providers here
      *

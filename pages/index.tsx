@@ -8,17 +8,24 @@ import {
     Text,
     useColorModeValue,
 } from '@chakra-ui/react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Navbar from '../components/navbar';
-import useUser from '../hooks/useUser';
 
 const LandingPage = () => {
     const bg = useColorModeValue('gray.50', 'gray.800');
     const textColor = useColorModeValue('gray.700', 'gray.200');
-    const { user, mutate, loggedOut } = useUser();
+    const { data: session } = useSession();
+    const router = useRouter();
 
     // if logged in, redirect to the dashboard
+    useEffect(() => {
+        if (session?.user) {
+            router.replace('/house');
+        }
+    }, [session]);
 
     return (
         <Box bg={bg}>
