@@ -21,13 +21,12 @@ import theme from '../pages/theme';
 interface InfoCardProps extends ChakraProps {
     text?: string;
     title?: string;
-    category?: string;
     tags?: string[];
     date: string;
 }
 
 const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
-    const { category, tags, text, title, date, ...rest } = props;
+    const { tags, text, title, date, ...rest } = props;
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const c = { time: date };
