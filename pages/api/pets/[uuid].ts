@@ -1,20 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient } from '@prisma/client'
+import { Pets, PrismaClient } from '@prisma/client'
 
-type Section = {
-  id: number
-  title: string
-  content: string
-}
-
-type Data = {
-  sections: Section[]
-}
 
 export default function petsHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Data | {error: string}>
+  res: NextApiResponse<Pets[] | {error: string}>
 ) {
 
 const prisma = new PrismaClient({})
@@ -70,5 +61,4 @@ async function createPet() {
       res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE'])
       res.status(405).end(`Method ${req.method} Not Allowed`)
   }
-}, 2500)
 }
