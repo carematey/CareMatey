@@ -19,14 +19,15 @@ Install packages by running
 npm install
 ```
 
-Create a .env.local file in the root directory and add the following:
+Create a .env file in the root directory and add the following:
 
 ```bash
 NEXT_PUBLIC_API_URL=http://localhost:3000/api
-DATABASE_URL=postgresql://USERNAME:PASSWORK@HOST/DB?schema=public
 ```
 
-initialize the prisma
+add .env to .gitignore if it is not already there
+
+initialize prisma then follow the steps to connect to your database
 
 ```bash
 npx prisma init
@@ -42,6 +43,8 @@ Because Prisma Client is tailored to your own schema, you need to update it ever
 
 ```bash
 npx prisma generate
+
+npx prisma db push
 ```
 
 Then, run the development server:
