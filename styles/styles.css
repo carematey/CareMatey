@@ -4,3 +4,7 @@
 	max-height: 30vh;
 	min-height: 3vh;
 }
+
+html, body {
+	overflow-x: hidden;
+}

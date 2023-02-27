@@ -4,14 +4,17 @@ import { User, Card, Home, PrismaClient } from '@prisma/client';
 
 export default function homeHandler(
     req: NextApiRequest,
-    res: NextApiResponse<Card[] | { error: string }>
+    res: NextApiResponse<Home[] | { error: string }>
 ) {
     const prisma = new PrismaClient({});
 
     async function findMany() {
         // ... you will write your Prisma Client queries here
-        const cards = await prisma.card.findMany();
-        return cards;
+        const homes = await prisma.home.findMany({
+            where: {
+                ownerId: Number(req.query.uuid),
+    }});
+        return homes;
     }
     async function createHome() {
         // ... you will write your Prisma Client queries here
