@@ -8,8 +8,6 @@ import {
 } from '@chakra-ui/react';
 import InfoCard from './InfoCard';
 import React, { useState } from 'react';
-import useSWR from 'swr';
-import { fetcher } from '../utils/fetcher';
 
 /*
     dataSource is used to define where the data is coming from.
@@ -20,28 +18,22 @@ import { fetcher } from '../utils/fetcher';
 */
 
 interface InfoCardCollectionProps extends ChakraProps {
+    data?: any;
+    isLoading: boolean;
     text?: string;
     title?: string;
     id?: string;
     tags?: any;
-    category?: string;
-    uuid?: number;
-    dataSource: string;
-    content?: string[];
     index?: number;
-    lastUpdated?: string;
-    createdAt: string;
+    lastUpdated?: string | undefined;
+    createdAt?: string;
 }
 
 const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     props
 ): JSX.Element => {
-    const { text, title, tags, category, uuid, dataSource, ...rest } = props;
+    const { data, isLoading, ...rest } = props;
 
-    const { data, error, isLoading } = useSWR(
-        `/api/${dataSource}/${uuid}`,
-        fetcher
-    );
     const [selectedTags, setSelectedTags] = useState('');
     const handleClickTags = (tags: string) => {
         if (selectedTags === tags) {
@@ -52,17 +44,15 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     };
 
     // filter of all items for the InfoCard component
-    let filteredItems = data?.userContent.filter(
-        (item: InfoCardCollectionProps) => {
-            if (!selectedTags) {
-                return item;
-            } else {
-                return item.tags?.includes(selectedTags);
-            }
+    let filteredItems = data?.filter((item: InfoCardCollectionProps) => {
+        if (!selectedTags) {
+            return item;
+        } else {
+            return item.tags?.includes(selectedTags);
         }
-    );
+    });
 
-    const filteredCategories: any = data?.userContent.map(
+    const filteredCategories: any = data?.map(
         (component: InfoCardCollectionProps) => {
             return component.tags.map((item: string) => {
                 return item.toString();
