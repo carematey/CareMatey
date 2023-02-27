@@ -17,6 +17,8 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import theme from '../pages/theme';
+import ReactMarkdown from 'react-markdown';
+import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 
 interface InfoCardProps extends ChakraProps {
     text?: string;
@@ -65,19 +67,28 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 onClick={onOpen}
             >
                 <Heading color={theme.colors.brand.blue.dark}>{title}</Heading>
-                <Text color={theme.colors.brand.blue.main}>
-                    {/* {text} */}
-                    {text != undefined && text.length > 90
-                        ? text.slice(0, 90) + '...'
-                        : text}
-                </Text>
+                {text && (
+                    <ReactMarkdown
+                        components={ChakraUIRenderer(theme.markdown)}
+                    >
+                        {text != undefined && text.length > 90
+                            ? text.slice(0, 90) + '...'
+                            : text}
+                    </ReactMarkdown>
+                )}
                 <Tags tagSize={'sm'} />
             </Card>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent bg={'white'}>
                     <ModalHeader>{title}</ModalHeader>
-                    <ModalBody>{text}</ModalBody>
+                    <ModalBody>
+                        {text && (
+                            <ReactMarkdown components={ChakraUIRenderer()}>
+                                {text}
+                            </ReactMarkdown>
+                        )}
+                    </ModalBody>
                     <ModalFooter>
                         <HStack justifyContent={'space-between'} w={'100%'}>
                             <Text minW="13ch">

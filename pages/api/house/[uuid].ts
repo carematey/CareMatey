@@ -50,6 +50,27 @@ export default function houseHandler(
                     createdAt: '2023-01-15T06:19:19.169Z',
                 },
                 {
+                    title: 'Markdown text',
+                    category: 'pets',
+                    text: `# Hello 
+I just love **bold text**.
+* list items
+1. number items
+
+### but why no table?
+
+| Month    | Savings | 
+| -------- | ------- | 
+| January  | $250    | 
+| February | $80     | 
+| March    | $420    | 
+`,
+                    tags: ['Future Features', 'rich text'],
+                    id: 102,
+                    lastUpdated: null,
+                    createdAt: '2023-01-15T06:19:19.169Z',
+                },
+                {
                     title: 'Contact info',
                     category: 'pets',
                     text: `Call tayler or Mikey if there are any issues. If you can't reach us, please call our emergency contacts`,
