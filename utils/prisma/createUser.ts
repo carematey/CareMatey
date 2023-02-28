@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from './../../lib/prismadb';
 
-const prisma = new PrismaClient();
+
 const createUser = async (data: {
     email: string;
     password: string;

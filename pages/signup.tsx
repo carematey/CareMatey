@@ -12,7 +12,7 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import { useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { z } from 'zod';
@@ -54,27 +54,23 @@ const SignUp = () => {
             }
             const encryptedPass = await encryptPassword(values.password);
             // make a request to the backend to create a user
-            const user = await fetch('/api/auth/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: values.email,
-                    password: encryptedPass,
-                }),
+            const user = await signIn('credentials', {
+                username: values.email,
+                password: encryptedPass,
+                signUp: true,
+                callbackUrl: '/house',
+                redirect: false,
             });
 
-            if (user.status === 200) {
-                router.push('/house');
-                console.log('user created');
-            } else {
+            if (user?.error) {
                 setErrors({
                     fieldErrors: {
                         email: ['email already exists'],
                     },
                     formErrors: [],
                 });
+            } else {
+                router.push('/house');
             }
         }
     };

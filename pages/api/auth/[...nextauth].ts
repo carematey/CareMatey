@@ -3,6 +3,7 @@ import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from 'bcryptjs'
 import prisma from '../../../lib/prismadb'
+import { encryptPassword } from "../../../utils/encryptPass";
 
 
 export const authOptions: NextAuthOptions = {
@@ -16,18 +17,38 @@ export const authOptions: NextAuthOptions = {
         password: { label: "password", type: "password" },
       },
       async authorize(credentials, req) {
-
+      try {
+        // signup is returned as a string
+        if (req?.body?.signUp === 'true') {
+          try {
+            const hashedPassword = await encryptPassword(credentials?.password as string);
+            const user = await prisma.user.create({
+              data: {
+                fullName: credentials?.username as string,
+                email: credentials?.username as string,
+                password: hashedPassword,
+              },
+            });
+            return {...user, id: user?.id.toString()}
+            
+          } catch (error) {
+            return null
+          }
+        }
         const user = await prisma.user.findUnique({
           where: { email: credentials?.username },
         })
 
         if (!user) {
-          throw new Error("Invalid username or password")
+          return null;
         }
-
+  
         const authorized = await bcrypt.compare(credentials?.password as string, user?.password as string);
         return authorized ? {...user, id: user?.id.toString()} : null;
-      },      
+      } catch (error) {
+        return null
+      }
+    },      
     }),
   ],
   session: {
@@ -39,6 +60,7 @@ callbacks: {
     session.user!.id = token.sub
     return Promise.resolve(session)
   },
+  
 },
     /**
      * ...add more providers here
