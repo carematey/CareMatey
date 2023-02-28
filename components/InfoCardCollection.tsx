@@ -138,7 +138,6 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 );
                             }
                         )}
-                        <InfoCard toCreate />
                     </SimpleGrid>
                 </>
             )}
