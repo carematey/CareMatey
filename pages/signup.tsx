@@ -12,9 +12,11 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { z } from 'zod';
-import bcrypt from 'bcryptjs';
+import { encryptPassword } from '../utils/encryptPass';
 
 const SignUpSchema = z.object({
     email: z.string().email(),
@@ -25,6 +27,7 @@ const SignUpSchema = z.object({
 type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 
 const SignUp = () => {
+    const router = useRouter();
     const [show, setShow] = React.useState<boolean>(false);
     const [login, setLogin] = React.useState<SignUpSchemaType>({
         email: '',
@@ -36,15 +39,6 @@ const SignUp = () => {
     > | null>(null);
     const handleClick = () => setShow(!show);
 
-    const encryptPassword = async (password: string) => {
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(password, salt);
-        console.log('🚀 ~ file: signUp.tsx:42 ~ encryptPassword ~ hash:', hash);
-        return hash;
-    };
-
-    // use zod to verify email and password
-    // use next-auth to sign up
     const handleSignUp = async (values: SignUpSchemaType) => {
         const parse = SignUpSchema.safeParse(values);
         if (parse.success) {
@@ -72,6 +66,7 @@ const SignUp = () => {
             });
 
             if (user.status === 200) {
+                router.push('/house');
                 console.log('user created');
             } else {
                 setErrors({
@@ -81,10 +76,9 @@ const SignUp = () => {
                     formErrors: [],
                 });
             }
-        } else {
-            console.log(parse.error);
         }
     };
+
     return (
         <Flex
             width={'100%'}
@@ -139,7 +133,11 @@ const SignUp = () => {
                             }
                         />
                         <InputRightElement width="4.5rem">
-                            <Button h="1.75rem" size="sm" onClick={handleClick}>
+                            <Button
+                                h="1.75rem"
+                                size="sm"
+                                onClick={() => handleClick()}
+                            >
                                 {show ? 'Hide' : 'Show'}
                             </Button>
                         </InputRightElement>

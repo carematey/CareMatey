@@ -1,8 +1,4 @@
-// backend api route for signing up a new user
-
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/react";
-
 import prisma from "../../../lib/prismadb";
 
 export default async function handler(
