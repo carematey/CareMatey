@@ -1,10 +1,6 @@
 version: '3'
 
 services:
-    app:
-        build: .
-        ports:
-            - '3000:3000'
     postgres:
         image: postgres:latest
         container_name: postgres
@@ -13,8 +9,8 @@ services:
             - 5432:5432
         environment:
             POSTGRES_HOST: ${DATABASE_URL}
-            POSTGRES_USER: mikey
-            POSTGRES_PASSWORD: S-Joir3209w4ka=+
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_USER_PASSWORD}
             POSTGRES_DB: my-pets-site
         volumes:
             - postgres-data:/var/lib/postgresql/data
