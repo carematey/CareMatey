@@ -23,6 +23,8 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import theme from '../pages/theme';
+import ReactMarkdown from 'react-markdown';
+import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 
 interface InfoCardProps extends ChakraProps {
     text?: string;

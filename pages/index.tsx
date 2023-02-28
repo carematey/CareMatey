@@ -8,17 +8,18 @@ import {
     Text,
     useColorModeValue,
 } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import Navbar from '../components/navbar';
 
 const LandingPage = () => {
     const bg = useColorModeValue('gray.50', 'gray.800');
     const textColor = useColorModeValue('gray.700', 'gray.200');
     const { data: session } = useSession();
     const router = useRouter();
+    const MotionBox = motion(Box);
 
     // if logged in, redirect to the dashboard
     useEffect(() => {
@@ -28,7 +29,7 @@ const LandingPage = () => {
     }, [session]);
 
     return (
-        <Box bg={bg}>
+        <MotionBox bg={bg}>
             <Flex justify="center" align="center" h="100vh">
                 <Container maxW="container.lg">
                     <Stack
@@ -37,8 +38,14 @@ const LandingPage = () => {
                         align="center"
                         justify="space-between"
                     >
-                        <Box textAlign="center">
-                            <Box
+                        <MotionBox
+                            textAlign="center"
+                            initial={{ y: 100, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.5, ease: 'easeInOut' }}
+                            mt={{ base: 80, md: 0 }}
+                        >
+                            <MotionBox
                                 width={'fit-content'}
                                 margin={{ base: 'auto', md: 'unset' }}
                             >
@@ -48,7 +55,7 @@ const LandingPage = () => {
                                     src="/images/dalle.png"
                                     alt="Logo"
                                 />
-                            </Box>
+                            </MotionBox>
 
                             <Heading
                                 size="lg"
@@ -78,21 +85,28 @@ const LandingPage = () => {
                             >
                                 Sign Up
                             </Button>
-                        </Box>
+                        </MotionBox>
 
-                        <Box mb={8}>
+                        <MotionBox
+                            mb={8}
+                            initial={{ y: 100, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.5, ease: 'easeInOut' }}
+                            pb={{ base: 80, md: 0 }}
+                            zIndex={10}
+                        >
                             <Image
                                 width={400}
                                 height={600}
                                 src="/images/landing1.png"
                                 alt="Pet sitting"
                             />
-                        </Box>
+                        </MotionBox>
                     </Stack>
                 </Container>
             </Flex>
 
-            <Box bg="purple.600" py={8}>
+            <MotionBox bg="purple.600" py={24}>
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -100,12 +114,24 @@ const LandingPage = () => {
                         align="center"
                         justify="space-between"
                     >
-                        <Box textAlign={['center', 'center', 'left', 'left']}>
+                        <MotionBox
+                            textAlign={['center', 'center', 'left', 'left']}
+                            maxW={'700px'}
+                            initial={{ x: -200, opacity: 0 }}
+                            whileInView={{ x: 0, opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, ease: 'easeInOut' }}
+                        >
                             <Heading size="md" color="white" mb={4}>
                                 For House and Pet Sitters
                             </Heading>
 
-                            <Text fontSize="lg" color="white" mb={4}>
+                            <Text
+                                fontSize="lg"
+                                whiteSpace={'pre-wrap'}
+                                color="white"
+                                mb={4}
+                            >
                                 [Website Name] is an easy-to-use platform that
                                 keeps all your house and pet sitting
                                 responsibilities in one convenient place. With
@@ -122,21 +148,27 @@ const LandingPage = () => {
                             >
                                 Learn More
                             </Button>
-                        </Box>
+                        </MotionBox>
 
-                        <Box mb={8}>
+                        <MotionBox
+                            mb={8}
+                            initial={{ x: 200, opacity: 0 }}
+                            whileInView={{ x: 0, opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, ease: 'easeInOut' }}
+                        >
                             <Image
                                 width={600}
                                 height={400}
                                 src="/images/landing1.png"
                                 alt="House sitting"
                             />
-                        </Box>
+                        </MotionBox>
                     </Stack>
                 </Container>
-            </Box>
+            </MotionBox>
 
-            <Box bg="gray.100" py={8}>
+            <MotionBox bg="gray.100" py={24}>
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -144,21 +176,39 @@ const LandingPage = () => {
                         align="center"
                         justify="space-between"
                     >
-                        <Box mb={8}>
+                        <MotionBox
+                            mb={8}
+                            initial={{ x: -40, opacity: 0 }}
+                            whileInView={{ x: 0, opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, ease: 'easeInOut' }}
+                        >
                             <Image
                                 width={600}
                                 height={400}
                                 src="/images/landing1.png"
                                 alt="Homeowner"
                             />
-                        </Box>
+                        </MotionBox>
 
-                        <Box textAlign={['center', 'center', 'left', 'left']}>
+                        <MotionBox
+                            textAlign={['center', 'center', 'left', 'left']}
+                            maxW={'700px'}
+                            initial={{ x: 40, opacity: 0 }}
+                            whileInView={{ x: 0, opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, ease: 'easeInOut' }}
+                        >
                             <Heading size="md" color={textColor} mb={4}>
                                 For Homeowners
                             </Heading>
 
-                            <Text fontSize="lg" color={textColor} mb={4}>
+                            <Text
+                                fontSize="lg"
+                                whiteSpace={'pre-wrap'}
+                                color={textColor}
+                                mb={4}
+                            >
                                 For homeowners, [Website Name] provides a simple
                                 and effective solution to ensure their home and
                                 pets are well cared for while they're away. Our
@@ -170,12 +220,12 @@ const LandingPage = () => {
                             <Button size="md" colorScheme="purple" mb={4}>
                                 Sign Up Today!
                             </Button>
-                        </Box>
+                        </MotionBox>
                     </Stack>
                 </Container>
-            </Box>
+            </MotionBox>
 
-            <Box bg="purple.600" py={8}>
+            <MotionBox bg="purple.600" py={24}>
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -183,12 +233,24 @@ const LandingPage = () => {
                         align="center"
                         justify="space-between"
                     >
-                        <Box textAlign={['center', 'center', 'left', 'left']}>
+                        <MotionBox
+                            textAlign={['center', 'center', 'left', 'left']}
+                            maxW={'700px'}
+                            initial={{ x: -200, opacity: 0 }}
+                            whileInView={{ x: 0, opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, ease: 'easeInOut' }}
+                        >
                             <Heading size="md" color="white" mb={4}>
                                 Experience Peace of Mind
                             </Heading>
 
-                            <Text fontSize="lg" color="white" mb={4}>
+                            <Text
+                                fontSize="lg"
+                                whiteSpace={'pre-wrap'}
+                                color="white"
+                                mb={4}
+                            >
                                 Sign up for [Website Name] today and start
                                 experiencing the peace of mind that comes with a
                                 well-cared-for home and happy pets! And stay
@@ -205,21 +267,35 @@ const LandingPage = () => {
                             >
                                 Sign Up
                             </Button>
-                        </Box>
+                        </MotionBox>
 
-                        <Box mb={8}>
+                        <MotionBox
+                            mb={8}
+                            initial={{ x: 200, opacity: 0 }}
+                            whileInView={{ x: 0, opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, ease: 'easeInOut' }}
+                        >
                             <Image
                                 width={400}
                                 height={600}
                                 src="/images/landing1.png"
                                 alt="Happy pets"
                             />
-                        </Box>
+                        </MotionBox>
                     </Stack>
                 </Container>
-            </Box>
+            </MotionBox>
 
-            <Box bg="gray.50" py={8}>
+            <MotionBox
+                bg="gray.50"
+                py={8}
+                // add easing
+                initial={{ y: 10, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, ease: 'easeInOut' }}
+            >
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -232,8 +308,8 @@ const LandingPage = () => {
                         </Text>
                     </Stack>
                 </Container>
-            </Box>
-        </Box>
+            </MotionBox>
+        </MotionBox>
     );
 };
 
