@@ -91,9 +91,16 @@ export default function Navigation() {
                     </HStack>
                     <Flex alignItems={'center'}>
                         <Stack direction="row" spacing={4}>
-                            <Button colorScheme="purple" size="md">
-                                Sign Up
-                            </Button>
+                            <Link
+                                href="signup"
+                                style={{
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                <Button colorScheme="purple" size="md">
+                                    Sign Up
+                                </Button>
+                            </Link>
                             {!session ? (
                                 <Button
                                     colorScheme="gray"

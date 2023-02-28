@@ -1,7 +1,7 @@
 
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
+import bcrypt from 'bcryptjs'
 import prisma from '../../../lib/prismadb'
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
@@ -18,12 +18,22 @@ export const authOptions: NextAuthOptions = {
         const user = await prisma.user.findUnique({
           where: { email: credentials?.username },
         })
-        console.log("🚀 ~ file: [...nextauth].ts:24 ~ authorize ~ user:", user)
-        if (!user || credentials?.password !== user.password) {
+
+        if (!user) {
           throw new Error("Invalid username or password")
         }
+
+        bcrypt.compare(credentials?.password as string, user?.password as string, function(err, result) {
+          if (err) {
+            console.log(err);
+            throw new Error("Invalid username or password")
+          } else {
+            console.log(result);
+          }
+        });
+
         return {...user,
-          id: user.id.toString(),}
+          id: user!.id.toString(),}
         // issue a token or session cookie here
       },      
     }),
