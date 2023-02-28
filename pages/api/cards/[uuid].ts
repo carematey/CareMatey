@@ -4,7 +4,7 @@ import { User, Card, Home, PrismaClient } from '@prisma/client';
 
 export default function CardsHandler(
     req: NextApiRequest,
-    res: NextApiResponse<Card[] | { error: string }>
+    res: NextApiResponse<Card[] | Card | { error: string }>
 ) {
     const prisma = new PrismaClient({});
 
@@ -19,6 +19,20 @@ export default function CardsHandler(
     }
     async function createCard() {
         // ... you will write your Prisma Client queries here
+        const card = await prisma.card.create(
+            {
+                data: {
+                    creatorId: Number(req.body.creatorId),
+                    ownerId: Number(req.body.ownerId),
+                    homeId: Number(req.query.uuid),
+                    title: req.body.title,
+                    text: req.body.text,
+                    tags: req.body.tags,
+                },
+            },
+        );
+        return card;
+        
     }
 
     // switch case for different methods (GET, POST, PUT, DELETE)
@@ -37,7 +51,16 @@ export default function CardsHandler(
 
             break;
         case 'POST':
-            // postHouse(req, res)
+            createCard()
+                .then(async (data) => {
+                    res.status(200).json(data);
+                    await prisma.$disconnect();
+                })
+                .catch(async (e) => {
+                    console.error(e);
+                    await prisma.$disconnect();
+                    process.exit(1);
+                });
             break;
         case 'PUT':
             // putHouse(req, res)
