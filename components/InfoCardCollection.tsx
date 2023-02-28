@@ -5,6 +5,8 @@ import {
     Center,
     Button,
     Heading,
+    Text,
+    VStack,
 } from '@chakra-ui/react';
 import InfoCard from './InfoCard';
 import React, { useState } from 'react';
@@ -23,7 +25,7 @@ interface InfoCardCollectionProps extends ChakraProps {
     text?: string;
     title?: string;
     id?: string;
-    tags?: any;
+    tags?: string[];
     index?: number;
     lastUpdated?: string | undefined;
     createdAt?: string;
@@ -72,7 +74,10 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         <>
             {isLoading ? (
                 <Center>
-                    <CircularProgress isIndeterminate />
+                    <VStack my={8} gap={3}>
+                        <CircularProgress isIndeterminate />
+                        <Text>Have you selected a home?</Text>
+                    </VStack>
                 </Center>
             ) : (
                 <>
