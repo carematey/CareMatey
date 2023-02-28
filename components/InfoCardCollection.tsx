@@ -54,7 +54,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
 
     const filteredCategories: any = data?.map(
         (component: InfoCardCollectionProps) => {
-            return component.tags.map((item: string) => {
+            return component.tags?.map((item: string) => {
                 return item.toString();
             });
         }
@@ -119,7 +119,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                         </Button>
                     </SimpleGrid>
                     <SimpleGrid minChildWidth={'12rem'} spacing={3}>
-                        {filteredItems.map(
+                        {filteredItems?.map(
                             (content: InfoCardCollectionProps) => {
                                 return (
                                     <>

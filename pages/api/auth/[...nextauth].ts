@@ -1,26 +1,44 @@
+
 import NextAuth, { type NextAuthOptions } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-import { prisma } from "../../../server/db";
-
+import prisma from '../../../lib/prismadb'
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
-  callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-
-        session.user.email = "1234";
-      }
-      return session;
-    },
-  },
   // Configure one or more authentication providers
   providers: [
-    DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID || "",
-      clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        username: { label: "email", type: "text", placeholder: "user@domain" },
+        password: { label: "password", type: "password" },
+      },
+      async authorize(credentials, req) {
+
+        const user = await prisma.user.findUnique({
+          where: { email: credentials?.username },
+        })
+        console.log("🚀 ~ file: [...nextauth].ts:24 ~ authorize ~ user:", user)
+        if (!user || credentials?.password !== user.password) {
+          throw new Error("Invalid username or password")
+        }
+        return {...user,
+          id: user.id.toString(),}
+        // issue a token or session cookie here
+      },      
     }),
-    
+  ],
+  session: {
+  strategy: 'jwt',
+},
+  
+callbacks: {
+  session: async ({session, user, token}) => {
+    console.log("🚀 ~ file: [...nextauth].ts:40 ~ session: ~ session:", session, token,user)
+    session.user!.id = token.sub
+    return Promise.resolve(session)
+  },
+},
     /**
      * ...add more providers here
      *
@@ -30,7 +48,7 @@ export const authOptions: NextAuthOptions = {
      * NextAuth.js docs for the provider you want to use. Example:
      * @see https://next-auth.js.org/providers/github
      */
-  ],
+
 };
 
 export default NextAuth(authOptions);
