@@ -20,7 +20,7 @@ export default function SpaceHandler(
     // switch case for different methods (GET, POST, PUT, DELETE)
     switch (req.method) {
         case 'GET':
-          findAllUserSpaces()
+          return findAllUserSpaces()
                 .then(async (data) => {
                     res.status(200).json(data);
                     await prisma.$disconnect();

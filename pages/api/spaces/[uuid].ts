@@ -23,6 +23,7 @@ export default function SpaceHandler(
             data: {
                 name: req.body.name as string,
                 userId: req.body.ownerId as string,
+
             },  
         })
         return space
@@ -31,7 +32,7 @@ export default function SpaceHandler(
     // switch case for different methods (GET, POST, PUT, DELETE)
     switch (req.method) {
         case 'GET':
-            findSpaceById()
+            return findSpaceById()
                 .then(async (data) => {
                     res.status(200).json(data);
                     await prisma.$disconnect();
@@ -44,7 +45,7 @@ export default function SpaceHandler(
 
             break;
         case 'POST':
-            createSpace()
+            return createSpace()
             .then(async (data) => {
                 res.status(200).json(data);
                 await prisma.$disconnect();

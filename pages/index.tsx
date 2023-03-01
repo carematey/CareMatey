@@ -24,7 +24,7 @@ const LandingPage = () => {
     // if logged in, redirect to the dashboard
     useEffect(() => {
         if (session?.user) {
-            router.replace('/house');
+            router.replace('/spaces');
         }
     }, [session, router]);
 
