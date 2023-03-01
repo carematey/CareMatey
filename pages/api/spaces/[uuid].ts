@@ -1,24 +1,31 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {  Home } from '@prisma/client';
+import {  Space } from '@prisma/client';
 import prisma from '../../../lib/prismadb';
 
-export default function homeHandler(
+export default function SpaceHandler(
     req: NextApiRequest,
-    res: NextApiResponse<Home[] | { error: string }>
+    res: NextApiResponse<Space[] | Space | { error: string }>
 ) {
 
 
     async function findMany() {
         // ... you will write your Prisma Client queries here
-        const homes = await prisma.home.findMany({
+        const spaces = await prisma.space.findMany({
             where: {
-                ownerId: Number(req.query.uuid),
+                userId: req.query.uuid as string,
     }});
-        return homes;
+        return spaces;
     }
-    async function createHome() {
+    async function createSpace() {
         // ... you will write your Prisma Client queries here
+        const space = await prisma.space.create({
+            data: {
+                name: req.body.name as string,
+                userId: req.body.ownerId as string,
+            },  
+        })
+        return space
     }
 
     // switch case for different methods (GET, POST, PUT, DELETE)
@@ -37,7 +44,16 @@ export default function homeHandler(
 
             break;
         case 'POST':
-            // postHouse(req, res)
+            createSpace()
+            .then(async (data) => {
+                res.status(200).json(data);
+                await prisma.$disconnect();
+            })
+            .catch(async (e) => {
+                console.error(e);
+                await prisma.$disconnect();
+                process.exit(1);
+            });
             break;
         case 'PUT':
             // putHouse(req, res)

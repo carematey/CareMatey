@@ -7,20 +7,13 @@ import { useSession } from 'next-auth/react';
 
 const House = () => {
     const { data: session } = useSession();
-
-    const {
-        data: user,
-        error: userError,
-        isLoading: isUserLoading,
-    } = useSWR(session && `/api/users/${session?.user?.email}`, fetcher);
     const { data, error, isLoading } = useSWR(
-        user && `/api/homes/${1}`,
+        session?.user && `/api/spaces/${session.user.id}`,
         fetcher
     );
-
     return (
         <Container>
-            {session && <Text>Welcome {user?.email}</Text>}
+            {session && <Text>Welcome {session.user?.email}</Text>}
             <InfoCardCollection data={data} isLoading={isLoading} />
         </Container>
     );

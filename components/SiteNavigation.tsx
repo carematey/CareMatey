@@ -19,8 +19,8 @@ import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
 const Links = [
-    ['Home', ''],
-    ['Contact', 'contact'],
+    ['Home', '/'],
+    // ['Contact', '/contact'],
 ];
 
 const NavLink = ({ href, children }: { href: string; children: ReactNode }) => (
@@ -91,24 +91,26 @@ export default function Navigation() {
                     </HStack>
                     <Flex alignItems={'center'}>
                         <Stack direction="row" spacing={4}>
-                            <Link
-                                href="signup"
-                                style={{
-                                    textDecoration: 'none',
-                                }}
-                            >
-                                <Button colorScheme="purple" size="md">
-                                    Sign Up
-                                </Button>
-                            </Link>
                             {!session ? (
-                                <Button
-                                    colorScheme="gray"
-                                    size="md"
-                                    onClick={() => signIn()}
-                                >
-                                    Sign in
-                                </Button>
+                                <>
+                                    <Link
+                                        href="signup"
+                                        style={{
+                                            textDecoration: 'none',
+                                        }}
+                                    >
+                                        <Button colorScheme="purple" size="md">
+                                            Sign Up
+                                        </Button>
+                                    </Link>
+                                    <Button
+                                        colorScheme="gray"
+                                        size="md"
+                                        onClick={() => signIn()}
+                                    >
+                                        Sign in
+                                    </Button>
+                                </>
                             ) : (
                                 <Menu>
                                     <MenuButton

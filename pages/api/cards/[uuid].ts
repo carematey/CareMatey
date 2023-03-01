@@ -11,7 +11,7 @@ export default function CardsHandler(
         // ... you will write your Prisma Client queries here
         const cards = await prisma.card.findMany({
             where: {
-                homeId: Number(req.query.uuid),
+                spaceId: Number(req.query.uuid),
             },
         });
         return cards;
@@ -23,7 +23,7 @@ export default function CardsHandler(
                 data: {
                     creatorId: Number(req.body.creatorId),
                     ownerId: Number(req.body.ownerId),
-                    homeId: Number(req.query.uuid),
+                    spaceId: Number(req.query.uuid),
                     title: req.body.title,
                     text: req.body.text,
                     tags: req.body.tags,

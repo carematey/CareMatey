@@ -45,7 +45,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  Home          Home[]
+  Space         Space[]
   Card          Card[]
 }
 
@@ -57,10 +57,8 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Home {
-  id Int @id @default(autoincrement())
-
-  ownerId    Int
+model Space {
+  id         Int       @id @default(autoincrement())
   name       String?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime?
@@ -70,13 +68,13 @@ model Home {
   User       User?     @relation(fields: [userId], references: [id])
   userId     String?
 
-  @@map(name: "home")
+  @@map(name: "space")
 }
 
 model Card {
   id         Int       @id @default(autoincrement())
-  home       Home      @relation(fields: [homeId], references: [id])
-  homeId     Int
+  space      Space     @relation(fields: [spaceId], references: [id])
+  spaceId    Int
   title      String
   text       String
   tags       String[]
