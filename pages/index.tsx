@@ -26,7 +26,7 @@ const LandingPage = () => {
         if (session?.user) {
             router.replace('/house');
         }
-    }, [session]);
+    }, [session, router]);
 
     return (
         <MotionBox bg={bg}>
