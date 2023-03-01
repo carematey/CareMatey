@@ -28,8 +28,35 @@ export default function SpaceHandler(
         })
         return space
     }
+    
+    async function deleteSpace() {
 
-    // switch case for different methods (GET, POST, PUT, DELETE)
+        const cards = await prisma.card.deleteMany({
+            where: {
+                spaceId: Number(req.query.uuid),
+            }
+        })
+
+        const space = await prisma.space.delete({
+            where: {
+                id: Number(req.query.uuid),
+            }
+        })
+        return space
+    }
+
+    const editSpace = async () => {
+        const space = await prisma.space.update({
+            where: {
+                id: Number(req.query.uuid),
+            },
+            data: {
+                name: req.body.name as string,
+            }
+        })
+        return space
+    }
+    
     switch (req.method) {
         case 'GET':
             return findSpaceById()
@@ -43,7 +70,6 @@ export default function SpaceHandler(
                     process.exit(1);
                 });
 
-            break;
         case 'POST':
             return createSpace()
             .then(async (data) => {
@@ -55,13 +81,28 @@ export default function SpaceHandler(
                 await prisma.$disconnect();
                 process.exit(1);
             });
-            break;
         case 'PUT':
-            // putHouse(req, res)
-            break;
+            return editSpace()
+            .then(async (data) => {
+                res.status(200).json(data);
+                await prisma.$disconnect();
+            })
+            .catch(async (e) => {
+                console.error(e);
+                await prisma.$disconnect();
+                process.exit(1);
+            });
         case 'DELETE':
-            // deleteHouse(req, res)
-            break;
+            return deleteSpace()
+            .then(async (data) => {
+                res.status(200).json(data);
+                await prisma.$disconnect();
+            })
+            .catch(async (e) => {
+                console.error(e);
+                await prisma.$disconnect();
+                process.exit(1);
+            });
         default:
             res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);
             res.status(405).end(`Method ${req.method} Not Allowed`);

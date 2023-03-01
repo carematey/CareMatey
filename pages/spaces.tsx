@@ -14,6 +14,8 @@ import {
     IconButton,
     Input,
     ButtonGroup,
+    InputGroup,
+    InputRightElement,
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 import InfoCardCollection from '../components/InfoCardCollection';
@@ -21,14 +23,32 @@ import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
 import { useSession } from 'next-auth/react';
 import { Space } from '@prisma/client';
-import { AddIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
+import {
+    AddIcon,
+    CheckIcon,
+    CloseIcon,
+    DeleteIcon,
+    EditIcon,
+} from '@chakra-ui/icons';
 
 //@temporary:
 const spaceId = 1;
 
 const Space = () => {
     const { data: session } = useSession();
-    const [selectedSpaceId, setSelectedSpaceId] = React.useState<number>();
+
+    const [creatingSpace, setCreatingSpace] = React.useState<boolean>(false);
+    const [newSpaceName, setNewSpaceName] = React.useState<string>('');
+
+    const [editMode, setEditMode] = React.useState<boolean>(false);
+
+    const [editNameId, setEditNameId] = React.useState<number | null>(null);
+    const [editSpaceNameValue, setEditSpaceNameValue] =
+        React.useState<string>('');
+
+    const [selectedSpaceId, setSelectedSpaceId] = React.useState<number | null>(
+        null
+    );
     const {
         data: spaces,
         error,
@@ -47,6 +67,7 @@ const Space = () => {
     );
 
     const handleCreateSpace = async () => {
+        if (!newSpaceName.length) return;
         const res = await fetch(`/api/spaces/${session?.user?.id}`, {
             method: 'POST',
             headers: {
@@ -61,8 +82,36 @@ const Space = () => {
         console.log(data);
     };
 
-    const [creatingSpace, setCreatingSpace] = React.useState<boolean>(false);
-    const [newSpaceName, setNewSpaceName] = React.useState<string>('');
+    const handleDeleteSpace = async (spaceId: number) => {
+        if (spaceId === selectedSpaceId) {
+            setSelectedSpaceId(null);
+        }
+        const res = await fetch(`/api/spaces/${spaceId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await res.json();
+        console.log(data);
+        setTimeout(() => {
+            mutate();
+        }, 100);
+    };
+
+    const handleEditSpaceName = async (spaceId: number) => {
+        if (!editSpaceNameValue.length) return;
+        const res = await fetch(`/api/spaces/${spaceId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: editSpaceNameValue,
+            }),
+        });
+    };
+
     return (
         <Container maxW={'100%'}>
             {session ? (
@@ -70,7 +119,7 @@ const Space = () => {
                     <HStack width={'100%'}>
                         <VStack
                             display={{ base: 'none', md: 'flex' }}
-                            w={{ base: 0, md: '20vw' }}
+                            w={{ base: 0, md: '27.5vw' }}
                             alignSelf={'flex-start'}
                             py={8}
                         >
@@ -110,91 +159,263 @@ const Space = () => {
                                     </Text>
                                     <AccordionPanel py={4}>
                                         {/* map spaces here */}
-                                        <IconButton
-                                            icon={<AddIcon />}
-                                            aria-label="Add"
-                                            w={'100%'}
-                                            my={2}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                setCreatingSpace(true);
-                                                setTimeout(() => {
-                                                    document
-                                                        ?.getElementById(
-                                                            'new-space'
-                                                        )
-                                                        ?.focus();
-                                                }, 100);
-                                            }}
-                                        />
-                                    </AccordionPanel>
-                                    {creatingSpace && (
-                                        <AccordionPanel
-                                            py={4}
-                                            display={'flex'}
-                                            flexDir={'column'}
-                                        >
-                                            <Input
-                                                onChange={(e) => {
-                                                    setNewSpaceName(
-                                                        e.target.value
-                                                    );
-                                                }}
-                                                id={'new-space'}
-                                                w={'100%'}
-                                                mb={2}
-                                            />
-                                            <ButtonGroup alignSelf={'flex-end'}>
-                                                <IconButton
-                                                    aria-label="cancel"
-                                                    colorScheme={'red'}
-                                                    opacity={0.8}
-                                                    icon={<CloseIcon />}
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        setCreatingSpace(false);
-                                                        setNewSpaceName('');
-                                                    }}
-                                                />
-                                                <IconButton
-                                                    aria-label="save"
-                                                    colorScheme={'green'}
-                                                    opacity={0.8}
-                                                    icon={<CheckIcon />}
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        handleCreateSpace();
-                                                        setCreatingSpace(false);
-                                                        setNewSpaceName('');
-                                                        setTimeout(() => {
-                                                            mutate();
-                                                        }, 100);
-                                                    }}
-                                                />
-                                            </ButtonGroup>
-                                        </AccordionPanel>
-                                    )}
-                                    <Divider borderColor={'gray.300'} />
-                                    <AccordionPanel py={4}>
-                                        {/* map spaces here */}
-                                        {spaces?.map((space: Space) => (
-                                            <Button
+                                        <ButtonGroup w={'100%'}>
+                                            <IconButton
+                                                icon={<AddIcon />}
+                                                colorScheme={
+                                                    creatingSpace
+                                                        ? 'blackAlpha'
+                                                        : 'gray'
+                                                }
+                                                aria-label="Add"
                                                 w={'100%'}
                                                 my={2}
-                                                colorScheme={
-                                                    selectedSpaceId === space.id
-                                                        ? 'blackAlpha'
-                                                        : 'teal'
-                                                }
-                                                key={space.id}
-                                                onClick={() => {
-                                                    setSelectedSpaceId(
-                                                        space.id
-                                                    );
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setCreatingSpace(true);
+                                                    setTimeout(() => {
+                                                        document
+                                                            ?.getElementById(
+                                                                'new-space'
+                                                            )
+                                                            ?.focus();
+                                                    }, 100);
                                                 }}
+                                            />
+                                            <IconButton
+                                                icon={<EditIcon />}
+                                                aria-label="Edit"
+                                                colorScheme={
+                                                    editMode
+                                                        ? 'blackAlpha'
+                                                        : 'gray'
+                                                }
+                                                w={'100%'}
+                                                my={2}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setEditNameId(null);
+                                                    setEditMode(!editMode);
+                                                }}
+                                            />
+                                        </ButtonGroup>
+                                    </AccordionPanel>
+
+                                    {creatingSpace && (
+                                        <>
+                                            <AccordionPanel
+                                                pt={4}
+                                                display={'flex'}
+                                                flexDir={'column'}
+                                                pb={'0 !important'}
                                             >
-                                                {space.name}
-                                            </Button>
+                                                <InputGroup pb={'0 !important'}>
+                                                    <Input
+                                                        onChange={(e) => {
+                                                            setNewSpaceName(
+                                                                e.target.value
+                                                            );
+                                                        }}
+                                                        id={'new-space'}
+                                                        w={'100%'}
+                                                        mb={2}
+                                                    />
+                                                    <InputRightElement>
+                                                        <ButtonGroup
+                                                            isAttached
+                                                            pr={10}
+                                                        >
+                                                            <IconButton
+                                                                aria-label="cancel"
+                                                                colorScheme={
+                                                                    'red'
+                                                                }
+                                                                opacity={0.8}
+                                                                icon={
+                                                                    <CloseIcon />
+                                                                }
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    e.preventDefault();
+                                                                    setCreatingSpace(
+                                                                        false
+                                                                    );
+                                                                    setNewSpaceName(
+                                                                        ''
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <IconButton
+                                                                aria-label="save"
+                                                                colorScheme={
+                                                                    'green'
+                                                                }
+                                                                opacity={0.8}
+                                                                icon={
+                                                                    <CheckIcon />
+                                                                }
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    e.preventDefault();
+                                                                    handleCreateSpace();
+                                                                    setCreatingSpace(
+                                                                        false
+                                                                    );
+                                                                    setNewSpaceName(
+                                                                        ''
+                                                                    );
+                                                                    setTimeout(
+                                                                        () => {
+                                                                            mutate();
+                                                                        },
+                                                                        100
+                                                                    );
+                                                                }}
+                                                            />
+                                                        </ButtonGroup>
+                                                    </InputRightElement>
+                                                </InputGroup>
+                                            </AccordionPanel>
+                                        </>
+                                    )}
+                                    <AccordionPanel pb={4} pt={0}>
+                                        {/* map spaces here */}
+                                        {spaces?.map((space: Space) => (
+                                            <ButtonGroup
+                                                w={'100%'}
+                                                alignItems={'center'}
+                                            >
+                                                {editNameId === space.id &&
+                                                editMode ? (
+                                                    <Input
+                                                        my={2}
+                                                        onChange={(e) => {
+                                                            setEditSpaceNameValue(
+                                                                e.target.value
+                                                            );
+                                                        }}
+                                                        defaultValue={
+                                                            space.name || ''
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <Button
+                                                        w={'100%'}
+                                                        my={2}
+                                                        colorScheme={
+                                                            selectedSpaceId ===
+                                                            space.id
+                                                                ? 'blackAlpha'
+                                                                : 'gray'
+                                                        }
+                                                        key={space.id}
+                                                        onClick={() => {
+                                                            setSelectedSpaceId(
+                                                                space.id
+                                                            );
+                                                        }}
+                                                        transition={
+                                                            'all 2s ease-in-out'
+                                                        }
+                                                    >
+                                                        {space.name}
+                                                    </Button>
+                                                )}
+                                                {editMode ? (
+                                                    editNameId !== space.id ? (
+                                                        <>
+                                                            <IconButton
+                                                                size={'md'}
+                                                                aria-label="edit"
+                                                                colorScheme={
+                                                                    editNameId ===
+                                                                    space.id
+                                                                        ? 'blackAlpha'
+                                                                        : 'gray'
+                                                                }
+                                                                icon={
+                                                                    <EditIcon />
+                                                                }
+                                                                onClick={() => {
+                                                                    setEditNameId(
+                                                                        space.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <IconButton
+                                                                size={'md'}
+                                                                aria-label="delete"
+                                                                icon={
+                                                                    <DeleteIcon />
+                                                                }
+                                                                onClick={() => {
+                                                                    handleDeleteSpace(
+                                                                        space.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <IconButton
+                                                                size={'md'}
+                                                                aria-label="cancel"
+                                                                colorScheme={
+                                                                    'red'
+                                                                }
+                                                                opacity={0.8}
+                                                                icon={
+                                                                    <CloseIcon />
+                                                                }
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    e.preventDefault();
+                                                                    setEditNameId(
+                                                                        null
+                                                                    );
+                                                                    setEditSpaceNameValue(
+                                                                        ''
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <IconButton
+                                                                size={'md'}
+                                                                aria-label="save"
+                                                                colorScheme={
+                                                                    'green'
+                                                                }
+                                                                opacity={0.8}
+                                                                icon={
+                                                                    <CheckIcon />
+                                                                }
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    e.preventDefault();
+                                                                    handleEditSpaceName(
+                                                                        space.id
+                                                                    );
+                                                                    setEditNameId(
+                                                                        null
+                                                                    );
+                                                                    setEditSpaceNameValue(
+                                                                        ''
+                                                                    );
+                                                                    setTimeout(
+                                                                        () => {
+                                                                            mutate();
+                                                                        },
+                                                                        100
+                                                                    );
+                                                                }}
+                                                            />
+                                                        </>
+                                                    )
+                                                ) : null}
+                                            </ButtonGroup>
                                         ))}
                                     </AccordionPanel>
                                 </AccordionItem>
