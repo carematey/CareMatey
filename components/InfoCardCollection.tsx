@@ -105,7 +105,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                         }
                                         whiteSpace={'normal'}
                                     >
-                                        {tags.toUpperCase()}
+                                        {tags?.toUpperCase()}
                                     </Button>
                                 );
                             }
@@ -128,10 +128,15 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                             tags={content.tags}
                                             title={content.title}
                                             text={content.text}
+                                            toCreate={false}
                                             date={
                                                 content.lastUpdated
-                                                    ? content.lastUpdated
-                                                    : content.createdAt
+                                                    ? new Date(
+                                                          content.lastUpdated
+                                                      )
+                                                    : new Date(
+                                                          content.createdAt as string
+                                                      )
                                             }
                                         />
                                     </>

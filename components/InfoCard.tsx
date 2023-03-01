@@ -20,11 +20,14 @@ import {
     Textarea,
     Button,
     VStack,
+    InputGroup,
+    InputRightElement,
 } from '@chakra-ui/react';
 import React from 'react';
 import theme from '../pages/theme';
 import ReactMarkdown from 'react-markdown';
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
+import { useSession } from 'next-auth/react';
 
 interface InfoCardProps extends ChakraProps {
     text?: string;
@@ -37,9 +40,52 @@ interface InfoCardProps extends ChakraProps {
 const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
     const { tags, text, title, date, toCreate, ...rest } = props;
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [newTag, setNewTag] = React.useState<string>(''); // TODO: add tags. Tags need to be able to add more than one
+    const [newCardValues, setNewCardValues] = React.useState<{
+        title: string;
+        text: string;
+        tags: string[];
+    }>({
+        title: '',
+        text: '',
+        tags: [],
+    });
+
+    const { data: session } = useSession();
+    const handleSubmission = async (e: React.FormEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        console.log(
+            '🚀 ~ file: InfoCard.tsx:61 ~ handleSubmission ~ ',
+            JSON.stringify({
+                creatorId: session?.user?.id,
+                ownerId: session?.user?.id, // TODO: change this to the id of the user who owns the board, in case the sitter is creating a card for the owner
+                title: title,
+                text: text,
+                tags: tags,
+            })
+        );
+        const res = await fetch(
+            '/api/cards/1', // TODO: change this to the id of the house
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    creatorId: session?.user?.id,
+                    ownerId: session?.user?.id, // TODO: change this to the id of the user who owns the board, in case the sitter is creating a card for the owner
+                    title: newCardValues.title,
+                    text: newCardValues.text,
+                    tags: newCardValues.tags,
+                }),
+            }
+        );
+        const data = await res.json();
+        console.log(data);
+    };
 
     const dt = { time: date };
-    const updatedTime = new Date(dt.time).toLocaleDateString();
+    const updatedTime = new Date(dt!.time!?.toLocaleDateString());
 
     const Tags = ({ tagSize }: { tagSize: string }) => (
         <Wrap spacing={2}>
@@ -107,9 +153,11 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                     w={'100%'}
                                 >
                                     <Text minW="13ch">
-                                        Last Updated
-                                        <br />
-                                        {updatedTime}
+                                        <>
+                                            Last Updated
+                                            <br />
+                                            {updatedTime}
+                                        </>
                                     </Text>
                                     <Tags tagSize={'lg'} />
                                 </HStack>
@@ -124,16 +172,69 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                             </ModalHeader>
                             <ModalBody>
                                 <VStack>
-                                    <Input placeholder="Title" isRequired />
+                                    <Input
+                                        onChange={(e) =>
+                                            setNewCardValues({
+                                                ...newCardValues,
+                                                title: e.target.value,
+                                            })
+                                        }
+                                        placeholder="Title"
+                                        isRequired
+                                    />
 
                                     <Textarea
+                                        onChange={(e) =>
+                                            setNewCardValues({
+                                                ...newCardValues,
+                                                text: e.target.value,
+                                            })
+                                        }
                                         placeholder="Instruction content"
                                         isRequired
                                     />
-                                    <Input placeholder="Tags" />
+                                    <InputGroup>
+                                        <Input
+                                            value={newTag}
+                                            onChange={(e) =>
+                                                setNewTag(e.target.value)
+                                            }
+                                            placeholder="Tags"
+                                        />
+                                        <InputRightElement>
+                                            <Button
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setNewCardValues({
+                                                        ...newCardValues,
+                                                        tags: [
+                                                            ...newCardValues.tags,
+                                                            newTag,
+                                                        ],
+                                                    });
+                                                    setNewTag('');
+                                                }}
+                                            >
+                                                Add
+                                            </Button>
+                                        </InputRightElement>
+                                    </InputGroup>
+                                    <HStack alignSelf={'flex-start'}>
+                                        {newCardValues.tags.map(
+                                            (tag: string, idx: number) => (
+                                                <Tag
+                                                    colorScheme={'twitter'}
+                                                    key={idx}
+                                                >
+                                                    {tag}
+                                                </Tag>
+                                            )
+                                        )}
+                                    </HStack>
                                     <Button
                                         onClick={(e) => {
-                                            console.log('submitted nothing!');
+                                            console.log('submitted!');
+                                            handleSubmission(e);
                                         }}
                                     >
                                         Submit
