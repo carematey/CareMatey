@@ -105,7 +105,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                         }
                                         whiteSpace={'normal'}
                                     >
-                                        {tags.toUpperCase()}
+                                        {tags?.toUpperCase()}
                                     </Button>
                                 );
                             }
