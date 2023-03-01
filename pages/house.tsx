@@ -14,7 +14,7 @@ const House = () => {
         isLoading: isUserLoading,
     } = useSWR(session && `/api/users/${session?.user?.email}`, fetcher);
     const { data, error, isLoading } = useSWR(
-        user && `/api/homes/${user?.id}`,
+        user && `/api/homes/${1}`,
         fetcher
     );
 

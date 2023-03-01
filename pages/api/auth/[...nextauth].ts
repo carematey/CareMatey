@@ -3,11 +3,27 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import prisma from "../../../lib/prismadb";
+import GoogleProvider from "next-auth/providers/google";
+import AppleProvider from "next-auth/providers/apple";
+import FacebookProvider from "next-auth/providers/facebook";
+
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [
+   
+
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
+    AppleProvider({
+      
+    }),
+    FacebookProvider({
+      
+    }),
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID || "",
       clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
