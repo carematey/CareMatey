@@ -39,15 +39,6 @@ const Space = () => {
         fetcher
     );
 
-    const {
-        data: cards,
-        error: errorCards,
-        isLoading: isLoadingCards,
-    } = useSWR(
-        !!selectedSpaceId && `/api/cards/space/${selectedSpaceId}`,
-        fetcher
-    );
-
     const selectedSpace = useMemo(
         () =>
             spaces &&
@@ -216,10 +207,7 @@ const Space = () => {
                             h={'calc(min(750px, calc(100vh - 100px)))'}
                         />
                         {selectedSpaceId && (
-                            <InfoCardCollection
-                                data={cards}
-                                isLoading={isLoadingCards}
-                            />
+                            <InfoCardCollection spaceId={selectedSpaceId} />
                         )}
                     </HStack>
                 </>
