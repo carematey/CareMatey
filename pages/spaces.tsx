@@ -30,12 +30,16 @@ import {
     DeleteIcon,
     EditIcon,
 } from '@chakra-ui/icons';
+import { motion } from 'framer-motion';
 
 //@temporary:
 const spaceId = 1;
 
 const Space = () => {
     const { data: session } = useSession();
+
+    const MotionIcon = motion(IconButton);
+    const MotionButton = motion(Button);
 
     const [creatingSpace, setCreatingSpace] = React.useState<boolean>(false);
     const [newSpaceName, setNewSpaceName] = React.useState<string>('');
@@ -160,7 +164,9 @@ const Space = () => {
                                     <AccordionPanel py={4}>
                                         {/* map spaces here */}
                                         <ButtonGroup w={'100%'}>
-                                            <IconButton
+                                            <MotionIcon
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.99 }}
                                                 icon={<AddIcon />}
                                                 colorScheme={
                                                     creatingSpace
@@ -170,8 +176,7 @@ const Space = () => {
                                                 aria-label="Add"
                                                 w={'100%'}
                                                 my={2}
-                                                onClick={(e) => {
-                                                    e.preventDefault();
+                                                onClick={() => {
                                                     setCreatingSpace(true);
                                                     setTimeout(() => {
                                                         document
@@ -182,7 +187,9 @@ const Space = () => {
                                                     }, 100);
                                                 }}
                                             />
-                                            <IconButton
+                                            <MotionIcon
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.99 }}
                                                 icon={<EditIcon />}
                                                 aria-label="Edit"
                                                 colorScheme={
@@ -192,8 +199,7 @@ const Space = () => {
                                                 }
                                                 w={'100%'}
                                                 my={2}
-                                                onClick={(e) => {
-                                                    e.preventDefault();
+                                                onClick={() => {
                                                     setEditNameId(null);
                                                     setEditMode(!editMode);
                                                 }}
@@ -225,7 +231,13 @@ const Space = () => {
                                                             isAttached
                                                             pr={10}
                                                         >
-                                                            <IconButton
+                                                            <MotionIcon
+                                                                whileHover={{
+                                                                    scale: 1.02,
+                                                                }}
+                                                                whileTap={{
+                                                                    scale: 0.99,
+                                                                }}
                                                                 aria-label="cancel"
                                                                 colorScheme={
                                                                     'red'
@@ -234,10 +246,7 @@ const Space = () => {
                                                                 icon={
                                                                     <CloseIcon />
                                                                 }
-                                                                onClick={(
-                                                                    e
-                                                                ) => {
-                                                                    e.preventDefault();
+                                                                onClick={() => {
                                                                     setCreatingSpace(
                                                                         false
                                                                     );
@@ -246,7 +255,13 @@ const Space = () => {
                                                                     );
                                                                 }}
                                                             />
-                                                            <IconButton
+                                                            <MotionIcon
+                                                                whileHover={{
+                                                                    scale: 1.02,
+                                                                }}
+                                                                whileTap={{
+                                                                    scale: 0.99,
+                                                                }}
                                                                 aria-label="save"
                                                                 colorScheme={
                                                                     'green'
@@ -255,10 +270,7 @@ const Space = () => {
                                                                 icon={
                                                                     <CheckIcon />
                                                                 }
-                                                                onClick={(
-                                                                    e
-                                                                ) => {
-                                                                    e.preventDefault();
+                                                                onClick={() => {
                                                                     handleCreateSpace();
                                                                     setCreatingSpace(
                                                                         false
@@ -301,7 +313,13 @@ const Space = () => {
                                                         }
                                                     />
                                                 ) : (
-                                                    <Button
+                                                    <MotionButton
+                                                        whileHover={{
+                                                            scale: 1.02,
+                                                        }}
+                                                        whileTap={{
+                                                            scale: 0.99,
+                                                        }}
                                                         w={'100%'}
                                                         my={2}
                                                         colorScheme={
@@ -316,17 +334,20 @@ const Space = () => {
                                                                 space.id
                                                             );
                                                         }}
-                                                        transition={
-                                                            'all 2s ease-in-out'
-                                                        }
                                                     >
                                                         {space.name}
-                                                    </Button>
+                                                    </MotionButton>
                                                 )}
                                                 {editMode ? (
                                                     editNameId !== space.id ? (
                                                         <>
-                                                            <IconButton
+                                                            <MotionIcon
+                                                                whileHover={{
+                                                                    scale: 1.02,
+                                                                }}
+                                                                whileTap={{
+                                                                    scale: 0.99,
+                                                                }}
                                                                 size={'md'}
                                                                 aria-label="edit"
                                                                 colorScheme={
@@ -344,7 +365,13 @@ const Space = () => {
                                                                     );
                                                                 }}
                                                             />
-                                                            <IconButton
+                                                            <MotionIcon
+                                                                whileHover={{
+                                                                    scale: 1.02,
+                                                                }}
+                                                                whileTap={{
+                                                                    scale: 0.99,
+                                                                }}
                                                                 size={'md'}
                                                                 aria-label="delete"
                                                                 icon={
@@ -359,7 +386,13 @@ const Space = () => {
                                                         </>
                                                     ) : (
                                                         <>
-                                                            <IconButton
+                                                            <MotionIcon
+                                                                whileHover={{
+                                                                    scale: 1.02,
+                                                                }}
+                                                                whileTap={{
+                                                                    scale: 0.99,
+                                                                }}
                                                                 size={'md'}
                                                                 aria-label="cancel"
                                                                 colorScheme={
@@ -369,10 +402,7 @@ const Space = () => {
                                                                 icon={
                                                                     <CloseIcon />
                                                                 }
-                                                                onClick={(
-                                                                    e
-                                                                ) => {
-                                                                    e.preventDefault();
+                                                                onClick={() => {
                                                                     setEditNameId(
                                                                         null
                                                                     );
@@ -381,7 +411,13 @@ const Space = () => {
                                                                     );
                                                                 }}
                                                             />
-                                                            <IconButton
+                                                            <MotionIcon
+                                                                whileHover={{
+                                                                    scale: 1.02,
+                                                                }}
+                                                                whileTap={{
+                                                                    scale: 0.99,
+                                                                }}
                                                                 size={'md'}
                                                                 aria-label="save"
                                                                 colorScheme={
@@ -391,10 +427,7 @@ const Space = () => {
                                                                 icon={
                                                                     <CheckIcon />
                                                                 }
-                                                                onClick={(
-                                                                    e
-                                                                ) => {
-                                                                    e.preventDefault();
+                                                                onClick={() => {
                                                                     handleEditSpaceName(
                                                                         space.id
                                                                     );
