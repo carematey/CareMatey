@@ -66,7 +66,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     ];
 
     // Pull this from the DB
-    const homeName: string = 'Mikeys house';
+    // const homeName: string = data.space.name;
 
     return (
         <>
@@ -77,7 +77,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
             ) : (
                 <>
                     <Center mt={4}>
-                        <Heading>{homeName}</Heading>
+                        {/* <Heading>{homeName}</Heading> */}
                     </Center>
                     <SimpleGrid
                         minChildWidth={'6rem'}

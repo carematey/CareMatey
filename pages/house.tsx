@@ -5,18 +5,24 @@ import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
 import { useSession } from 'next-auth/react';
 
-const House = () => {
+//@temporary:
+const spaceId = 1
+
+const Space = (selectedSpace: Number) => {
     const { data: session } = useSession();
-    const { data, error, isLoading } = useSWR(
-        session?.user && `/api/spaces/${session.user.id}`,
+    const { data: loadedSpace, error, isLoading } = useSWR(
+        session?.user && `/api/cards/space/${spaceId}`,
         fetcher
     );
     return (
         <Container>
-            {session && <Text>Welcome {session.user?.email}</Text>}
-            <InfoCardCollection data={data} isLoading={isLoading} />
+            {session ? <>
+            <Text>Welcome {session.user?.email}</Text>
+                <InfoCardCollection data={loadedSpace} isLoading={isLoading} /> 
+            </>
+            :<Text>Please login</Text> }
         </Container>
     );
 };
 
-export default House;
+export default Space;

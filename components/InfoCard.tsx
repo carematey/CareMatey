@@ -72,11 +72,10 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
             }
         );
         const data = await res.json();
-        console.log(data);
     };
 
     const dt = { time: date };
-    const updatedTime = new Date(dt!.time!?.toLocaleDateString());
+    const updatedTime = new Date(dt!.time!).toLocaleDateString();
 
     const Tags = ({ tagSize }: { tagSize: string }) => (
         <Wrap spacing={2}>
@@ -145,7 +144,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                 >
                                     <Text minW="13ch">
                                         <>
-                                            Last Updated
+                                            Last Updated 
                                             <br />
                                             {updatedTime}
                                         </>

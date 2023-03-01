@@ -1,37 +1,26 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {  Space } from '@prisma/client';
-import prisma from '../../../lib/prismadb';
+import {  Card } from '@prisma/client';
+import prisma from '../../../../lib/prismadb';
 
-export default function SpaceHandler(
+export default function SpacesCardHandler(
     req: NextApiRequest,
-    res: NextApiResponse<Space[] | Space | { error: string }>
+    res: NextApiResponse<Card[] | Card | { error: string }>
 ) {
 
-    /* 
-        GET a Space by its uuid
-    */
-    async function findSpaceById() {
-        const spaces = await prisma.space.findUniqueOrThrow({
+    async function findSpacesCards() {
+        /** GET all cards within the inputted spacesId */
+        const cards = await prisma.card.findMany({
             where: {
-                id: Number(req.query.uuid),
+                spaceId: Number(req.query.spaceId),
     }});
-        return spaces;
-    }
-    async function createSpace() {
-        const space = await prisma.space.create({
-            data: {
-                name: req.body.name as string,
-                userId: req.body.ownerId as string,
-            },  
-        })
-        return space
+        return cards;
     }
 
     // switch case for different methods (GET, POST, PUT, DELETE)
     switch (req.method) {
         case 'GET':
-            findSpaceById()
+            findSpacesCards()
                 .then(async (data) => {
                     res.status(200).json(data);
                     await prisma.$disconnect();
@@ -44,16 +33,7 @@ export default function SpaceHandler(
 
             break;
         case 'POST':
-            createSpace()
-            .then(async (data) => {
-                res.status(200).json(data);
-                await prisma.$disconnect();
-            })
-            .catch(async (e) => {
-                console.error(e);
-                await prisma.$disconnect();
-                process.exit(1);
-            });
+            
             break;
         case 'PUT':
             // putHouse(req, res)

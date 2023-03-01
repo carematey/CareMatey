@@ -78,8 +78,8 @@ model Card {
   title      String
   text       String
   tags       String[]
-  ownerId    Int
-  creatorId  Int
+  ownerId    String
+  creatorId  String
   createdAt  DateTime  @default(now())
   updatedAt  DateTime?
   archivedAt DateTime?
