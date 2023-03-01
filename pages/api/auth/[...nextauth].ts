@@ -19,10 +19,12 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
     AppleProvider({
-      
+      clientId: process.env.APPLE_CLIENT_ID || "",
+      clientSecret: process.env.APPLE_CLIENT_SECRET || "",
     }),
     FacebookProvider({
-      
+      clientId: process.env.FACEBOOK_CLIENT_ID || "",
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET || "",      
     }),
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID || "",
@@ -33,14 +35,18 @@ export const authOptions: NextAuthOptions = {
   strategy: 'jwt',
 },
   
-callbacks: {
-  session: async ({session, user, token}) => {
-    session.user!.id = token.sub
-    return Promise.resolve(session)
+  callbacks: {
+    session: async ({ session, token }: any) => {
+      session.user!.id = token.sub
+      return Promise.resolve(session)
+    },
+    jwt: async ({ user, token }) => {
+      if (user) {
+        token.uid = user.id
+      }
+      return token
+    }
   },
-  
-
-},
     /**
      * ...add more providers here
      *

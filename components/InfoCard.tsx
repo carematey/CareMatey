@@ -54,18 +54,8 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
     const { data: session } = useSession();
     const handleSubmission = async (e: React.FormEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        console.log(
-            '🚀 ~ file: InfoCard.tsx:61 ~ handleSubmission ~ ',
-            JSON.stringify({
-                creatorId: session?.user?.id,
-                ownerId: session?.user?.id, // TODO: change this to the id of the user who owns the board, in case the sitter is creating a card for the owner
-                title: title,
-                text: text,
-                tags: tags,
-            })
-        );
         const res = await fetch(
-            '/api/cards/1', // TODO: change this to the id of the house
+            '/api/cards/1', // TODO: change this to the id of the space
             {
                 method: 'POST',
                 headers: {
@@ -73,7 +63,8 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 },
                 body: JSON.stringify({
                     creatorId: session?.user?.id,
-                    ownerId: session?.user?.id, // TODO: change this to the id of the user who owns the board, in case the sitter is creating a card for the owner
+                    ownerId: session?.user?.id,
+                    // TODO: change this to the id of the user who owns the board, in case the sitter is creating a card for the owner
                     title: newCardValues.title,
                     text: newCardValues.text,
                     tags: newCardValues.tags,
