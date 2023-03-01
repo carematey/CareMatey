@@ -1,12 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { User, Card, Home, PrismaClient } from '@prisma/client';
-
+import {  Card } from '@prisma/client';
+import prisma from '../../../lib/prismadb';
 export default function CardsHandler(
     req: NextApiRequest,
     res: NextApiResponse<Card[] | { error: string }>
 ) {
-    const prisma = new PrismaClient({});
 
     async function findMany() {
         // ... you will write your Prisma Client queries here
