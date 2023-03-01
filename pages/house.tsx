@@ -1,5 +1,5 @@
 import { Container, Text, Select } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import InfoCardCollection from '../components/InfoCardCollection';
 import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
@@ -15,38 +15,38 @@ const House = () => {
     } = useSWR(session && `/api/users/${session?.user?.email}`, fetcher);
 
     const {
-        data: home,
-        error: homeError,
-        isLoading: isHomeLoading,
+        data: spaces,
+        error: spaceError,
+        isLoading: isSpaceLoading,
     } = useSWR(user?.id && `/api/homes/${user?.id}`, fetcher);
 
-    const [selectedHome, setSelectedHome] = useState(null);
+    const [selectedSpace, setSelectedSpace] = useState('');
 
-    function handleSelectChange(e) {
-        setSelectedHome(e.target.value);
+    function handleSelectChange(e : React.ChangeEvent<HTMLSelectElement>) {
+        setSelectedSpace(e.target.value);
     }
 
     const {
         data: card,
         error: cardDataError,
         isLoading: isCardDataLoading,
-    } = useSWR(selectedHome && `/api/cards/${selectedHome}`, fetcher);
+    } = useSWR(selectedSpace && `/api/cards/${selectedSpace}`, fetcher);
 
     return (
         <Container>
             {session && <Text>Welcome {user?.email}</Text>}
-            <Select placeholder="Select Home" onChange={handleSelectChange}>
-                {home?.map((house: any) => {
+            <Select placeholder="Select Space" onChange={handleSelectChange}>
+                {spaces?.map((space: any) => {
                     return (
-                        <option key={house.index} value={house.id}>
-                            {house.name}
+                        <option key={space.index} value={space.id}>
+                            {space.name}
                         </option>
                     );
                 })}
             </Select>
             <InfoCardCollection
                 data={card}
-                isLoading={isHomeLoading || !selectedHome}
+                isLoading={isSpaceLoading || !selectedSpace}
             />
         </Container>
     );

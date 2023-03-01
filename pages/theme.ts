@@ -1,14 +1,13 @@
 import { extendTheme, type ThemeConfig } from '@chakra-ui/react';
 const config: ThemeConfig = {
     initialColorMode: 'light',
-    useSystemColorMode: false,
 };
 
 const theme = extendTheme({
     styles: {
         global: {
             body: {
-                bg: 'brand.robin.lite',
+                // bg: 'brand.robin.lite',
                 color: 'brand.blue.dark',
             },
         },

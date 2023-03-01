@@ -1,10 +1,4 @@
-.fullButtonIcon {
-	height: 6rem;
-	width: 6rem;
-	max-height: 30vh;
-	min-height: 3vh;
-}
-
-html, body {
-	overflow-x: hidden;
+html,
+body {
+    overflow-x: hidden;
 }
