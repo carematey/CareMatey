@@ -7,11 +7,10 @@ export default function CardsHandler(
     res: NextApiResponse<Card[] | Card | { error: string }>
 ) {
 
-    async function findMany() {
-        // ... you will write your Prisma Client queries here
-        const cards = await prisma.card.findMany({
+    async function findUniqueCard() {
+        const cards = await prisma.card.findUniqueOrThrow({
             where: {
-                spaceId: Number(req.query.uuid),
+                id: Number(req.query.uuid),
             },
         });
         return cards;
@@ -21,8 +20,8 @@ export default function CardsHandler(
         const card = await prisma.card.create(
             {
                 data: {
-                    creatorId: Number(req.body.creatorId),
-                    ownerId: Number(req.body.ownerId),
+                    creatorId: req.body.creatorId,
+                    ownerId: req.body.ownerId,
                     spaceId: Number(req.query.uuid),
                     title: req.body.title,
                     text: req.body.text,
@@ -37,7 +36,7 @@ export default function CardsHandler(
     // switch case for different methods (GET, POST, PUT, DELETE)
     switch (req.method) {
         case 'GET':
-            findMany()
+            findUniqueCard()
                 .then(async (data) => {
                     res.status(200).json(data);
                     await prisma.$disconnect();
