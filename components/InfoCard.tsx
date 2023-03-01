@@ -20,6 +20,8 @@ import {
     Textarea,
     Button,
     VStack,
+    InputGroup,
+    InputRightElement,
 } from '@chakra-ui/react';
 import React from 'react';
 import theme from '../pages/theme';
@@ -38,6 +40,7 @@ interface InfoCardProps extends ChakraProps {
 const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
     const { tags, text, title, date, toCreate, ...rest } = props;
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [newTag, setNewTag] = React.useState<string>(''); // TODO: add tags. Tags need to be able to add more than one
     const [newCardValues, setNewCardValues] = React.useState<{
         title: string;
         text: string;
@@ -190,10 +193,44 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                         placeholder="Instruction content"
                                         isRequired
                                     />
-                                    <Input
-                                        // TODO: add tags. Tags need to be able to add more than one
-                                        placeholder="Tags"
-                                    />
+                                    <InputGroup>
+                                        <Input
+                                            value={newTag}
+                                            onChange={(e) =>
+                                                setNewTag(e.target.value)
+                                            }
+                                            placeholder="Tags"
+                                        />
+                                        <InputRightElement>
+                                            <Button
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setNewCardValues({
+                                                        ...newCardValues,
+                                                        tags: [
+                                                            ...newCardValues.tags,
+                                                            newTag,
+                                                        ],
+                                                    });
+                                                    setNewTag('');
+                                                }}
+                                            >
+                                                Add
+                                            </Button>
+                                        </InputRightElement>
+                                    </InputGroup>
+                                    <HStack alignSelf={'flex-start'}>
+                                        {newCardValues.tags.map(
+                                            (tag: string, idx: number) => (
+                                                <Tag
+                                                    colorScheme={'twitter'}
+                                                    key={idx}
+                                                >
+                                                    {tag}
+                                                </Tag>
+                                            )
+                                        )}
+                                    </HStack>
                                     <Button
                                         onClick={(e) => {
                                             console.log('submitted!');
