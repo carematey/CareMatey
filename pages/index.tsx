@@ -211,9 +211,9 @@ const LandingPage = () => {
                             >
                                 For homeowners, [Website Name] provides a simple
                                 and effective solution to ensure their home and
-                                pets are well cared for while they're away. Our
-                                user-friendly interface makes it easy to share
-                                important details with their house or pet
+                                pets are well cared for while they&apos;re away.
+                                Our user-friendly interface makes it easy to
+                                share important details with their house or pet
                                 sitter, including emergency contacts, feeding
                                 schedules, and more.
                             </Text>
@@ -254,9 +254,9 @@ const LandingPage = () => {
                                 Sign up for [Website Name] today and start
                                 experiencing the peace of mind that comes with a
                                 well-cared-for home and happy pets! And stay
-                                tuned - we'll be launching our mobile app soon,
-                                so you can access all the great features of
-                                [Website Name] on-the-go.
+                                tuned - we&apos;ll be launching our mobile app
+                                soon, so you can access all the great features
+                                of [Website Name] on-the-go.
                             </Text>
 
                             <Button
