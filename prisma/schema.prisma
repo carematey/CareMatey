@@ -10,33 +10,65 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id         Int       @id @default(autoincrement())
-  fullName   String
-  email      String    @unique
-  password   String
-  phone      String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime?
-  archivedAt DateTime?
-  deletedAt  DateTime?
-  homes      Home[]
-  cards      Card[]
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
-  @@map(name: "user")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  Home          Home[]
+  Card          Card[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 model Home {
-  id      Int     @id @default(autoincrement())
-  owner   User    @relation(fields: [ownerId], references: [id])
-  ownerId Int
-  name    String?
+  id Int @id @default(autoincrement())
 
+  ownerId    Int
+  name       String?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime?
   archivedAt DateTime?
   deletedAt  DateTime?
   cards      Card[]
+  User       User?     @relation(fields: [userId], references: [id])
+  userId     String?
 
   @@map(name: "home")
 }
@@ -48,13 +80,14 @@ model Card {
   title      String
   text       String
   tags       String[]
-  owner      User      @relation(fields: [ownerId], references: [id])
   ownerId    Int
   creatorId  Int
   createdAt  DateTime  @default(now())
   updatedAt  DateTime?
   archivedAt DateTime?
   deletedAt  DateTime?
+  User       User?     @relation(fields: [userId], references: [id])
+  userId     String?
 
   @@index([tags, creatorId])
   @@map(name: "card")
