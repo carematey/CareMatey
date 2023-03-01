@@ -1,54 +1,16 @@
 
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth, { type NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from 'bcryptjs'
-import prisma from '../../../lib/prismadb'
-import { encryptPassword } from "../../../utils/encryptPass";
-
-
+import DiscordProvider from "next-auth/providers/discord";
+import prisma from "../../../lib/prismadb";
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   // Configure one or more authentication providers
+  adapter: PrismaAdapter(prisma),
   providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        username: { label: "email", type: "text", placeholder: "user@domain" },
-        password: { label: "password", type: "password" },
-      },
-      async authorize(credentials, req) {
-      try {
-        // signup is returned as a string
-        if (req?.body?.signUp === 'true') {
-          try {
-            const hashedPassword = await encryptPassword(credentials?.password as string);
-            const user = await prisma.user.create({
-              data: {
-                fullName: credentials?.username as string,
-                email: credentials?.username as string,
-                password: hashedPassword,
-              },
-            });
-            return {...user, id: user?.id.toString()}
-            
-          } catch (error) {
-            return null
-          }
-        }
-        const user = await prisma.user.findUnique({
-          where: { email: credentials?.username },
-        })
-
-        if (!user) {
-          return null;
-        }
-  
-        const authorized = await bcrypt.compare(credentials?.password as string, user?.password as string);
-        return authorized ? {...user, id: user?.id.toString()} : null;
-      } catch (error) {
-        return null
-      }
-    },      
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID || "",
+      clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
     }),
   ],
   session: {
@@ -61,6 +23,7 @@ callbacks: {
     return Promise.resolve(session)
   },
   
+
 },
     /**
      * ...add more providers here
