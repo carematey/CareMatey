@@ -24,7 +24,7 @@ import {
     InputRightElement,
 } from '@chakra-ui/react';
 import React from 'react';
-import theme from '../pages/theme';
+import theme from '../theme';
 import ReactMarkdown from 'react-markdown';
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import { useSession } from 'next-auth/react';
