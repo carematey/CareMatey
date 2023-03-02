@@ -16,8 +16,21 @@ export default function SpacesCardHandler(
     }});
         return cards;
     }
-
+// possible future feature
+    // async function findSharedSpacesByUserId() {
+    //     const spaces = await prisma.space.findMany({
+    //         where: {
+    //             authorizedUsers: {
+    //                 some: {
+    //                     id: Number(req.query.userId),
+    //                 }
+    //             }
+    //         }
+    //     })
+    //     return spaces
+    // }
     // switch case for different methods (GET, POST, PUT, DELETE)
+
     switch (req.method) {
         case 'GET':
             return findSpacesCards()

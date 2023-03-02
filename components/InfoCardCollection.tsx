@@ -91,14 +91,21 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                     <Button
                                         key={index}
                                         h={'20'}
+                                        mx={1}
                                         onClick={() =>
                                             handleClickTags(tag as string)
                                         }
                                         bg={
-                                            selectedTags.toLocaleLowerCase() ===
+                                            selectedTags ===
+                                            (tag as string).toLocaleLowerCase()
+                                                ? 'blackAlpha.500'
+                                                : 'gray.100'
+                                        }
+                                        color={
+                                            selectedTags ===
                                             (tag as string).toLocaleLowerCase()
                                                 ? 'white'
-                                                : 'whiteAlpha.500'
+                                                : 'black'
                                         }
                                         outlineColor={
                                             selectedTags ===
