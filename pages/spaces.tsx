@@ -296,6 +296,7 @@ const Space = () => {
                                         {/* map spaces here */}
                                         {spaces?.map((space: Space) => (
                                             <ButtonGroup
+                                                key={space.id}
                                                 w={'100%'}
                                                 alignItems={'center'}
                                             >
