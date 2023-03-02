@@ -22,8 +22,9 @@ export default function SpaceHandler(
         const space = await prisma.space.create({
             data: {
                 name: req.body.name as string,
-                userId: req.body.ownerId as string,
-
+                User: {connect: {
+                    id: req.body.ownerId as string
+                }}
             },  
         })
         return space
