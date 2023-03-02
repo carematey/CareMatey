@@ -4,10 +4,11 @@ import {
     SimpleGrid,
     Center,
     Button,
-    Heading,
+    VStack,
+    HStack,
 } from '@chakra-ui/react';
 import InfoCard from './InfoCard';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
 /*
@@ -48,6 +49,14 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         }
     };
 
+    const tagSet = new Set(
+        data?.map((item: InfoCardCollectionProps) => item.tags).flat()
+    );
+
+    useEffect(() => {
+        setSelectedTags('');
+    }, [spaceId]);
+
     // filter of all items for the InfoCard component
     let filteredItems = data?.filter((item: InfoCardCollectionProps) => {
         if (!selectedTags) {
@@ -56,19 +65,6 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
             return item.tags?.includes(selectedTags);
         }
     });
-
-    const filteredCategories: any = data?.map(
-        (component: InfoCardCollectionProps) => {
-            return component.tags?.map((item: string) => {
-                return item.toString();
-            });
-        }
-    );
-    const uniqueCategories: any = [
-        ...new Set(
-            filteredCategories?.flat().sort((a: number, b: number) => a - b)
-        ),
-    ];
 
     // Pull this from the DB
     // const homeName: string = data.space.name;
@@ -84,72 +80,78 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                     <Center mt={4}>
                         {/* <Heading>{homeName}</Heading> */}
                     </Center>
-                    <SimpleGrid
-                        minChildWidth={'6rem'}
-                        spacing={3}
-                        pb={6}
-                        {...rest}
-                    >
-                        {uniqueCategories?.map(
-                            (tags: any, id: string, index: number) => {
+                    <VStack w={'100%'} h={'calc(min(750px, 100vh) - 4rem)'}>
+                        <HStack
+                            flexDir={'row-reverse'}
+                            pos={'sticky'}
+                            top={'0'}
+                        >
+                            {Array.from(tagSet)?.map((tag, index) => {
                                 return (
                                     <Button
                                         key={index}
-                                        id={id}
                                         h={'20'}
-                                        onClick={() => handleClickTags(tags)}
+                                        onClick={() =>
+                                            handleClickTags(tag as string)
+                                        }
                                         bg={
-                                            selectedTags === tags
+                                            selectedTags.toLocaleLowerCase() ===
+                                            (tag as string).toLocaleLowerCase()
                                                 ? 'white'
                                                 : 'whiteAlpha.500'
                                         }
                                         outlineColor={
-                                            selectedTags === tags
+                                            selectedTags ===
+                                            (tag as string).toLocaleLowerCase()
                                                 ? 'whiteAlpha.700'
                                                 : ''
                                         }
                                         whiteSpace={'normal'}
                                     >
-                                        {tags?.toUpperCase()}
+                                        {tag?.toString()?.toUpperCase()}
                                     </Button>
                                 );
-                            }
-                        )}
-                        <Button
-                            key={0}
-                            h={'20'}
-                            onClick={() => handleClickTags('')}
-                        >
-                            CLEAR FILTER
-                        </Button>
-                    </SimpleGrid>
-                    <SimpleGrid minChildWidth={'12rem'} spacing={3}>
-                        {filteredItems?.map(
-                            (content: InfoCardCollectionProps) => {
-                                return (
-                                    <>
-                                        <InfoCard
-                                            key={content.id}
-                                            tags={content.tags}
-                                            title={content.title}
-                                            text={content.text}
-                                            toCreate={false}
-                                            date={
-                                                content.lastUpdated
-                                                    ? new Date(
-                                                          content.lastUpdated
-                                                      )
-                                                    : new Date(
-                                                          content.createdAt as string
-                                                      )
-                                            }
-                                        />
-                                    </>
-                                );
-                            }
-                        )}
-                        <InfoCard mutate={mutate} spaceId={spaceId} toCreate />
-                    </SimpleGrid>
+                            })}
+                            <Button
+                                key={0}
+                                h={'20'}
+                                onClick={() => handleClickTags('')}
+                            >
+                                CLEAR FILTER
+                            </Button>
+                        </HStack>
+                        <SimpleGrid minChildWidth={'12rem'} spacing={3}>
+                            {filteredItems?.map(
+                                (content: InfoCardCollectionProps) => {
+                                    return (
+                                        <>
+                                            <InfoCard
+                                                key={content.id}
+                                                tags={content.tags}
+                                                title={content.title}
+                                                text={content.text}
+                                                toCreate={false}
+                                                date={
+                                                    content.lastUpdated
+                                                        ? new Date(
+                                                              content.lastUpdated
+                                                          )
+                                                        : new Date(
+                                                              content.createdAt as string
+                                                          )
+                                                }
+                                            />
+                                        </>
+                                    );
+                                }
+                            )}
+                            <InfoCard
+                                mutate={mutate}
+                                spaceId={spaceId}
+                                toCreate
+                            />
+                        </SimpleGrid>
+                    </VStack>
                 </>
             )}
         </>
