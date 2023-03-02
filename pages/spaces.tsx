@@ -67,7 +67,7 @@ const Space = () => {
         () =>
             spaces &&
             spaces.find((space: Space) => space.id === selectedSpaceId),
-        [selectedSpaceId]
+        [selectedSpaceId, spaces]
     );
 
     const handleCreateSpace = async () => {
