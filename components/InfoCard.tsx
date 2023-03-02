@@ -34,11 +34,14 @@ interface InfoCardProps extends ChakraProps {
     title?: string;
     tags?: string[];
     date?: Date;
-    toCreate: Boolean;
+    toCreate?: Boolean;
+    spaceId?: number;
+    mutate?: any;
 }
 
 const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
-    const { tags, text, title, date, toCreate, ...rest } = props;
+    const { spaceId, mutate, tags, text, title, date, toCreate, ...rest } =
+        props;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [newTag, setNewTag] = React.useState<string>(''); // TODO: add tags. Tags need to be able to add more than one
     const [newCardValues, setNewCardValues] = React.useState<{
@@ -55,7 +58,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
     const handleSubmission = async (e: React.FormEvent<HTMLButtonElement>) => {
         e.preventDefault();
         const res = await fetch(
-            '/api/cards/1', // TODO: change this to the id of the space
+            `/api/cards/${spaceId}`, // TODO: change this to the id of the space
             {
                 method: 'POST',
                 headers: {
@@ -72,6 +75,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
             }
         );
         const data = await res.json();
+        mutate();
     };
 
     const dt = { time: date };
@@ -144,7 +148,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                 >
                                     <Text minW="13ch">
                                         <>
-                                            Last Updated 
+                                            Last Updated
                                             <br />
                                             {updatedTime}
                                         </>

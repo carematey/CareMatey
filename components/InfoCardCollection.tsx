@@ -8,7 +8,8 @@ import {
 } from '@chakra-ui/react';
 import InfoCard from './InfoCard';
 import React, { useState } from 'react';
-
+import useSWR from 'swr';
+import { fetcher } from '../utils/fetcher';
 /*
     dataSource is used to define where the data is coming from.
     Then we fill the InfoCardCollection with all the InfoCards
@@ -18,8 +19,6 @@ import React, { useState } from 'react';
 */
 
 interface InfoCardCollectionProps extends ChakraProps {
-    data?: any;
-    isLoading: boolean;
     text?: string;
     title?: string;
     id?: string;
@@ -27,13 +26,19 @@ interface InfoCardCollectionProps extends ChakraProps {
     index?: number;
     lastUpdated?: string | undefined;
     createdAt?: string;
+    spaceId?: number;
 }
 
 const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     props
 ): JSX.Element => {
-    const { data, isLoading, ...rest } = props;
-
+    const { spaceId, ...rest } = props;
+    const {
+        data,
+        error: errorCards,
+        isLoading: isLoading,
+        mutate,
+    } = useSWR(!!spaceId && `/api/cards/space/${spaceId}`, fetcher);
     const [selectedTags, setSelectedTags] = useState('');
     const handleClickTags = (tags: string) => {
         if (selectedTags === tags) {
@@ -143,7 +148,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 );
                             }
                         )}
-                        <InfoCard toCreate />
+                        <InfoCard mutate={mutate} spaceId={spaceId} toCreate />
                     </SimpleGrid>
                 </>
             )}

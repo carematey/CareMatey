@@ -36,7 +36,7 @@ export default function CardsHandler(
     // switch case for different methods (GET, POST, PUT, DELETE)
     switch (req.method) {
         case 'GET':
-            findUniqueCard()
+            return findUniqueCard()
                 .then(async (data) => {
                     res.status(200).json(data);
                     await prisma.$disconnect();
@@ -49,7 +49,7 @@ export default function CardsHandler(
 
             break;
         case 'POST':
-            createCard()
+            return createCard()
                 .then(async (data) => {
                     res.status(200).json(data);
                     await prisma.$disconnect();

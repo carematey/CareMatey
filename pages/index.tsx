@@ -24,7 +24,7 @@ const LandingPage = () => {
     // if logged in, redirect to the dashboard
     useEffect(() => {
         if (session?.user) {
-            router.replace('/house');
+            router.replace('/spaces');
         }
     }, [session, router]);
 
@@ -63,7 +63,7 @@ const LandingPage = () => {
                                 whiteSpace={'pre-wrap'}
                                 textAlign={{ base: 'center', md: 'left' }}
                             >
-                                Welcome to [App Name]
+                                Welcome to CareMatey
                             </Heading>
 
                             <Text
@@ -132,12 +132,12 @@ const LandingPage = () => {
                                 color="white"
                                 mb={4}
                             >
-                                [Website Name] is an easy-to-use platform that
-                                keeps all your house and pet sitting
-                                responsibilities in one convenient place. With
-                                important details about the home, pets, and
-                                plants easily accessible, you can provide
-                                top-quality care with peace of mind.
+                                Care Matey is an easy-to-use platform that keeps
+                                all your house and pet sitting responsibilities
+                                in one convenient place. With important details
+                                about the home, pets, and plants easily
+                                accessible, you can provide top-quality care
+                                with peace of mind.
                             </Text>
 
                             <Button
@@ -209,11 +209,11 @@ const LandingPage = () => {
                                 color={textColor}
                                 mb={4}
                             >
-                                For homeowners, [Website Name] provides a simple
-                                and effective solution to ensure their home and
-                                pets are well cared for while they&apos;re away.
-                                Our user-friendly interface makes it easy to
-                                share important details with their house or pet
+                                For homeowners, Care Matey provides a simple and
+                                effective solution to ensure their home and pets
+                                are well cared for while they&apos;re away. Our
+                                user-friendly interface makes it easy to share
+                                important details with their house or pet
                                 sitter, including emergency contacts, feeding
                                 schedules, and more.
                             </Text>
@@ -251,12 +251,12 @@ const LandingPage = () => {
                                 color="white"
                                 mb={4}
                             >
-                                Sign up for [Website Name] today and start
+                                Sign up for Care Matey today and start
                                 experiencing the peace of mind that comes with a
                                 well-cared-for home and happy pets! And stay
                                 tuned - we&apos;ll be launching our mobile app
                                 soon, so you can access all the great features
-                                of [Website Name] on-the-go.
+                                of Care Matey on-the-go.
                             </Text>
 
                             <Button

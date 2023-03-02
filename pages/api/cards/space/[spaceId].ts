@@ -20,7 +20,7 @@ export default function SpacesCardHandler(
     // switch case for different methods (GET, POST, PUT, DELETE)
     switch (req.method) {
         case 'GET':
-            findSpacesCards()
+            return findSpacesCards()
                 .then(async (data) => {
                     res.status(200).json(data);
                     await prisma.$disconnect();
