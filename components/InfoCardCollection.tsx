@@ -170,65 +170,67 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                         <SimpleGrid minChildWidth="10rem" spacing={4}>
                             {recommendations?.length > 0 &&
                                 typeof recommendations !== 'string' &&
-                                recommendations?.map((recommendation: any) => (
-                                    <VStack>
-                                        <Card
-                                            p={4}
-                                            {...rest}
-                                            bg={'white'}
-                                            rounded={'md'}
-                                            boxShadow={'inner'}
-                                            cursor={'pointer'}
-                                        >
-                                            <Card>
-                                                <Heading
-                                                    color={
-                                                        theme.colors.brand.blue
-                                                            .dark
-                                                    }
-                                                >
-                                                    {recommendation?.title}
-                                                </Heading>
-                                                <Text
-                                                    color={
-                                                        theme.colors.brand.blue
-                                                            .main
-                                                    }
-                                                >
-                                                    {/* {text} */}
-                                                    {recommendation?.text !=
-                                                        undefined &&
-                                                    recommendation?.text
-                                                        .length > 90
-                                                        ? recommendation?.text.slice(
-                                                              0,
-                                                              90
-                                                          ) + '...'
-                                                        : recommendation?.text}
-                                                </Text>
-                                            </Card>
-                                        </Card>
-                                        <ButtonGroup>
-                                            {/* save and cancel buttons */}
-                                            <Button colorScheme="blue">
-                                                Save
-                                            </Button>
-                                            <Button
-                                                onClick={() =>
-                                                    setRecommendations(
-                                                        recommendations.filter(
-                                                            (rec: any) =>
-                                                                rec.title !==
-                                                                recommendation.title
-                                                        )
-                                                    )
-                                                }
+                                recommendations?.map(
+                                    (recommendation: any, idx: number) => (
+                                        <VStack key={idx}>
+                                            <Card
+                                                p={4}
+                                                {...rest}
+                                                bg={'white'}
+                                                rounded={'md'}
+                                                boxShadow={'inner'}
+                                                cursor={'pointer'}
                                             >
-                                                Cancel
-                                            </Button>
-                                        </ButtonGroup>
-                                    </VStack>
-                                ))}
+                                                <Card>
+                                                    <Heading
+                                                        color={
+                                                            theme.colors.brand
+                                                                .blue.dark
+                                                        }
+                                                    >
+                                                        {recommendation?.title}
+                                                    </Heading>
+                                                    <Text
+                                                        color={
+                                                            theme.colors.brand
+                                                                .blue.main
+                                                        }
+                                                    >
+                                                        {/* {text} */}
+                                                        {recommendation?.text !=
+                                                            undefined &&
+                                                        recommendation?.text
+                                                            .length > 90
+                                                            ? recommendation?.text.slice(
+                                                                  0,
+                                                                  90
+                                                              ) + '...'
+                                                            : recommendation?.text}
+                                                    </Text>
+                                                </Card>
+                                            </Card>
+                                            <ButtonGroup>
+                                                {/* save and cancel buttons */}
+                                                <Button colorScheme="blue">
+                                                    Save
+                                                </Button>
+                                                <Button
+                                                    onClick={() =>
+                                                        setRecommendations(
+                                                            recommendations.filter(
+                                                                (rec: any) =>
+                                                                    rec.title !==
+                                                                    recommendation.title
+                                                            )
+                                                        )
+                                                    }
+                                                >
+                                                    Cancel
+                                                </Button>
+                                            </ButtonGroup>
+                                        </VStack>
+                                    )
+                                )}
                         </SimpleGrid>
                     </VStack>
                 </>
