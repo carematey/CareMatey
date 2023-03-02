@@ -462,7 +462,10 @@ const Space = () => {
                             h={'calc(min(750px, calc(100vh - 100px)))'}
                         />
                         {selectedSpaceId && (
-                            <InfoCardCollection spaceId={selectedSpaceId} />
+                            <InfoCardCollection
+                                spaceName={selectedSpace?.name}
+                                spaceId={selectedSpaceId}
+                            />
                         )}
                     </HStack>
                 </>

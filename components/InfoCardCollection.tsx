@@ -6,11 +6,17 @@ import {
     Button,
     VStack,
     HStack,
+    Card,
+    Heading,
+    Text,
+    ButtonGroup,
+    Divider,
 } from '@chakra-ui/react';
 import InfoCard from './InfoCard';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
+import theme from '../theme';
 /*
     dataSource is used to define where the data is coming from.
     Then we fill the InfoCardCollection with all the InfoCards
@@ -27,13 +33,14 @@ interface InfoCardCollectionProps extends ChakraProps {
     index?: number;
     lastUpdated?: string | undefined;
     createdAt?: string;
+    spaceName?: string;
     spaceId?: number;
 }
 
 const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     props
 ): JSX.Element => {
-    const { spaceId, ...rest } = props;
+    const { spaceId, spaceName, ...rest } = props;
     const {
         data,
         error: errorCards,
@@ -52,6 +59,8 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     const tagSet = new Set(
         data?.map((item: InfoCardCollectionProps) => item.tags).flat()
     );
+
+    const [recommendations, setRecommendations] = useState([]);
 
     useEffect(() => {
         setSelectedTags('');
@@ -146,10 +155,80 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 }
                             )}
                             <InfoCard
+                                setRecommendations={setRecommendations}
+                                recommendations={recommendations}
                                 mutate={mutate}
                                 spaceId={spaceId}
+                                spaceName={spaceName}
                                 toCreate
                             />
+                        </SimpleGrid>
+                        <Divider
+                            orientation="horizontal"
+                            borderColor={'black'}
+                        />
+                        <SimpleGrid minChildWidth="10rem" spacing={4}>
+                            {recommendations?.length > 0 &&
+                                typeof recommendations !== 'string' &&
+                                recommendations?.map((recommendation: any) => (
+                                    <VStack>
+                                        <Card
+                                            p={4}
+                                            {...rest}
+                                            bg={'white'}
+                                            rounded={'md'}
+                                            boxShadow={'inner'}
+                                            cursor={'pointer'}
+                                        >
+                                            <Card>
+                                                <Heading
+                                                    color={
+                                                        theme.colors.brand.blue
+                                                            .dark
+                                                    }
+                                                >
+                                                    {recommendation?.title}
+                                                </Heading>
+                                                <Text
+                                                    color={
+                                                        theme.colors.brand.blue
+                                                            .main
+                                                    }
+                                                >
+                                                    {/* {text} */}
+                                                    {recommendation?.text !=
+                                                        undefined &&
+                                                    recommendation?.text
+                                                        .length > 90
+                                                        ? recommendation?.text.slice(
+                                                              0,
+                                                              90
+                                                          ) + '...'
+                                                        : recommendation?.text}
+                                                </Text>
+                                            </Card>
+                                        </Card>
+                                        <ButtonGroup>
+                                            {/* save and cancel buttons */}
+                                            <Button colorScheme="blue">
+                                                Save
+                                            </Button>
+                                            <Button
+                                                onClick={() =>
+                                                    setRecommendations(
+                                                        recommendations.filter(
+                                                            (rec: any) =>
+                                                                rec.title !==
+                                                                recommendation.title
+                                                        )
+                                                    )
+                                                }
+                                            >
+                                                Cancel
+                                            </Button>
+                                        </ButtonGroup>
+                                    </VStack>
+                                ))}
                         </SimpleGrid>
                     </VStack>
                 </>
