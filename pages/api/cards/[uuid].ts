@@ -22,10 +22,14 @@ export default function CardsHandler(
                 data: {
                     creatorId: req.body.creatorId,
                     ownerId: req.body.ownerId,
-                    spaceId: Number(req.query.uuid),
+                    space: { connect: {id: Number(req.query.uuid)}},
                     title: req.body.title,
                     text: req.body.text,
                     tags: req.body.tags,
+                    User: {connect: {
+                        id: req.body.ownerId
+                    }}
+                    
                 },
             },
         );
