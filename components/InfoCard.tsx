@@ -36,12 +36,26 @@ interface InfoCardProps extends ChakraProps {
     date?: Date;
     toCreate?: Boolean;
     spaceId?: number;
+    spaceName?: string;
     mutate?: any;
+    recommendations?: any;
+    setRecommendations?: any;
 }
 
 const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
-    const { spaceId, mutate, tags, text, title, date, toCreate, ...rest } =
-        props;
+    const {
+        spaceId,
+        mutate,
+        tags,
+        text,
+        title,
+        date,
+        recommendations,
+        setRecommendations,
+        toCreate,
+        spaceName,
+        ...rest
+    } = props;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [newTag, setNewTag] = React.useState<string>(''); // TODO: add tags. Tags need to be able to add more than one
     const [newCardValues, setNewCardValues] = React.useState<{
@@ -74,8 +88,29 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 }),
             }
         );
+        onClose();
         const data = await res.json();
         mutate();
+
+        const aiRes = await fetch(`/api/ai/chat`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                title: newCardValues.title,
+                text: newCardValues.text,
+                tags: newCardValues.tags,
+                spaceName: spaceName,
+            }),
+        });
+
+        const aiResult = await aiRes.json();
+        const aiData = aiResult.choices[0].message.content.replaceAll(
+            `\"`,
+            `"`
+        );
+        setRecommendations(JSON.parse(aiData));
     };
 
     const dt = { time: date };

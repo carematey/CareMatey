@@ -15,6 +15,6 @@
         "jsx": "preserve",
         "incremental": true
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "prettier.config.js", "lib/prisma.tsx"],
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "prettier.config.js", "lib/prisma.tsx", "pages/api/ai/chat.js"],
     "exclude": ["node_modules"]
 }
