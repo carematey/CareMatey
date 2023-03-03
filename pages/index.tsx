@@ -29,8 +29,12 @@ const LandingPage = () => {
     }, [session, router]);
 
     return (
-        <MotionBox bg={bg}>
-            <Flex justify="center" align="center" h="100vh">
+        <Box bg={bg}>
+            <Flex
+                justify="center"
+                align="center"
+                h={{ base: '110vh', md: '100vh' }}
+            >
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -79,7 +83,7 @@ const LandingPage = () => {
 
                             <Button
                                 size="lg"
-                                colorScheme="purple"
+                                colorScheme="blue"
                                 mb={4}
                                 float={{ base: 'unset', md: 'left' }}
                             >
@@ -106,7 +110,7 @@ const LandingPage = () => {
                 </Container>
             </Flex>
 
-            <MotionBox bg="purple.600" py={24}>
+            <MotionBox bg="blue.600" py={24}>
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -142,7 +146,7 @@ const LandingPage = () => {
 
                             <Button
                                 size="md"
-                                colorScheme="whiteAlpha"
+                                colorScheme="blue"
                                 variant="outline"
                                 mb={4}
                             >
@@ -217,7 +221,7 @@ const LandingPage = () => {
                                 sitter, including emergency contacts, feeding
                                 schedules, and more.
                             </Text>
-                            <Button size="md" colorScheme="purple" mb={4}>
+                            <Button size="md" colorScheme="blue" mb={4}>
                                 Sign Up Today!
                             </Button>
                         </MotionBox>
@@ -225,7 +229,7 @@ const LandingPage = () => {
                 </Container>
             </MotionBox>
 
-            <MotionBox bg="purple.600" py={24}>
+            <MotionBox bg="blue.600" py={24}>
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -261,7 +265,7 @@ const LandingPage = () => {
 
                             <Button
                                 size="md"
-                                colorScheme="whiteAlpha"
+                                colorScheme="blue"
                                 variant="outline"
                                 mb={4}
                             >
@@ -309,7 +313,7 @@ const LandingPage = () => {
                     </Stack>
                 </Container>
             </MotionBox>
-        </MotionBox>
+        </Box>
     );
 };
 
