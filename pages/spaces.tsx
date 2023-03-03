@@ -51,6 +51,7 @@ const Space = () => {
     const [selectedSpaceId, setSelectedSpaceId] = React.useState<number | null>(
         null
     );
+
     const {
         data: spaces,
         error,
@@ -61,7 +62,7 @@ const Space = () => {
         fetcher
     );
 
-    const selectedSpace = useMemo(
+    const selectedSpace: Space = useMemo(
         () =>
             spaces &&
             spaces.find((space: Space) => space.id === selectedSpaceId),
@@ -70,6 +71,7 @@ const Space = () => {
 
     const handleCreateSpace = async () => {
         if (!newSpaceName.length) return;
+        setCreatingSpace(false);
         const res = await fetch(`/api/spaces/${session?.user?.id}`, {
             method: 'POST',
             headers: {
@@ -80,25 +82,27 @@ const Space = () => {
                 ownerId: session?.user?.id,
             }),
         });
+        mutate([...spaces, { name: newSpaceName, ownerId: session?.user?.id }]);
+        setNewSpaceName('');
         const data = await res.json();
-        console.log(data);
+        return data;
     };
 
     const handleDeleteSpace = async (spaceId: number) => {
         if (spaceId === selectedSpaceId) {
             setSelectedSpaceId(null);
         }
+        const newSpaces = spaces.filter((space: Space) => space.id !== spaceId);
+        mutate(newSpaces);
+
         const res = await fetch(`/api/spaces/${spaceId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
         });
+        mutate();
         const data = await res.json();
-        console.log(data);
-        setTimeout(() => {
-            mutate();
-        }, 100);
     };
 
     const handleEditSpaceName = async (spaceId: number) => {
@@ -112,6 +116,19 @@ const Space = () => {
                 name: editSpaceNameValue,
             }),
         });
+        const newSpaces = spaces.map((space: Space) => {
+            if (space.id === spaceId) {
+                return {
+                    ...space,
+                    name: editSpaceNameValue,
+                };
+            }
+            return space;
+        });
+
+        mutate(newSpaces);
+
+        return res;
     };
 
     return (
@@ -276,18 +293,6 @@ const Space = () => {
                                                                 }
                                                                 onClick={() => {
                                                                     handleCreateSpace();
-                                                                    setCreatingSpace(
-                                                                        false
-                                                                    );
-                                                                    setNewSpaceName(
-                                                                        ''
-                                                                    );
-                                                                    setTimeout(
-                                                                        () => {
-                                                                            mutate();
-                                                                        },
-                                                                        100
-                                                                    );
                                                                 }}
                                                             />
                                                         </ButtonGroup>
@@ -441,12 +446,6 @@ const Space = () => {
                                                                     );
                                                                     setEditSpaceNameValue(
                                                                         ''
-                                                                    );
-                                                                    setTimeout(
-                                                                        () => {
-                                                                            mutate();
-                                                                        },
-                                                                        100
                                                                     );
                                                                 }}
                                                             />

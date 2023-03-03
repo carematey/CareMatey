@@ -40,11 +40,12 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
 ): JSX.Element => {
     const { data: session } = useSession();
     const { spaceId, spaceName, ...rest } = props;
+
     const {
-        data,
+        data: cardData,
         error: errorCards,
         isLoading: isLoading,
-        mutate,
+        mutate: mutateCards,
     } = useSWR(!!spaceId && `/api/cards/space/${spaceId}`, fetcher);
     const [selectedTags, setSelectedTags] = useState('');
     const handleClickTags = (tags: string) => {
@@ -56,7 +57,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     };
 
     const tagSet = new Set(
-        data?.map((item: InfoCardCollectionProps) => item.tags).flat()
+        cardData?.map((item: InfoCardCollectionProps) => item.tags).flat()
     );
 
     const [recommendations, setRecommendations] = useState([]);
@@ -88,11 +89,21 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
             }
         );
         const data = await res.json();
-        mutate();
+
+        mutateCards([
+            ...cardData,
+            {
+                creatorId: session?.user?.id,
+                ownerId: session?.user?.id,
+                title: newCardValues.title,
+                text: newCardValues.text,
+                tags: newCardValues.tags,
+            },
+        ]);
     };
 
     // filter of all items for the InfoCard component
-    let filteredItems = data?.filter((item: InfoCardCollectionProps) => {
+    let filteredItems = cardData?.filter((item: InfoCardCollectionProps) => {
         if (!selectedTags) {
             return item;
         } else {
@@ -173,7 +184,6 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                         <InfoCard
                             setRecommendations={setRecommendations}
                             recommendations={recommendations}
-                            mutate={mutate}
                             spaceId={spaceId}
                             spaceName={spaceName}
                             toCreate
