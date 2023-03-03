@@ -82,10 +82,7 @@ const Space = () => {
                 ownerId: session?.user?.id,
             }),
         });
-        mutate(
-            [...spaces, { name: newSpaceName, ownerId: session?.user?.id }],
-            false
-        );
+        mutate([...spaces, { name: newSpaceName, ownerId: session?.user?.id }]);
         setNewSpaceName('');
         const data = await res.json();
         return data;
