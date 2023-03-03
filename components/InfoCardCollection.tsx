@@ -17,6 +17,7 @@ import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
 import theme from '../theme';
+import { useSession } from 'next-auth/react';
 /*
     dataSource is used to define where the data is coming from.
     Then we fill the InfoCardCollection with all the InfoCards
@@ -40,6 +41,7 @@ interface InfoCardCollectionProps extends ChakraProps {
 const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     props
 ): JSX.Element => {
+    const { data: session } = useSession();
     const { spaceId, spaceName, ...rest } = props;
     const {
         data,
@@ -66,6 +68,32 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         setSelectedTags('');
     }, [spaceId]);
 
+    const handleSubmission = async (newCardValues: {
+        title: string;
+        text: string;
+        tags: string[];
+    }) => {
+        const res = await fetch(
+            `/api/cards/${spaceId}`, // TODO: change this to the id of the space
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    creatorId: session?.user?.id,
+                    ownerId: session?.user?.id,
+                    // TODO: change this to the id of the user who owns the board, in case the sitter is creating a card for the owner
+                    title: newCardValues.title,
+                    text: newCardValues.text,
+                    tags: newCardValues.tags,
+                }),
+            }
+        );
+        const data = await res.json();
+        mutate();
+    };
+
     // filter of all items for the InfoCard component
     let filteredItems = data?.filter((item: InfoCardCollectionProps) => {
         if (!selectedTags) {
@@ -86,15 +114,30 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                 </Center>
             ) : (
                 <>
-                    <Center mt={4}>
-                        {/* <Heading>{homeName}</Heading> */}
-                    </Center>
-                    <VStack w={'100%'} h={'calc(min(750px, 100vh) - 4rem)'}>
+                    <VStack
+                        w={'100%'}
+                        h={'calc(min(750px, 100vh) - 4rem)'}
+                        width={'100%'}
+                    >
                         <HStack
-                            flexDir={'row-reverse'}
-                            pos={'sticky'}
+                            flexDir={'row'}
+                            justifyContent={'flex-start'}
+                            wrap={'wrap'}
                             top={'0'}
+                            p={4}
+                            boxShadow={'lg'}
+                            borderRadius={'lg'}
+                            bg={'gray.50'}
+                            width={'100%'}
                         >
+                            <Button
+                                key={0}
+                                h={'20'}
+                                onClick={() => handleClickTags('')}
+                            >
+                                CLEAR FILTER
+                            </Button>
+                            {/* filter tags */}
                             {Array.from(tagSet)?.map((tag, index) => {
                                 return (
                                     <Button
@@ -106,7 +149,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                         bg={
                                             selectedTags.toLocaleLowerCase() ===
                                             (tag as string).toLocaleLowerCase()
-                                                ? 'white'
+                                                ? 'blackAlpha.500'
                                                 : 'whiteAlpha.500'
                                         }
                                         outlineColor={
@@ -121,15 +164,29 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                     </Button>
                                 );
                             })}
-                            <Button
-                                key={0}
-                                h={'20'}
-                                onClick={() => handleClickTags('')}
-                            >
-                                CLEAR FILTER
-                            </Button>
-                        </HStack>
-                        <SimpleGrid minChildWidth={'12rem'} spacing={3}>
+                        </HStack>{' '}
+                        <InfoCard
+                            setRecommendations={setRecommendations}
+                            recommendations={recommendations}
+                            mutate={mutate}
+                            spaceId={spaceId}
+                            spaceName={spaceName}
+                            toCreate
+                            handleSubmission={handleSubmission}
+                            w={'100%'}
+                            mb={4}
+                        />
+                        <SimpleGrid
+                            minChildWidth={'14rem'}
+                            spacing={3}
+                            p={'35px'}
+                            boxShadow={'lg'}
+                            borderRadius={'lg'}
+                            width={'100%'}
+                            bg={'gray.50'}
+                            gridTemplateColumns={'repeat(auto-fit, 300px)'}
+                        >
+                            {/* all cards being displayed */}
                             {filteredItems?.map(
                                 (content: InfoCardCollectionProps) => {
                                     return (
@@ -154,64 +211,52 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                     );
                                 }
                             )}
-                            <InfoCard
-                                setRecommendations={setRecommendations}
-                                recommendations={recommendations}
-                                mutate={mutate}
-                                spaceId={spaceId}
-                                spaceName={spaceName}
-                                toCreate
-                            />
                         </SimpleGrid>
                         <Divider
                             orientation="horizontal"
                             borderColor={'black'}
                         />
-                        <SimpleGrid minChildWidth="10rem" spacing={4}>
+                        <SimpleGrid
+                            minChildWidth="10rem"
+                            spacing={4}
+                            width={'100%'}
+                            alignItems={'flex-end'}
+                            gridTemplateColumns={'repeat(auto-fit, 300px)'}
+                        >
                             {recommendations?.length > 0 &&
                                 typeof recommendations !== 'string' &&
                                 recommendations?.map(
                                     (recommendation: any, idx: number) => (
                                         <VStack key={idx}>
-                                            <Card
-                                                p={4}
-                                                {...rest}
-                                                bg={'white'}
-                                                rounded={'md'}
-                                                boxShadow={'inner'}
-                                                cursor={'pointer'}
+                                            <InfoCard
+                                                key={recommendation.id}
+                                                tags={recommendation.tags}
+                                                title={recommendation.title}
+                                                text={recommendation.text}
+                                                toCreate={false}
+                                            />
+
+                                            <ButtonGroup
+                                                alignSelf={'flex-start'}
                                             >
-                                                <Card>
-                                                    <Heading
-                                                        color={
-                                                            theme.colors.brand
-                                                                .blue.dark
-                                                        }
-                                                    >
-                                                        {recommendation?.title}
-                                                    </Heading>
-                                                    <Text
-                                                        color={
-                                                            theme.colors.brand
-                                                                .blue.main
-                                                        }
-                                                    >
-                                                        {/* {text} */}
-                                                        {recommendation?.text !=
-                                                            undefined &&
-                                                        recommendation?.text
-                                                            .length > 90
-                                                            ? recommendation?.text.slice(
-                                                                  0,
-                                                                  90
-                                                              ) + '...'
-                                                            : recommendation?.text}
-                                                    </Text>
-                                                </Card>
-                                            </Card>
-                                            <ButtonGroup>
                                                 {/* save and cancel buttons */}
-                                                <Button colorScheme="blue">
+                                                <Button
+                                                    colorScheme="blue"
+                                                    onClick={() => {
+                                                        handleSubmission({
+                                                            title: recommendation.title,
+                                                            text: recommendation.text,
+                                                            tags: recommendation.tags,
+                                                        });
+                                                        setRecommendations(
+                                                            recommendations.filter(
+                                                                (rec: any) =>
+                                                                    rec.title !==
+                                                                    recommendation.title
+                                                            )
+                                                        );
+                                                    }}
+                                                >
                                                     Save
                                                 </Button>
                                                 <Button

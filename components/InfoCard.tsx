@@ -28,6 +28,7 @@ import theme from '../theme';
 import ReactMarkdown from 'react-markdown';
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import { useSession } from 'next-auth/react';
+import { motion } from 'framer-motion';
 
 interface InfoCardProps extends ChakraProps {
     text?: string;
@@ -40,6 +41,7 @@ interface InfoCardProps extends ChakraProps {
     mutate?: any;
     recommendations?: any;
     setRecommendations?: any;
+    handleSubmission?: any;
 }
 
 const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
@@ -52,10 +54,12 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
         date,
         recommendations,
         setRecommendations,
+        handleSubmission,
         toCreate,
         spaceName,
         ...rest
     } = props;
+    const MotionCenter = motion(Center);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [newTag, setNewTag] = React.useState<string>(''); // TODO: add tags. Tags need to be able to add more than one
     const [newCardValues, setNewCardValues] = React.useState<{
@@ -69,29 +73,11 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
     });
 
     const { data: session } = useSession();
-    const handleSubmission = async (e: React.FormEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        const res = await fetch(
-            `/api/cards/${spaceId}`, // TODO: change this to the id of the space
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    creatorId: session?.user?.id,
-                    ownerId: session?.user?.id,
-                    // TODO: change this to the id of the user who owns the board, in case the sitter is creating a card for the owner
-                    title: newCardValues.title,
-                    text: newCardValues.text,
-                    tags: newCardValues.tags,
-                }),
-            }
-        );
-        onClose();
-        const data = await res.json();
-        mutate();
 
+    const dt = { time: date };
+    const updatedTime = new Date(dt!.time!).toLocaleDateString();
+
+    const handleAI = async () => {
         const aiRes = await fetch(`/api/ai/chat`, {
             method: 'POST',
             headers: {
@@ -112,12 +98,8 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
         );
         setRecommendations(JSON.parse(aiData));
     };
-
-    const dt = { time: date };
-    const updatedTime = new Date(dt!.time!).toLocaleDateString();
-
     const Tags = ({ tagSize }: { tagSize: string }) => (
-        <Wrap spacing={2}>
+        <Wrap spacing={2} m={0} p={0} alignSelf={'flex-start'}>
             {tags?.map((tag, index) => (
                 <WrapItem key={index}>
                     <Tag
@@ -141,11 +123,13 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
             <Card
                 p={4}
                 {...rest}
-                bg={'white'}
-                rounded={'md'}
-                boxShadow={'inner'}
+                rounded={'lg'}
+                boxShadow={'lg'}
                 cursor={'pointer'}
                 onClick={onOpen}
+                minH={'170px'}
+                w={'100%'}
+                maxW={toCreate ? 'unset' : '300px'}
             >
                 {!toCreate ? (
                     <>
@@ -162,10 +146,26 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                     </>
                 ) : (
                     <>
-                        <Center my={'auto'}>
-                            <AddIcon color="#bbb" boxSize={10} />
-                        </Center>
-                        <Text textAlign={'center'}>Create a new card</Text>
+                        <MotionCenter
+                            whileHover={{
+                                scale: 1.01,
+                            }}
+                            whileTap={{
+                                scale: 0.99,
+                            }}
+                            my={'auto'}
+                            boxShadow={'lg'}
+                            borderRadius={'lg'}
+                            p={8}
+                            m={0}
+                        >
+                            <VStack>
+                                <AddIcon color="#bbb" boxSize={10} />
+                                <Text textAlign={'center'}>
+                                    Create a new card
+                                </Text>
+                            </VStack>
+                        </MotionCenter>
                     </>
                 )}
             </Card>
@@ -179,16 +179,17 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                             <ModalFooter>
                                 <HStack
                                     justifyContent={'space-between'}
+                                    alignItems={'flex-start'}
                                     w={'100%'}
                                 >
-                                    <Text minW="13ch">
+                                    <Tags tagSize={'lg'} />
+                                    <Text minW="10ch">
                                         <>
                                             Last Updated
                                             <br />
                                             {updatedTime}
                                         </>
                                     </Text>
-                                    <Tags tagSize={'lg'} />
                                 </HStack>
                             </ModalFooter>
                         </>
@@ -263,7 +264,8 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                     <Button
                                         onClick={(e) => {
                                             console.log('submitted!');
-                                            handleSubmission(e);
+                                            handleSubmission(newCardValues);
+                                            handleAI();
                                         }}
                                     >
                                         Submit

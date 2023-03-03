@@ -32,9 +32,6 @@ import {
 } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
 
-//@temporary:
-const spaceId = 1;
-
 const Space = () => {
     const { data: session } = useSession();
 
@@ -162,7 +159,6 @@ const Space = () => {
                                         </AccordionButton>
                                     </Text>
                                     <AccordionPanel py={4}>
-                                        {/* map spaces here */}
                                         <ButtonGroup w={'100%'}>
                                             <MotionIcon
                                                 whileHover={{ scale: 1.02 }}
