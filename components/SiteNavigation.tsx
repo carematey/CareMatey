@@ -100,7 +100,7 @@ export default function Navigation() {
                                         }}
                                     ></Link>
                                     <Button
-                                        colorScheme="purple"
+                                        colorScheme="blue"
                                         size="md"
                                         onClick={() => signIn()}
                                     >
