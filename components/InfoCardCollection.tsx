@@ -5,10 +5,7 @@ import {
     Center,
     Button,
     VStack,
-    HStack,
-    Card,
-    Heading,
-    Text,
+    Box,
     ButtonGroup,
     Divider,
 } from '@chakra-ui/react';
@@ -113,58 +110,66 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                     <CircularProgress isIndeterminate />
                 </Center>
             ) : (
-                <>
-                    <VStack
-                        w={'100%'}
-                        h={'calc(min(750px, 100vh) - 4rem)'}
-                        width={'100%'}
-                    >
-                        <HStack
-                            flexDir={'row'}
-                            justifyContent={'flex-start'}
-                            wrap={'wrap'}
-                            top={'0'}
-                            p={4}
-                            boxShadow={'lg'}
-                            borderRadius={'lg'}
-                            bg={'gray.50'}
-                            width={'100%'}
-                        >
-                            <Button
-                                key={0}
-                                h={'20'}
-                                onClick={() => handleClickTags('')}
+                <Box
+                    w={'100%'}
+                    h={'calc(min(750px, 100vh) - 4rem)'}
+                    bg={'whiteAlpha.800'}
+                >
+                    <VStack w={'100%'}>
+                        {Array.from(tagSet).length > 0 && (
+                            <SimpleGrid
+                                pos={'sticky'}
+                                top={'4rem'}
+                                zIndex={4}
+                                pt={4}
+                                boxShadow={'lg'}
+                                borderRadius={'lg'}
+                                bg={'gray.50'}
+                                width={'100%'}
+                                minChildWidth={28}
+                                maxHeight={32}
+                                overflowY={'scroll'}
                             >
-                                CLEAR FILTER
-                            </Button>
-                            {/* filter tags */}
-                            {Array.from(tagSet)?.map((tag, index) => {
-                                return (
-                                    <Button
-                                        key={index}
-                                        h={'20'}
-                                        onClick={() =>
-                                            handleClickTags(tag as string)
-                                        }
-                                        bg={
-                                            selectedTags.toLocaleLowerCase() ===
-                                            (tag as string).toLocaleLowerCase()
-                                                ? 'blackAlpha.500'
-                                                : 'whiteAlpha.500'
-                                        }
-                                        outlineColor={
-                                            selectedTags ===
-                                            (tag as string).toLocaleLowerCase()
-                                                ? 'whiteAlpha.700'
-                                                : ''
-                                        }
-                                        whiteSpace={'normal'}
-                                    >
-                                        {tag?.toString()?.toUpperCase()}
-                                    </Button>
-                                );
-                            })}
-                        </HStack>{' '}
+                                <Button
+                                    key={0}
+                                    h={16}
+                                    onClick={() => handleClickTags('')}
+                                >
+                                    CLEAR FILTER
+                                </Button>
+                                {/* filter tags */}
+                                {Array.from(tagSet)?.map((tag, index) => {
+                                    return (
+                                        <Button
+                                            key={index}
+                                            h={16}
+                                            onClick={() =>
+                                                handleClickTags(tag as string)
+                                            }
+                                            bg={
+                                                selectedTags.toLocaleLowerCase() ===
+                                                (
+                                                    tag as string
+                                                ).toLocaleLowerCase()
+                                                    ? 'blackAlpha.500'
+                                                    : 'whiteAlpha.500'
+                                            }
+                                            outlineColor={
+                                                selectedTags ===
+                                                (
+                                                    tag as string
+                                                ).toLocaleLowerCase()
+                                                    ? 'whiteAlpha.700'
+                                                    : ''
+                                            }
+                                            whiteSpace={'normal'}
+                                        >
+                                            {tag?.toString()?.toUpperCase()}
+                                        </Button>
+                                    );
+                                })}
+                            </SimpleGrid>
+                        )}
                         <InfoCard
                             setRecommendations={setRecommendations}
                             recommendations={recommendations}
@@ -177,14 +182,13 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                             mb={4}
                         />
                         <SimpleGrid
-                            minChildWidth={'14rem'}
+                            columns={[2, 4]}
                             spacing={3}
                             p={'35px'}
                             boxShadow={'lg'}
                             borderRadius={'lg'}
                             width={'100%'}
                             bg={'gray.50'}
-                            gridTemplateColumns={'repeat(auto-fit, 300px)'}
                         >
                             {/* all cards being displayed */}
                             {filteredItems?.map(
@@ -278,7 +282,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 )}
                         </SimpleGrid>
                     </VStack>
-                </>
+                </Box>
             )}
         </>
     );
