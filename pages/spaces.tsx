@@ -92,8 +92,6 @@ const Space = () => {
         if (spaceId === selectedSpaceId) {
             setSelectedSpaceId(null);
         }
-        const newSpaces = spaces.filter((space: Space) => space.id !== spaceId);
-        mutate(newSpaces);
 
         const res = await fetch(`/api/spaces/${spaceId}`, {
             method: 'DELETE',
@@ -101,7 +99,9 @@ const Space = () => {
                 'Content-Type': 'application/json',
             },
         });
-        mutate();
+        const newSpaces = spaces.filter((space: Space) => space.id !== spaceId);
+        mutate(newSpaces, false);
+
         const data = await res.json();
     };
 
@@ -126,7 +126,7 @@ const Space = () => {
             return space;
         });
 
-        mutate(newSpaces);
+        mutate(newSpaces, false);
 
         return res;
     };

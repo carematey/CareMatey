@@ -29,7 +29,7 @@ const LandingPage = () => {
     }, [session, router]);
 
     return (
-        <Box bg={bg}>
+        <Box bg={bg} overflowY={'hidden'}>
             <Flex
                 justify="center"
                 align="center"
