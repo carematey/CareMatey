@@ -162,7 +162,6 @@ const Space = () => {
                                         </AccordionButton>
                                     </Text>
                                     <AccordionPanel py={4}>
-                                        {/* map spaces here */}
                                         <ButtonGroup w={'100%'}>
                                             <MotionIcon
                                                 whileHover={{ scale: 1.02 }}
