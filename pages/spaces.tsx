@@ -82,7 +82,10 @@ const Space = () => {
                 ownerId: session?.user?.id,
             }),
         });
-        mutate([...spaces, { name: newSpaceName, ownerId: session?.user?.id }]);
+        mutate(
+            [...spaces, { name: newSpaceName, ownerId: session?.user?.id }],
+            false
+        );
         setNewSpaceName('');
         const data = await res.json();
         return data;
@@ -100,7 +103,7 @@ const Space = () => {
             },
         });
         const newSpaces = spaces.filter((space: Space) => space.id !== spaceId);
-        mutate(newSpaces);
+        mutate(newSpaces, false);
 
         const data = await res.json();
     };
@@ -126,7 +129,7 @@ const Space = () => {
             return space;
         });
 
-        mutate(newSpaces);
+        mutate(newSpaces, false);
 
         return res;
     };
