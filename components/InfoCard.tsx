@@ -27,7 +27,6 @@ import React from 'react';
 import theme from '../theme';
 import ReactMarkdown from 'react-markdown';
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
-import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
 
 interface InfoCardProps extends ChakraProps {
@@ -37,8 +36,7 @@ interface InfoCardProps extends ChakraProps {
     date?: Date;
     toCreate?: Boolean;
     spaceId?: number;
-    spaceName?: string;
-    mutate?: any;
+    spaceName?: string | null | undefined;
     recommendations?: any;
     setRecommendations?: any;
     handleSubmission?: any;
@@ -47,7 +45,6 @@ interface InfoCardProps extends ChakraProps {
 const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
     const {
         spaceId,
-        mutate,
         tags,
         text,
         title,
@@ -71,8 +68,6 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
         text: '',
         tags: [],
     });
-
-    const { data: session } = useSession();
 
     const dt = { time: date };
     const updatedTime = new Date(dt!.time!).toLocaleDateString();
@@ -263,7 +258,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                     </HStack>
                                     <Button
                                         onClick={(e) => {
-                                            console.log('submitted!');
+                                            onClose();
                                             handleSubmission(newCardValues);
                                             handleAI();
                                         }}
