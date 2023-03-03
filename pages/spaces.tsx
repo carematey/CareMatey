@@ -32,9 +32,6 @@ import {
 } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
 
-//@temporary:
-const spaceId = 1;
-
 const Space = () => {
     const { data: session } = useSession();
 
