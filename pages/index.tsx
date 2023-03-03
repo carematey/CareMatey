@@ -29,8 +29,12 @@ const LandingPage = () => {
     }, [session, router]);
 
     return (
-        <MotionBox bg={bg}>
-            <Flex justify="center" align="center" h="100vh">
+        <Box bg={bg}>
+            <Flex
+                justify="center"
+                align="center"
+                h={{ base: '110vh', md: '100vh' }}
+            >
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -142,7 +146,7 @@ const LandingPage = () => {
 
                             <Button
                                 size="md"
-                                colorScheme="whibluepha"
+                                colorScheme="blue"
                                 variant="outline"
                                 mb={4}
                             >
@@ -261,7 +265,7 @@ const LandingPage = () => {
 
                             <Button
                                 size="md"
-                                colorScheme="whibluepha"
+                                colorScheme="blue"
                                 variant="outline"
                                 mb={4}
                             >
@@ -309,7 +313,7 @@ const LandingPage = () => {
                     </Stack>
                 </Container>
             </MotionBox>
-        </MotionBox>
+        </Box>
     );
 };
 
