@@ -98,13 +98,9 @@ export default function Navigation() {
                                         style={{
                                             textDecoration: 'none',
                                         }}
-                                    >
-                                        <Button colorScheme="purple" size="md">
-                                            Sign Up
-                                        </Button>
-                                    </Link>
+                                    ></Link>
                                     <Button
-                                        colorScheme="gray"
+                                        colorScheme="purple"
                                         size="md"
                                         onClick={() => signIn()}
                                     >
