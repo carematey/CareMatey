@@ -184,6 +184,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                             borderRadius={'lg'}
                             width={'100%'}
                             bg={'gray.50'}
+                            gridTemplateColumns={'repeat(auto-fit, 300px)'}
                         >
                             {/* all cards being displayed */}
                             {filteredItems?.map(
@@ -220,6 +221,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                             spacing={4}
                             width={'100%'}
                             alignItems={'flex-end'}
+                            gridTemplateColumns={'repeat(auto-fit, 300px)'}
                         >
                             {recommendations?.length > 0 &&
                                 typeof recommendations !== 'string' &&
