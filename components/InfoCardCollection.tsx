@@ -141,7 +141,6 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 maxHeight={32}
                                 overflowY={'scroll'}
                             >
-
                                 <Button
                                     key={0}
                                     h={16}
@@ -158,21 +157,13 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                             onClick={() =>
                                                 handleClickTags(tag as string)
                                             }
-                                            bg={
+                                            colorScheme={
                                                 selectedTags.toLocaleLowerCase() ===
                                                 (
                                                     tag as string
                                                 ).toLocaleLowerCase()
-                                                    ? 'blackAlpha.500'
-                                                    : 'whiteAlpha.500'
-                                            }
-                                            outlineColor={
-                                                selectedTags ===
-                                                (
-                                                    tag as string
-                                                ).toLocaleLowerCase()
-                                                    ? 'whiteAlpha.700'
-                                                    : ''
+                                                    ? 'blue'
+                                                    : 'gray'
                                             }
                                             whiteSpace={'normal'}
                                         >
