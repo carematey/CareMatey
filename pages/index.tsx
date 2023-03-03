@@ -79,7 +79,7 @@ const LandingPage = () => {
 
                             <Button
                                 size="lg"
-                                colorScheme="purple"
+                                colorScheme="blue"
                                 mb={4}
                                 float={{ base: 'unset', md: 'left' }}
                             >
@@ -106,7 +106,7 @@ const LandingPage = () => {
                 </Container>
             </Flex>
 
-            <MotionBox bg="purple.600" py={24}>
+            <MotionBox bg="blue.600" py={24}>
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -142,7 +142,7 @@ const LandingPage = () => {
 
                             <Button
                                 size="md"
-                                colorScheme="whiteAlpha"
+                                colorScheme="whibluepha"
                                 variant="outline"
                                 mb={4}
                             >
@@ -217,7 +217,7 @@ const LandingPage = () => {
                                 sitter, including emergency contacts, feeding
                                 schedules, and more.
                             </Text>
-                            <Button size="md" colorScheme="purple" mb={4}>
+                            <Button size="md" colorScheme="blue" mb={4}>
                                 Sign Up Today!
                             </Button>
                         </MotionBox>
@@ -225,7 +225,7 @@ const LandingPage = () => {
                 </Container>
             </MotionBox>
 
-            <MotionBox bg="purple.600" py={24}>
+            <MotionBox bg="blue.600" py={24}>
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -261,7 +261,7 @@ const LandingPage = () => {
 
                             <Button
                                 size="md"
-                                colorScheme="whiteAlpha"
+                                colorScheme="whibluepha"
                                 variant="outline"
                                 mb={4}
                             >

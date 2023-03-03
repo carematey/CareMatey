@@ -108,8 +108,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                         whiteSpace={'nowrap'}
                         overflow={'hidden'}
                         size={tagSize}
-                        bg={theme.colors.brand.blue.lite}
-                        color={'white'}
+                        colorScheme={'blue'}
                     >
                         {tag.toString().toUpperCase()}
                     </Tag>
@@ -130,6 +129,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 minH={'170px'}
                 w={'100%'}
                 maxW={toCreate ? 'unset' : '300px'}
+                justifyContent={'space-between'}
             >
                 {!toCreate ? (
                     <>

@@ -166,7 +166,7 @@ const Space = () => {
                                                 icon={<AddIcon />}
                                                 colorScheme={
                                                     creatingSpace
-                                                        ? 'blackAlpha'
+                                                        ? 'blue'
                                                         : 'gray'
                                                 }
                                                 aria-label="Add"
@@ -189,9 +189,7 @@ const Space = () => {
                                                 icon={<EditIcon />}
                                                 aria-label="Edit"
                                                 colorScheme={
-                                                    editMode
-                                                        ? 'blackAlpha'
-                                                        : 'gray'
+                                                    editMode ? 'blue' : 'gray'
                                                 }
                                                 w={'100%'}
                                                 my={2}
@@ -238,7 +236,7 @@ const Space = () => {
                                                                 colorScheme={
                                                                     'red'
                                                                 }
-                                                                opacity={0.8}
+                                                                opacity={0.9}
                                                                 icon={
                                                                     <CloseIcon />
                                                                 }
@@ -260,9 +258,9 @@ const Space = () => {
                                                                 }}
                                                                 aria-label="save"
                                                                 colorScheme={
-                                                                    'green'
+                                                                    'teal'
                                                                 }
-                                                                opacity={0.8}
+                                                                opacity={0.9}
                                                                 icon={
                                                                     <CheckIcon />
                                                                 }
@@ -322,7 +320,7 @@ const Space = () => {
                                                         colorScheme={
                                                             selectedSpaceId ===
                                                             space.id
-                                                                ? 'blackAlpha'
+                                                                ? 'blue'
                                                                 : 'gray'
                                                         }
                                                         key={space.id}
@@ -350,7 +348,7 @@ const Space = () => {
                                                                 colorScheme={
                                                                     editNameId ===
                                                                     space.id
-                                                                        ? 'blackAlpha'
+                                                                        ? 'blue'
                                                                         : 'gray'
                                                                 }
                                                                 icon={
@@ -395,7 +393,7 @@ const Space = () => {
                                                                 colorScheme={
                                                                     'red'
                                                                 }
-                                                                opacity={0.8}
+                                                                opacity={0.9}
                                                                 icon={
                                                                     <CloseIcon />
                                                                 }
@@ -418,9 +416,9 @@ const Space = () => {
                                                                 size={'md'}
                                                                 aria-label="save"
                                                                 colorScheme={
-                                                                    'green'
+                                                                    'teal'
                                                                 }
-                                                                opacity={0.8}
+                                                                opacity={0.9}
                                                                 icon={
                                                                     <CheckIcon />
                                                                 }
