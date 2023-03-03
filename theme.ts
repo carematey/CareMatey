@@ -32,7 +32,7 @@ const theme = extendTheme({
                 main: '#044F74',
                 dark: '#022F52',
             },
-            blue: {
+            purple: {
                 lite: '#30868F',
                 main: '#28666E',
                 dark: '#26464C',
