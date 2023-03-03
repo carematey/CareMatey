@@ -16,6 +16,7 @@ import {
     ButtonGroup,
     InputGroup,
     InputRightElement,
+    Stack,
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 import InfoCardCollection from '../components/InfoCardCollection';
@@ -114,50 +115,57 @@ const Space = () => {
     };
 
     return (
-        <Container maxW={'100%'}>
+        <Container h={'100%'} maxW={'100%'}>
             {session ? (
                 <>
-                    <HStack width={'100%'}>
+                    <Stack
+                        direction={{ base: 'column', md: 'row' }}
+                        width={'100%'}
+                        height={{ md: '100%' }}
+                    >
                         <VStack
-                            display={{ base: 'none', md: 'flex' }}
-                            w={{ base: 0, md: '27.5vw' }}
+                            display={'flex'}
+                            position={'sticky'}
+                            top={{ base: 8, md: '4rem' }}
+                            w={{ base: '100%', md: '27.5vw' }}
                             alignSelf={'flex-start'}
-                            py={8}
                         >
-                            <Text
-                                p={4}
-                                w={'100%'}
-                                bg={'gray.100'}
-                                color={'gray.600'}
-                                fontWeight={'bold'}
-                                justifySelf={'flex-start'}
-                            >
-                                {selectedSpace?.name || 'Select a space'}
-                            </Text>
                             <Accordion
+                                defaultIndex={[0]}
                                 allowToggle
                                 background={'#ffffff'}
                                 py={6}
-                                minH={'477px'}
                                 maxW={'473px'}
                                 w={'100%'}
                             >
                                 <AccordionItem
-                                    borderColor={'black '}
+                                    borderColor={'whiteAlpha'}
                                     borderTopColor={'transparent !important'}
                                 >
-                                    <Text>
-                                        <AccordionButton borderColor={'black'}>
-                                            <Box
-                                                as="span"
-                                                flex="1"
-                                                textAlign="left"
+                                    <AccordionButton borderColor={'black'}>
+                                        <Box
+                                            as="span"
+                                            flex="1"
+                                            textAlign="left"
+                                        >
+                                            <Text
+                                                p={4}
+                                                w={'100%'}
+                                                bg={'gray.100'}
+                                                color={'gray.600'}
+                                                fontWeight={'bold'}
                                             >
-                                                All spaces
-                                            </Box>
-                                            <AccordionIcon fontSize={'xxl'} />
-                                        </AccordionButton>
-                                    </Text>
+                                                {selectedSpace?.name ||
+                                                    'Select a space'}
+                                                <AccordionIcon
+                                                    mt={1}
+                                                    float={'right'}
+                                                    fontSize={'xxl'}
+                                                />
+                                            </Text>
+                                        </Box>
+                                    </AccordionButton>
+
                                     <AccordionPanel py={4}>
                                         <ButtonGroup w={'100%'}>
                                             <MotionIcon
@@ -452,8 +460,8 @@ const Space = () => {
                         <Divider
                             display={{ base: 'none', md: 'block' }}
                             orientation="vertical"
-                            borderColor={'black'}
-                            h={'calc(min(750px, calc(100vh - 100px)))'}
+                            borderColor={'whiteAlpha.'}
+                            h={'calc(min(750px, calc(100vh - 4rem)))'}
                         />
                         {selectedSpaceId && (
                             <InfoCardCollection
@@ -461,7 +469,7 @@ const Space = () => {
                                 spaceId={selectedSpaceId}
                             />
                         )}
-                    </HStack>
+                    </Stack>
                 </>
             ) : (
                 <Text>Please login</Text>
