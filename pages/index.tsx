@@ -29,7 +29,7 @@ const LandingPage = () => {
     }, [session, router]);
 
     return (
-        <MotionBox bg={bg}>
+        <MotionBox bg={bg} overflowY={'hidden'}>
             <Flex justify="center" align="center" h="100vh">
                 <Container maxW="container.lg">
                     <Stack
