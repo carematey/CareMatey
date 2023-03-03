@@ -31,7 +31,7 @@ interface InfoCardCollectionProps extends ChakraProps {
     index?: number;
     lastUpdated?: string | undefined;
     createdAt?: string;
-    spaceName?: string;
+    spaceName?: string | null;
     spaceId?: number;
 }
 

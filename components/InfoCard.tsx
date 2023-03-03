@@ -36,7 +36,7 @@ interface InfoCardProps extends ChakraProps {
     date?: Date;
     toCreate?: Boolean;
     spaceId?: number;
-    spaceName?: string;
+    spaceName?: string | null | undefined;
     recommendations?: any;
     setRecommendations?: any;
     handleSubmission?: any;
