@@ -160,7 +160,11 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                                 handleClickTags(tag as string)
                                             }
                                             colorScheme={
-                                                selectedTags === tag
+                                                selectedTags.toLocaleLowerCase() ===
+                                                (
+                                                    tag as string
+                                                ).toLocaleLowerCase()
+
                                                     ? 'blue'
                                                     : 'gray'
                                             }
