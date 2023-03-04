@@ -19,6 +19,7 @@ import React from 'react';
 import theme from '../theme';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import Tags from './Tags';
 
 interface InfoCardProps extends ChakraProps {
     text?: string;
@@ -45,24 +46,6 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
 
     const dt = { time: date };
     const updatedTime = new Date(dt!.time!).toLocaleDateString();
-    const Tags = ({ tagSize }: { tagSize: string }) => (
-        <Wrap spacing={2} m={0} p={0} alignSelf={'flex-start'}>
-            {tags?.map((tag, index) => (
-                <WrapItem key={index}>
-                    <Tag
-                        p={1}
-                        textOverflow={'ellipsis'}
-                        whiteSpace={'nowrap'}
-                        overflow={'hidden'}
-                        size={tagSize}
-                        colorScheme={'blue'}
-                    >
-                        {tag.toString().toLowerCase()}
-                    </Tag>
-                </WrapItem>
-            ))}
-        </Wrap>
-    );
 
     return (
         <>
@@ -85,7 +68,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                         ? text.slice(0, 90) + '...'
                         : (text as string)}
                 </ReactMarkdown>
-                <Tags tagSize={'sm'} />
+                <Tags tags={tags} tagSize={'sm'} />
             </Card>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
@@ -102,7 +85,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                             alignItems={'flex-start'}
                             w={'100%'}
                         >
-                            <Tags tagSize={'lg'} />
+                            <Tags tags={tags} tagSize={'lg'} />
                             <Text minW="10ch">
                                 <>
                                     Last Updated
