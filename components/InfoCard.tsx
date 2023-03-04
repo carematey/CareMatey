@@ -123,8 +123,9 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 onClick={onOpen}
                 minH={'170px'}
                 w={'100%'}
-                maxW={toCreate ? 'unset' : '300px'}
+                maxW={{ base: 'inherit', md: toCreate ? 'unset' : '300px' }}
                 justifyContent={'space-between'}
+                justifySelf={'center'}
             >
                 {!toCreate ? (
                     <>
