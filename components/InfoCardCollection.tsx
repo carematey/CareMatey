@@ -16,6 +16,7 @@ import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
 import theme from '../theme';
 import { useSession } from 'next-auth/react';
+import CreateCard from './CreateCard';
 /*
     dataSource is used to define where the data is coming from.
     Then we fill the InfoCardCollection with all the InfoCards
@@ -151,41 +152,41 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                     CLEAR FILTER
                                 </Button>
                                 {/* filter tags */}
-                                {Array.from(tagSet)?.map((tag, index) => {
-                                    return (
-                                        <Button
-                                            key={index}
-                                            h={16}
-                                            onClick={() =>
-                                                handleClickTags(tag as string)
-                                            }
-                                            colorScheme={
-                                                selectedTags.toLocaleLowerCase() ===
-                                                (
-                                                    tag as string
-                                                ).toLocaleLowerCase()
-
-                                                    ? 'blue'
-                                                    : 'gray'
-                                            }
-                                            whiteSpace={'normal'}
-                                        >
-                                            {tag?.toString()?.toUpperCase()}
-                                        </Button>
-                                    );
-                                })}
+                                {Array.from(tagSet)?.map(
+                                    (tag, index: number) => {
+                                        return (
+                                            <Button
+                                                key={index + 1}
+                                                h={16}
+                                                onClick={() =>
+                                                    handleClickTags(
+                                                        tag as string
+                                                    )
+                                                }
+                                                colorScheme={
+                                                    selectedTags === tag
+                                                        ? 'blue'
+                                                        : 'gray'
+                                                }
+                                                whiteSpace={'normal'}
+                                            >
+                                                {tag?.toString()?.toLowerCase()}
+                                            </Button>
+                                        );
+                                    }
+                                )}
                             </SimpleGrid>
                         )}
-                        <InfoCard
+                        <CreateCard
                             setRecommendations={setRecommendations}
                             recommendations={recommendations}
                             spaceId={spaceId}
                             spaceName={spaceName}
-                            toCreate
                             handleSubmission={handleSubmission}
                             w={'100%'}
                             mb={4}
                         />
+
                         <SimpleGrid
                             gridTemplateColumns={
                                 'repeat(auto-fill, minmax(240px,1fr));'
@@ -209,7 +210,6 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                                 tags={content.tags}
                                                 title={content.title}
                                                 text={content.text}
-                                                toCreate={false}
                                                 date={
                                                     content.lastUpdated
                                                         ? new Date(
@@ -270,7 +270,6 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                                 tags={recommendation.tags}
                                                 title={recommendation.title}
                                                 text={recommendation.text}
-                                                toCreate={false}
                                             />
 
                                             <ButtonGroup alignSelf={'flex-end'}>
