@@ -239,21 +239,28 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                             </>
                         )}
                         <SimpleGrid
-                            minChildWidth="10rem"
                             width={'100%'}
-                            alignItems={'flex-end'}
                             gridTemplateColumns={
                                 'repeat(auto-fill, minmax(240px,1fr));'
                             }
                             spacing={3}
                             mx={'auto'}
                             p={{ base: '0px', md: '1vw' }}
+                            boxShadow={'lg'}
+                            borderRadius={'lg'}
+                            bg={'gray.50'}
+                            zIndex={3}
                         >
                             {recommendations?.length > 0 &&
                                 typeof recommendations !== 'string' &&
                                 recommendations?.map(
                                     (recommendation: any, idx: number) => (
-                                        <VStack key={idx} width={'100%'}>
+                                        <VStack
+                                            key={idx}
+                                            w={'100%'}
+                                            h={'100%'}
+                                            justifyContent={'space-between'}
+                                        >
                                             <InfoCard
                                                 key={recommendation.id}
                                                 tags={recommendation.tags}
