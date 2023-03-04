@@ -8,6 +8,7 @@ import {
     Box,
     ButtonGroup,
     Divider,
+    Heading,
 } from '@chakra-ui/react';
 import InfoCard from './InfoCard';
 import React, { useEffect, useState } from 'react';
@@ -64,6 +65,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
 
     useEffect(() => {
         setSelectedTags('');
+        setRecommendations([]);
     }, [spaceId]);
 
     const handleSubmission = async (newCardValues: {
@@ -141,7 +143,6 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 maxHeight={32}
                                 overflowY={'scroll'}
                             >
-
                                 <Button
                                     key={0}
                                     h={16}
@@ -158,21 +159,10 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                             onClick={() =>
                                                 handleClickTags(tag as string)
                                             }
-                                            bg={
-                                                selectedTags.toLocaleLowerCase() ===
-                                                (
-                                                    tag as string
-                                                ).toLocaleLowerCase()
-                                                    ? 'blackAlpha.500'
-                                                    : 'whiteAlpha.500'
-                                            }
-                                            outlineColor={
-                                                selectedTags ===
-                                                (
-                                                    tag as string
-                                                ).toLocaleLowerCase()
-                                                    ? 'whiteAlpha.700'
-                                                    : ''
+                                            colorScheme={
+                                                selectedTags === tag
+                                                    ? 'blue'
+                                                    : 'gray'
                                             }
                                             whiteSpace={'normal'}
                                         >
@@ -193,13 +183,17 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                             mb={4}
                         />
                         <SimpleGrid
-                            columns={[2, 4]}
+                            gridTemplateColumns={
+                                'repeat(auto-fill, minmax(240px,1fr));'
+                            }
                             spacing={3}
-                            p={'35px'}
+                            mx={'auto'}
+                            p={{ base: '0px', md: '1vw' }}
                             boxShadow={'lg'}
                             borderRadius={'lg'}
                             width={'100%'}
                             bg={'gray.50'}
+                            zIndex={3}
                         >
                             {/* all cards being displayed */}
                             {filteredItems?.map(
@@ -227,22 +221,37 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 }
                             )}
                         </SimpleGrid>
-                        <Divider
-                            orientation="horizontal"
-                            borderColor={'black'}
-                        />
+
+                        {recommendations?.length > 0 && (
+                            <>
+                                <Heading
+                                    mt={'32px !important'}
+                                    size={'sm'}
+                                    alignSelf={'flex-start'}
+                                >
+                                    AI recommendations
+                                </Heading>
+
+                                <Divider
+                                    orientation="horizontal"
+                                    borderColor={'gray.500'}
+                                />
+                            </>
+                        )}
                         <SimpleGrid
                             minChildWidth="10rem"
                             spacing={4}
                             width={'100%'}
                             alignItems={'flex-end'}
-                            gridTemplateColumns={'repeat(auto-fit, 300px)'}
+                            gridTemplateColumns={
+                                'repeat(auto-fit, minmax(250px, 1fr))'
+                            }
                         >
                             {recommendations?.length > 0 &&
                                 typeof recommendations !== 'string' &&
                                 recommendations?.map(
                                     (recommendation: any, idx: number) => (
-                                        <VStack key={idx}>
+                                        <VStack key={idx} width={'100%'}>
                                             <InfoCard
                                                 key={recommendation.id}
                                                 tags={recommendation.tags}
