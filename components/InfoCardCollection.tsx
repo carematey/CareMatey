@@ -233,6 +233,8 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                         <>
                                             <InfoCard
                                                 key={content.id}
+                                                cardId={Number(content.id)}
+                                                spaceId={spaceId}
                                                 tags={content.tags}
                                                 title={content.title}
                                                 text={content.text}
