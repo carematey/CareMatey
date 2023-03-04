@@ -4,7 +4,7 @@ import {   SpaceAuthorization } from '@prisma/client';
 import prisma from '../../../../lib/prismadb';
 export default function SpaceAuthorizationsHandler(
     req: NextApiRequest,
-    res: NextApiResponse<SpaceAuthorization[] | SpaceAuthorization | { error: string }>
+    res: NextApiResponse<SpaceAuthorization[] | SpaceAuthorization | Number  | { error: string }>
 ) {
 
     async function findUniqueSpaceAuthorization() {
@@ -101,7 +101,7 @@ export default function SpaceAuthorizationsHandler(
         case 'DELETE':
             return deleteSpaceAuthorization() 
                 .then(async (data) => {
-                    res.status(200).json(data);
+                    res.status(200).json(data.count);
                     await prisma.$disconnect();
                 })
                 .catch(async (e) => {
