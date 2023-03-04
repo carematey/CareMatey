@@ -31,6 +31,12 @@ export default function SpaceHandler(
     
     async function deleteSpace() {
 
+        const spaceAuthorizations = await prisma.spaceAuthorization.deleteMany({
+            where: {
+                spaceId: Number(req.query.uuid),
+            }
+        })
+
         const cards = await prisma.card.deleteMany({
             where: {
                 spaceId: Number(req.query.uuid),

@@ -35,6 +35,21 @@ const Space = () => {
         [selectedSpaceId, spaces]
     );
 
+    const {
+        data: authorizedSpaces,
+        error: authorizedSpacesError,
+        isLoading: authorizedSpacesLoading,
+    } = useSWR(
+        session?.user &&
+            selectedSpace?.name &&
+            `/api/spaces/${selectedSpace?.id}/authorization?userId=${session?.user?.id}`,
+        fetcher
+    );
+    console.log(
+        '🚀 ~ file: dashboard.tsx:26 ~ Space ~ authorizedSpaces:',
+        authorizedSpaces
+    );
+
     return (
         <Container h={'100%'} maxW={'100%'}>
             {session ? (
