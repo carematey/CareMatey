@@ -240,12 +240,14 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                         )}
                         <SimpleGrid
                             minChildWidth="10rem"
-                            spacing={4}
                             width={'100%'}
                             alignItems={'flex-end'}
                             gridTemplateColumns={
-                                'repeat(auto-fit, minmax(250px, 1fr))'
+                                'repeat(auto-fill, minmax(240px,1fr));'
                             }
+                            spacing={3}
+                            mx={'auto'}
+                            p={{ base: '0px', md: '1vw' }}
                         >
                             {recommendations?.length > 0 &&
                                 typeof recommendations !== 'string' &&
@@ -260,9 +262,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                                 toCreate={false}
                                             />
 
-                                            <ButtonGroup
-                                                alignSelf={'flex-start'}
-                                            >
+                                            <ButtonGroup alignSelf={'flex-end'}>
                                                 {/* save and cancel buttons */}
                                                 <Button
                                                     colorScheme="blue"
