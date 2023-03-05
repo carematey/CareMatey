@@ -26,10 +26,8 @@ import {
     ModalBody,
     ModalOverlay,
     ModalContent,
-    Divider,
-    Heading,
 } from '@chakra-ui/react';
-import { Space, SpaceAuthorization } from '@prisma/client';
+import { Space } from '@prisma/client';
 import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import React from 'react';
@@ -73,15 +71,6 @@ export function Sidebar({
         fetcher
     );
 
-    const {
-        data: authorizedSpaces,
-        error: authorizedSpacesError,
-        isLoading: authorizedSpacesLoading,
-    } = useSWR(
-        session?.user && `/api/spaces/${session?.user?.id}/authorization`,
-        fetcher
-    );
-
     const handleCreateSpace = async () => {
         if (!newSpaceName.length) return;
         setCreatingSpace(false);
@@ -114,6 +103,7 @@ export function Sidebar({
         });
         const newSpaces = spaces.filter((space: Space) => space.id !== spaceId);
         mutate(newSpaces, false);
+
         const data = await res.json();
     };
 
@@ -411,156 +401,6 @@ export function Sidebar({
                                         </>
                                     )
                                 ) : null}
-                            </ButtonGroup>
-                        ))}
-                        <Divider borderColor={'gray.400'} />
-                        <Heading color={'black'} opacity={'0.7'} size={'md'}>
-                            shared spaces
-                        </Heading>
-                        {authorizedSpaces?.map((space: SpaceAuthorization) => (
-                            <ButtonGroup
-                                key={space.spaceId}
-                                w={'100%'}
-                                alignItems={'center'}
-                            >
-                                {/* {editNameId === space.spaceId && editMode ? (
-                                    <Input
-                                        my={2}
-                                        onChange={(e) => {
-                                            setEditSpaceNameValue(
-                                                e.target.value
-                                            );
-                                        }}
-                                        defaultValue={space.spaceName || ''}
-                                    />
-                                ) : (
-                                    <MotionButton
-                                        whileHover={{
-                                            scale: 1.02,
-                                        }}
-                                        whileTap={{
-                                            scale: 0.99,
-                                        }}
-                                        w={'100%'}
-                                        my={2}
-                                        colorScheme={
-                                            selectedSpaceId === space.spaceId
-                                                ? 'blue'
-                                                : 'gray'
-                                        }
-                                        key={space.spaceId}
-                                        onClick={() => {
-                                            setSelectedSpaceId(space.spaceId);
-                                        }}
-                                    >
-                                        {space.spaceName}
-                                    </MotionButton>
-                                )}
-                                {editMode ? (
-                                    editNameId !== space.spaceId ? (
-                                        <>
-                                            <MotionIcon
-                                                whileHover={{
-                                                    scale: 1.02,
-                                                }}
-                                                whileTap={{
-                                                    scale: 0.99,
-                                                }}
-                                                size={'md'}
-                                                aria-label="edit"
-                                                colorScheme={
-                                                    editNameId === space.spaceId
-                                                        ? 'blue'
-                                                        : 'gray'
-                                                }
-                                                icon={<EditIcon />}
-                                                onClick={() => {
-                                                    setEditNameId(
-                                                        space.spaceId
-                                                    );
-                                                }}
-                                            />
-                                            <MotionIcon
-                                                whileHover={{
-                                                    scale: 1.02,
-                                                }}
-                                                whileTap={{
-                                                    scale: 0.99,
-                                                }}
-                                                size={'md'}
-                                                aria-label="delete"
-                                                icon={<DeleteIcon />}
-                                                onClick={() => {
-                                                    setDeleteSpaceId(
-                                                        space.spaceId
-                                                    );
-                                                    onOpen();
-                                                }}
-                                            />
-                                        </>
-                                    ) : (
-                                        <>
-                                            <MotionIcon
-                                                whileHover={{
-                                                    scale: 1.02,
-                                                }}
-                                                whileTap={{
-                                                    scale: 0.99,
-                                                }}
-                                                size={'md'}
-                                                aria-label="cancel"
-                                                colorScheme={'red'}
-                                                opacity={0.9}
-                                                icon={<CloseIcon />}
-                                                onClick={() => {
-                                                    setEditNameId(null);
-                                                    setEditSpaceNameValue('');
-                                                }}
-                                            />
-                                            <MotionIcon
-                                                whileHover={{
-                                                    scale: 1.02,
-                                                }}
-                                                whileTap={{
-                                                    scale: 0.99,
-                                                }}
-                                                size={'md'}
-                                                aria-label="save"
-                                                colorScheme={'teal'}
-                                                opacity={0.9}
-                                                icon={<CheckIcon />}
-                                                onClick={() => {
-                                                    handleEditSpaceName(
-                                                        space.spaceId
-                                                    );
-                                                    setEditNameId(null);
-                                                    setEditSpaceNameValue('');
-                                                }}
-                                            />
-                                        </>
-                                    )
-                                ) : null} */}
-                                <MotionButton
-                                    whileHover={{
-                                        scale: 1.02,
-                                    }}
-                                    whileTap={{
-                                        scale: 0.99,
-                                    }}
-                                    w={'100%'}
-                                    my={2}
-                                    colorScheme={
-                                        selectedSpaceId === space.spaceId
-                                            ? 'blue'
-                                            : 'gray'
-                                    }
-                                    key={space.spaceId}
-                                    onClick={() => {
-                                        setSelectedSpaceId(space.spaceId);
-                                    }}
-                                >
-                                    {space.spaceName}
-                                </MotionButton>
                             </ButtonGroup>
                         ))}
                     </AccordionPanel>
