@@ -2,17 +2,13 @@ import { AddIcon } from '@chakra-ui/icons';
 import {
     ChakraProps,
     Card,
-    Heading,
     Text,
     Tag,
-    Wrap,
-    WrapItem,
     Modal,
     ModalContent,
     ModalBody,
     useDisclosure,
     ModalHeader,
-    ModalFooter,
     ModalOverlay,
     HStack,
     Center,
@@ -22,16 +18,12 @@ import {
     VStack,
     InputGroup,
     InputRightElement,
-    Switch,
-    FormLabel,
     FormControl,
     TagLabel,
     TagCloseButton,
+    ButtonGroup,
 } from '@chakra-ui/react';
-import React from 'react';
-import theme from '../theme';
-import ReactMarkdown from 'react-markdown';
-import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 interface InfoCardProps extends ChakraProps {
@@ -70,6 +62,16 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
         tags: [],
     });
 
+    // remove all values when modal is closed
+    useEffect(() => {
+        setNewCardValues({
+            title: '',
+            text: '',
+            tags: [],
+        });
+        return () => {};
+    }, [isOpen]);
+
     const addTag = () => {
         setNewCardValues({
             ...newCardValues,
@@ -105,24 +107,6 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
         );
         setRecommendations(JSON.parse(aiData));
     };
-    const Tags = ({ tagSize }: { tagSize: string }) => (
-        <Wrap spacing={2} m={0} p={0} alignSelf={'flex-start'}>
-            {tags?.map((tag, index) => (
-                <WrapItem key={index}>
-                    <Tag
-                        p={1}
-                        textOverflow={'ellipsis'}
-                        whiteSpace={'nowrap'}
-                        overflow={'hidden'}
-                        size={tagSize}
-                        colorScheme={'blue'}
-                    >
-                        {tag.toString().toLowerCase()}
-                    </Tag>
-                </WrapItem>
-            ))}
-        </Wrap>
-    );
 
     return (
         <>
@@ -232,15 +216,22 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                     )}
                                 </HStack>
                                 <HStack gap={8}>
-                                    <Button
-                                        p={8}
-                                        className="submitButton"
-                                        onClick={(e) => {
-                                            onClose();
-                                            handleSubmission(newCardValues);
-                                        }}
-                                    >
-                                        <Text p={8}>Submit</Text>
+                                    <ButtonGroup>
+                                        <Button
+                                            p={8}
+                                            className="submitButton"
+                                            onClick={(e) => {
+                                                onClose();
+                                                handleSubmission(newCardValues);
+                                                setNewCardValues({
+                                                    title: '',
+                                                    text: '',
+                                                    tags: [],
+                                                });
+                                            }}
+                                        >
+                                            <Text p={8}>Submit</Text>
+                                        </Button>
                                         <Button
                                             colorScheme={'blue'}
                                             className="submitButton"
@@ -250,11 +241,16 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                                 onClose();
                                                 handleSubmission(newCardValues);
                                                 handleAI();
+                                                setNewCardValues({
+                                                    title: '',
+                                                    text: '',
+                                                    tags: [],
+                                                });
                                             }}
                                         >
                                             [+ AI]
                                         </Button>
-                                    </Button>
+                                    </ButtonGroup>
                                 </HStack>
                             </VStack>
                         </FormControl>

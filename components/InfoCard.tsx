@@ -3,9 +3,6 @@ import {
     Card,
     Heading,
     Text,
-    Tag,
-    Wrap,
-    WrapItem,
     Modal,
     ModalContent,
     ModalBody,
@@ -14,11 +11,20 @@ import {
     ModalFooter,
     ModalOverlay,
     HStack,
+    ButtonGroup,
+    IconButton,
+    Input,
+    Textarea,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import theme from '../theme';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import Tags from './Tags';
+import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { motion } from 'framer-motion';
+import useSWR from 'swr';
+import { fetcher } from '../utils/fetcher';
 
 interface InfoCardProps extends ChakraProps {
     text?: string;
@@ -26,44 +32,82 @@ interface InfoCardProps extends ChakraProps {
     tags?: string[];
     date?: Date;
     spaceId?: number;
+    cardId?: number;
     spaceName?: string | null | undefined;
 }
 
 const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
-    const { spaceId, tags, text, title, date, spaceName, ...rest } = props;
+    const { spaceId, tags, text, title, date, spaceName, cardId, ...rest } =
+        props;
+    const { data, mutate } = useSWR(
+        !!spaceId && `/api/cards/space/${spaceId}`,
+        fetcher
+    );
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [editMode, setEditMode] = React.useState<boolean>(false);
     const [newTag, setNewTag] = React.useState<string>(''); // TODO: add tags. Tags need to be able to add more than one
     const [newCardValues, setNewCardValues] = React.useState<{
         title: string;
         text: string;
         tags: string[];
     }>({
-        title: '',
-        text: '',
-        tags: [],
+        title: title as string,
+        text: text as string,
+        tags: tags as string[],
     });
+    const handleEditCard = async () => {
+        const res = await fetch(`/api/cards/${cardId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify({
+                title: newCardValues.title,
+                text: newCardValues.text,
+                tags: newCardValues.tags,
+            }),
+        });
+
+        mutate(
+            data?.map((card: any) => {
+                if (card.id === cardId) {
+                    return {
+                        ...card,
+                        title: newCardValues.title,
+                        text: newCardValues.text,
+                        tags: newCardValues.tags,
+                    };
+                }
+                return card;
+            })
+        );
+        const result = await res.json();
+        setEditMode(false);
+
+        onClose();
+    };
+    const handleDeleteCard = async () => {
+        const res = await fetch(`/api/cards/${cardId}`, {
+            method: 'DELETE',
+        });
+        mutate(
+            data?.filter((card: any) => {
+                return card.id !== cardId;
+            })
+        );
+        const result = await res.json();
+        onClose();
+    };
+
+    useEffect(() => {
+        setEditMode(false);
+        return () => {};
+    }, [isOpen]);
 
     const dt = { time: date };
     const updatedTime = new Date(dt!.time!).toLocaleDateString();
-    const Tags = ({ tagSize }: { tagSize: string }) => (
-        <Wrap spacing={2} m={0} p={0} alignSelf={'flex-start'}>
-            {tags?.map((tag, index) => (
-                <WrapItem key={index}>
-                    <Tag
-                        p={1}
-                        textOverflow={'ellipsis'}
-                        whiteSpace={'nowrap'}
-                        overflow={'hidden'}
-                        size={tagSize}
-                        colorScheme={'blue'}
-                    >
-                        {tag.toString().toLowerCase()}
-                    </Tag>
-                </WrapItem>
-            ))}
-        </Wrap>
-    );
-
+    const MotionIcon = motion(IconButton);
     return (
         <>
             <Card
@@ -85,16 +129,54 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                         ? text.slice(0, 90) + '...'
                         : (text as string)}
                 </ReactMarkdown>
-                <Tags tagSize={'sm'} />
+                <Tags tags={tags} tagSize={'sm'} />
             </Card>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent bg={'white'}>
-                    <ModalHeader>{title}</ModalHeader>
-                    <ModalBody>
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {text as string}
-                        </ReactMarkdown>
+                    <HStack w={'100%'} justifyContent={'space-between'}>
+                        {!editMode ? (
+                            <ModalHeader color={theme.colors.brand.blue.dark}>
+                                {title}
+                            </ModalHeader>
+                        ) : (
+                            <Input
+                                value={newCardValues?.title}
+                                onChange={(e) =>
+                                    setNewCardValues({
+                                        ...newCardValues,
+                                        title: e.target.value,
+                                    })
+                                }
+                                m={4}
+                            />
+                        )}
+                        <Text minW="10ch" p={4}>
+                            <>
+                                Last Updated
+                                <br />
+                                {updatedTime}
+                            </>
+                        </Text>
+                    </HStack>
+                    <ModalBody p={editMode ? 0 : 6}>
+                        {!editMode ? (
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {text as string}
+                            </ReactMarkdown>
+                        ) : (
+                            <Textarea
+                                w={'93%'}
+                                value={newCardValues?.text}
+                                onChange={(e) =>
+                                    setNewCardValues({
+                                        ...newCardValues,
+                                        text: e.target.value,
+                                    })
+                                }
+                                m={4}
+                            />
+                        )}
                     </ModalBody>
                     <ModalFooter>
                         <HStack
@@ -102,14 +184,80 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                             alignItems={'flex-start'}
                             w={'100%'}
                         >
-                            <Tags tagSize={'lg'} />
-                            <Text minW="10ch">
-                                <>
-                                    Last Updated
-                                    <br />
-                                    {updatedTime}
-                                </>
-                            </Text>
+                            <Tags tags={tags} tagSize={'lg'} />
+
+                            <ButtonGroup alignSelf={'flex-end'}>
+                                {!editMode ? (
+                                    <>
+                                        <MotionIcon
+                                            whileHover={{
+                                                scale: 1.02,
+                                            }}
+                                            whileTap={{
+                                                scale: 0.99,
+                                            }}
+                                            size={'md'}
+                                            aria-label="edit"
+                                            colorScheme={'gray'}
+                                            icon={<EditIcon />}
+                                            onClick={() => {
+                                                setEditMode(true);
+                                            }}
+                                        />
+                                        <MotionIcon
+                                            whileHover={{
+                                                scale: 1.02,
+                                            }}
+                                            whileTap={{
+                                                scale: 0.99,
+                                            }}
+                                            size={'md'}
+                                            aria-label="delete"
+                                            icon={<DeleteIcon />}
+                                            onClick={() => {
+                                                handleDeleteCard();
+                                                onOpen();
+                                            }}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        <MotionIcon
+                                            whileHover={{
+                                                scale: 1.02,
+                                            }}
+                                            whileTap={{
+                                                scale: 0.99,
+                                            }}
+                                            size={'md'}
+                                            aria-label="cancel"
+                                            colorScheme={'red'}
+                                            opacity={0.9}
+                                            icon={<CloseIcon />}
+                                            onClick={() => {
+                                                setEditMode(false);
+                                            }}
+                                        />
+                                        <MotionIcon
+                                            whileHover={{
+                                                scale: 1.02,
+                                            }}
+                                            whileTap={{
+                                                scale: 0.99,
+                                            }}
+                                            size={'md'}
+                                            aria-label="save"
+                                            colorScheme={'teal'}
+                                            opacity={0.9}
+                                            icon={<CheckIcon />}
+                                            onClick={() => {
+                                                setEditMode(false);
+                                                handleEditCard();
+                                            }}
+                                        />
+                                    </>
+                                )}
+                            </ButtonGroup>
                         </HStack>
                     </ModalFooter>
                 </ModalContent>

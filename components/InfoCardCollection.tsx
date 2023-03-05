@@ -17,6 +17,7 @@ import { fetcher } from '../utils/fetcher';
 import theme from '../theme';
 import { useSession } from 'next-auth/react';
 import CreateCard from './CreateCard';
+import AiCard from './AiCard';
 /*
     dataSource is used to define where the data is coming from.
     Then we fill the InfoCardCollection with all the InfoCards
@@ -24,6 +25,24 @@ import CreateCard from './CreateCard';
     Run the API here and then use the response to create InfoCard
     Components
 */
+// const mockData = [
+//     {
+//         title: 'How to',
+//         text: 'The AI is a tool that can help you find',
+//         tags: ['AI', 'Tool', 'Resource'],
+//     },
+//     {
+//         title: 'What is the AI',
+//         text: 'The AI is a tool that can help you find the best resource/ The AI is a tool that can help you find the best resource',
+//         tags: ['AI', 'Tool', 'Resource'],
+//     },
+//     {
+//         // vary the length of the text
+//         title: 'How to use the AI sdfgfd dfsg  sdf',
+//         text: 'The AI is a tool that can help you find the best resource. lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+//         tags: ['AI', 'Tool', 'Resource'],
+//     },
+// ];
 
 interface InfoCardCollectionProps extends ChakraProps {
     text?: string;
@@ -62,7 +81,14 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         cardData?.map((item: InfoCardCollectionProps) => item.tags).flat()
     );
 
-    const [recommendations, setRecommendations] = useState([]);
+    const [recommendations, setRecommendations] = useState<
+        {
+            title: string;
+            text: string;
+            tags: string[];
+            lastUpdated?: string;
+        }[]
+    >([]);
 
     useEffect(() => {
         setSelectedTags('');
@@ -207,6 +233,8 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                         <>
                                             <InfoCard
                                                 key={content.id}
+                                                cardId={Number(content.id)}
+                                                spaceId={spaceId}
                                                 tags={content.tags}
                                                 title={content.title}
                                                 text={content.text}
@@ -259,55 +287,18 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 typeof recommendations !== 'string' &&
                                 recommendations?.map(
                                     (recommendation: any, idx: number) => (
-                                        <VStack
-                                            key={idx}
-                                            w={'100%'}
-                                            h={'100%'}
-                                            justifyContent={'space-between'}
-                                        >
-                                            <InfoCard
-                                                key={recommendation.id}
-                                                tags={recommendation.tags}
-                                                title={recommendation.title}
-                                                text={recommendation.text}
-                                            />
-
-                                            <ButtonGroup alignSelf={'flex-end'}>
-                                                {/* save and cancel buttons */}
-                                                <Button
-                                                    colorScheme="blue"
-                                                    onClick={() => {
-                                                        handleSubmission({
-                                                            title: recommendation.title,
-                                                            text: recommendation.text,
-                                                            tags: recommendation.tags,
-                                                        });
-                                                        setRecommendations(
-                                                            recommendations.filter(
-                                                                (rec: any) =>
-                                                                    rec.title !==
-                                                                    recommendation.title
-                                                            )
-                                                        );
-                                                    }}
-                                                >
-                                                    Save
-                                                </Button>
-                                                <Button
-                                                    onClick={() =>
-                                                        setRecommendations(
-                                                            recommendations.filter(
-                                                                (rec: any) =>
-                                                                    rec.title !==
-                                                                    recommendation.title
-                                                            )
-                                                        )
-                                                    }
-                                                >
-                                                    Cancel
-                                                </Button>
-                                            </ButtonGroup>
-                                        </VStack>
+                                        <AiCard
+                                            recommendation={recommendation}
+                                            setRecommendations={
+                                                setRecommendations
+                                            }
+                                            recommendations={recommendations}
+                                            handleSubmission={handleSubmission}
+                                            key={recommendation.id}
+                                            tags={recommendation.tags}
+                                            title={recommendation.title}
+                                            text={recommendation.text}
+                                        />
                                     )
                                 )}
                         </SimpleGrid>
