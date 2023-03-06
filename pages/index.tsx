@@ -9,7 +9,7 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -37,7 +37,7 @@ const LandingPage = () => {
             >
                 <Container maxW="container.lg">
                     <Stack
-                        direction={['column', 'column', 'row', 'row']}
+                        direction={{ base: 'column', lg: 'row' }}
                         spacing={4}
                         align="center"
                         justify="space-between"
@@ -47,27 +47,16 @@ const LandingPage = () => {
                             initial={{ y: 100, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.5, ease: 'easeInOut' }}
-                            mt={{ base: 80, md: 0 }}
                         >
-                            <MotionBox
-                                width={'fit-content'}
-                                margin={{ base: 'auto', md: 'unset' }}
-                            >
-                                <Image
-                                    width={300}
-                                    height={150}
-                                    src="/images/dalle.png"
-                                    alt="Logo"
-                                />
-                            </MotionBox>
-
                             <Heading
                                 size="lg"
                                 mb={4}
                                 whiteSpace={'pre-wrap'}
                                 textAlign={{ base: 'center', md: 'left' }}
+                                w={{ base: '90%', md: '450px' }}
                             >
-                                Welcome to CareMatey
+                                Flexible task management software for teams and
+                                individuals.
                             </Heading>
 
                             <Text
@@ -86,6 +75,7 @@ const LandingPage = () => {
                                 colorScheme="blue"
                                 mb={4}
                                 float={{ base: 'unset', md: 'left' }}
+                                onClick={() => signIn()}
                             >
                                 Sign Up
                             </Button>
@@ -98,11 +88,14 @@ const LandingPage = () => {
                             transition={{ duration: 0.5, ease: 'easeInOut' }}
                             pb={{ base: 80, md: 0 }}
                             zIndex={10}
+                            pos={'relative'}
+                            width={'100%'}
+                            height={'400px'}
+                            maxW={'500px'}
                         >
                             <Image
-                                width={400}
-                                height={600}
-                                src="/images/landing1.png"
+                                fill
+                                src="/images/cute.jpg"
                                 alt="Pet sitting"
                             />
                         </MotionBox>
@@ -131,10 +124,12 @@ const LandingPage = () => {
                             </Heading>
 
                             <Text
+                                mx={{ base: 'auto', md: 'unset' }}
                                 fontSize="lg"
                                 whiteSpace={'pre-wrap'}
                                 color="white"
                                 mb={4}
+                                maxW={{ base: '90%', md: '450px' }}
                             >
                                 Care Matey is an easy-to-use platform that keeps
                                 all your house and pet sitting responsibilities
@@ -160,15 +155,40 @@ const LandingPage = () => {
                             whileInView={{ x: 0, opacity: 1 }}
                             viewport={{ once: true }}
                             transition={{ duration: 1, ease: 'easeInOut' }}
+                            width={'100%'}
+                            height={'400px'}
+                            maxW={'500px'}
                         >
                             <Image
                                 width={600}
                                 height={400}
-                                src="/images/landing1.png"
+                                src="/images/landing_1.jpg"
                                 alt="House sitting"
                             />
                         </MotionBox>
                     </Stack>
+                </Container>
+            </MotionBox>
+
+            <MotionBox bg="blue.600">
+                <Container px={0} mx={'0 !important'} minW={'100%'}>
+                    <MotionBox
+                        initial={{ x: 200, opacity: 0 }}
+                        whileInView={{ x: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1, ease: 'easeInOut' }}
+                        pos="relative"
+                        w={'100%'}
+                        minW={'100% !important'}
+                        zIndex={10}
+                        height={{ base: 'auto', md: '300px' }}
+                    >
+                        <Image
+                            fill
+                            src="/images/landing1.png"
+                            alt="Happy pets"
+                        />
+                    </MotionBox>
                 </Container>
             </MotionBox>
 
@@ -182,6 +202,7 @@ const LandingPage = () => {
                     >
                         <MotionBox
                             mb={8}
+                            maxW={{ base: '90%', md: '450px' }}
                             initial={{ x: -40, opacity: 0 }}
                             whileInView={{ x: 0, opacity: 1 }}
                             viewport={{ once: true }}
@@ -190,14 +211,14 @@ const LandingPage = () => {
                             <Image
                                 width={600}
                                 height={400}
-                                src="/images/landing1.png"
+                                src="/images/team.jpg"
                                 alt="Homeowner"
                             />
                         </MotionBox>
 
                         <MotionBox
                             textAlign={['center', 'center', 'left', 'left']}
-                            maxW={'700px'}
+                            maxW={{ base: '90%', md: '450px' }}
                             initial={{ x: 40, opacity: 0 }}
                             whileInView={{ x: 0, opacity: 1 }}
                             viewport={{ once: true }}
@@ -221,7 +242,12 @@ const LandingPage = () => {
                                 sitter, including emergency contacts, feeding
                                 schedules, and more.
                             </Text>
-                            <Button size="md" colorScheme="blue" mb={4}>
+                            <Button
+                                size="md"
+                                colorScheme="blue"
+                                mb={4}
+                                onClick={() => signIn()}
+                            >
                                 Sign Up Today!
                             </Button>
                         </MotionBox>
@@ -239,11 +265,11 @@ const LandingPage = () => {
                     >
                         <MotionBox
                             textAlign={['center', 'center', 'left', 'left']}
-                            maxW={'700px'}
                             initial={{ x: -200, opacity: 0 }}
                             whileInView={{ x: 0, opacity: 1 }}
                             viewport={{ once: true }}
                             transition={{ duration: 1, ease: 'easeInOut' }}
+                            maxW={{ base: '90%', md: '450px' }}
                         >
                             <Heading size="md" color="white" mb={4}>
                                 Experience Peace of Mind
@@ -268,12 +294,14 @@ const LandingPage = () => {
                                 colorScheme="blue"
                                 variant="outline"
                                 mb={4}
+                                onClick={() => signIn()}
                             >
                                 Sign Up
                             </Button>
                         </MotionBox>
 
                         <MotionBox
+                            maxW={{ base: '90%', md: '450px' }}
                             mb={8}
                             initial={{ x: 200, opacity: 0 }}
                             whileInView={{ x: 0, opacity: 1 }}
@@ -283,7 +311,7 @@ const LandingPage = () => {
                             <Image
                                 width={400}
                                 height={600}
-                                src="/images/landing1.png"
+                                src="/images/huh.jpg"
                                 alt="Happy pets"
                             />
                         </MotionBox>
