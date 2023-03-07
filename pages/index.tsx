@@ -31,9 +31,10 @@ const LandingPage = () => {
     return (
         <Box bg={bg} overflowY={'hidden'}>
             <Flex
+                className="landing-page-section-1"
                 justify="center"
                 align="center"
-                h={{ base: '110vh', md: '100vh' }}
+                h={{ base: '95vh', md: '100vh' }}
             >
                 <Container maxW="container.lg">
                     <Stack
@@ -41,12 +42,18 @@ const LandingPage = () => {
                         spacing={4}
                         align="center"
                         justify="space-between"
+                        pos={'relative'}
+                        zIndex={1}
                     >
                         <MotionBox
                             textAlign="center"
                             initial={{ y: 100, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.5, ease: 'easeInOut' }}
+                            transition={{
+                                duration: 0.5,
+                                delay: 0.1,
+                                ease: 'easeInOut',
+                            }}
                         >
                             <Heading
                                 size="lg"
@@ -58,44 +65,75 @@ const LandingPage = () => {
                                 Flexible task management software for teams and
                                 individuals.
                             </Heading>
-
-                            <Text
-                                fontSize="lg"
-                                color={textColor}
-                                mb={8}
-                                textAlign={{ base: 'center', md: 'left' }}
-                                whiteSpace={'pre-wrap'}
+                            <MotionBox
+                                initial={{
+                                    y: -80,
+                                    opacity: -1,
+                                    zIndex: -1,
+                                }}
+                                animate={{ y: 0, opacity: 1, zIndex: 0 }}
+                                transition={{
+                                    duration: 0.5,
+                                    delay: 0.25,
+                                    ease: 'easeInOut',
+                                }}
                             >
-                                The website that simplifies house and pet
-                                sitting!
-                            </Text>
+                                <Text
+                                    fontSize="lg"
+                                    color={textColor}
+                                    mb={8}
+                                    textAlign={{ base: 'center', md: 'left' }}
+                                    whiteSpace={'pre-wrap'}
+                                >
+                                    The website that simplifies house and pet
+                                    sitting!
+                                </Text>
+                            </MotionBox>
 
-                            <Button
-                                size="lg"
-                                colorScheme="blue"
-                                mb={4}
-                                float={{ base: 'unset', md: 'left' }}
-                                onClick={() => signIn()}
+                            <MotionBox
+                                initial={{
+                                    x: 880,
+                                    zIndex: -5,
+                                    opacity: 0,
+                                }}
+                                animate={{ x: 0, opacity: 1, zIndex: 0 }}
+                                transition={{
+                                    duration: 0.5,
+                                    delay: 0.55,
+                                    ease: 'easeInOut',
+                                }}
                             >
-                                Sign Up
-                            </Button>
+                                <Button
+                                    size="lg"
+                                    colorScheme="blue"
+                                    mb={4}
+                                    float={{ base: 'unset', md: 'left' }}
+                                    onClick={() => signIn()}
+                                >
+                                    Sign Up
+                                </Button>
+                            </MotionBox>
                         </MotionBox>
 
                         <MotionBox
                             mb={8}
-                            initial={{ y: 100, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.5, ease: 'easeInOut' }}
+                            initial={{
+                                x: 800,
+                                opacity: 0,
+                            }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ duration: 1, ease: 'easeInOut' }}
                             pb={{ base: 80, md: 0 }}
                             zIndex={10}
                             pos={'relative'}
                             width={'100%'}
-                            height={'400px'}
-                            maxW={'500px'}
+                            height={{ base: '400px', md: '700px' }}
+                            maxW={{ base: '270px', md: '550px' }}
                         >
                             <Image
+                                className="right-arrow-path"
                                 fill
-                                src="/images/cute.jpg"
+                                src="/images/team.jpg"
                                 alt="Pet sitting"
                             />
                         </MotionBox>
@@ -160,6 +198,7 @@ const LandingPage = () => {
                             maxW={'500px'}
                         >
                             <Image
+                                className="trapezoid-path"
                                 width={600}
                                 height={400}
                                 src="/images/landing_1.jpg"
@@ -209,9 +248,10 @@ const LandingPage = () => {
                             transition={{ duration: 1, ease: 'easeInOut' }}
                         >
                             <Image
+                                className="bevel-path"
                                 width={600}
                                 height={400}
-                                src="/images/team.jpg"
+                                src="/images/cute.jpg"
                                 alt="Homeowner"
                             />
                         </MotionBox>

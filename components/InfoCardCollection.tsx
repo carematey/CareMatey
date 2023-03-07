@@ -177,6 +177,10 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                     colorScheme={'blue'}
                                     color={'white'}
                                     borderRadius={'none'}
+                                    fontSize={{
+                                        base: 'xs',
+                                        sm: 'sm',
+                                    }}
                                 >
                                     clear filter
                                 </Button>
@@ -193,13 +197,16 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                                         tag as string
                                                     )
                                                 }
-                                                bg={
+                                                colorScheme={
                                                     selectedTags === tag
-                                                        ? '#ED6A5A'
-                                                        : 'gray.100'
+                                                        ? 'teal'
+                                                        : 'gray'
                                                 }
-                                                _hover={{ bg: '#ED6A5A' }}
                                                 whiteSpace={'normal'}
+                                                fontSize={{
+                                                    base: 'xs',
+                                                    sm: 'sm',
+                                                }}
                                             >
                                                 {tag?.toString()?.toLowerCase()}
                                             </Button>

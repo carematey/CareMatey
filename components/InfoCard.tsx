@@ -147,6 +147,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                     background={
                         'linear-gradient(50deg, rgba(255,255,255,.1) 0%, rgba(153,153,255,.1) 100%, rgba(166,240,255,.1) 100%)'
                     }
+                    backdropFilter={'blur( 4px )'}
                 />
                 <ModalContent
                     m={'auto'}
