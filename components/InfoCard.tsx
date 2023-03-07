@@ -110,13 +110,14 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
     const dt = { time: date };
     const updatedTime = new Date(dt!.time!).toLocaleDateString();
     const MotionIcon = motion(IconButton);
+
+    const gradientAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     return (
         <>
             <Card
                 p={4}
                 {...rest}
                 rounded={'lg'}
-                boxShadow={'lg'}
                 cursor={'pointer'}
                 onClick={onOpen}
                 minH={'170px'}
@@ -124,8 +125,14 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 maxW={{ base: 'inherit', md: '300px' }}
                 justifyContent={'space-between'}
                 justifySelf={'center'}
+                background={`linear-gradient(${
+                    gradientAngles[(cardId as number) % gradientAngles.length]
+                }deg, rgba(255,255,255,.1) 0%, rgba(153,153,255,.1) 100%, rgba(166,240,255,.1) 100%)`}
+                backdropFilter={'blur( 14.5px )'}
+                borderRadius={'10px'}
+                border={'1px solid rgba( 255, 255, 255, 0.18 )'}
             >
-                <Heading color={theme.colors.brand.blue.dark} size={'lg'}>
+                <Heading color={theme.colors.brand.blue.dark} size={'md'}>
                     {title}
                 </Heading>
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
@@ -136,8 +143,23 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 <Tags tags={tags} tagSize={'sm'} />
             </Card>
             <Modal size={'2xl'} isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent bg={'white'} maxH={'83vh'} overflowY={'scroll'}>
+                <ModalOverlay
+                    background={
+                        'linear-gradient(50deg, rgba(255,255,255,.1) 0%, rgba(153,153,255,.1) 100%, rgba(166,240,255,.1) 100%)'
+                    }
+                />
+                <ModalContent
+                    m={'auto'}
+                    bg={'white'}
+                    maxH={'83vh'}
+                    overflowY={'scroll'}
+                    background={
+                        'linear-gradient(50deg, rgba(255,255,255,.05) 0%, rgba(153,153,255,.05) 100%, rgba(166,240,255,.05) 100%)'
+                    }
+                    backdropFilter={'blur( 65.5px )'}
+                    borderRadius={'10px'}
+                    border={'1px solid rgba( 255, 255, 255, 0.18 )'}
+                >
                     <HStack w={'100%'} justifyContent={'space-between'}>
                         {!editMode ? (
                             <ModalHeader color={theme.colors.brand.blue.dark}>

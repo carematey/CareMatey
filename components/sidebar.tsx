@@ -568,7 +568,7 @@ export function Sidebar({
             </Accordion>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay>
-                    <ModalContent p={4}>
+                    <ModalContent p={4} m={'auto'}>
                         <ModalHeader>WARNING!</ModalHeader>
                         <ModalBody>
                             <Text>
