@@ -1,14 +1,22 @@
 .fullButtonIcon {
-	height: 6rem;
-	width: 6rem;
-	max-height: 30vh;
-	min-height: 3vh;
+    height: 6rem;
+    width: 6rem;
+    max-height: 30vh;
+    min-height: 3vh;
 }
 
-html, body {
-	overflow-x: hidden;
+html,
+body {
+    overflow-x: hidden;
 }
 
-* { 
-	scroll-behavior: smooth !important;
+* {
+    scroll-behavior: smooth !important;
+}
+
+/* for markdown tables */
+thead,
+td {
+    border: solid 1px #ddd;
+    padding-inline: 6px;
 }

@@ -142,7 +142,7 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                     </VStack>
                 </MotionCenter>
             </Card>
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
                 <ModalOverlay />
                 <ModalContent bg={'white'}>
                     <ModalHeader>
@@ -172,6 +172,7 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                         })
                                     }
                                     placeholder="Instruction content"
+                                    h={'40vh'}
                                     isRequired
                                 />
                                 <InputGroup>

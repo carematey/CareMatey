@@ -15,6 +15,8 @@ import {
     IconButton,
     Input,
     Textarea,
+    Box,
+    Container,
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import theme from '../theme';
@@ -123,7 +125,9 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 justifyContent={'space-between'}
                 justifySelf={'center'}
             >
-                <Heading color={theme.colors.brand.blue.dark}>{title}</Heading>
+                <Heading color={theme.colors.brand.blue.dark} size={'lg'}>
+                    {title}
+                </Heading>
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {text != undefined && text.length > 90
                         ? text.slice(0, 90) + '...'
@@ -131,9 +135,9 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 </ReactMarkdown>
                 <Tags tags={tags} tagSize={'sm'} />
             </Card>
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal size={'2xl'} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
-                <ModalContent bg={'white'}>
+                <ModalContent bg={'white'} maxH={'83vh'} overflowY={'scroll'}>
                     <HStack w={'100%'} justifyContent={'space-between'}>
                         {!editMode ? (
                             <ModalHeader color={theme.colors.brand.blue.dark}>
@@ -161,12 +165,15 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                     </HStack>
                     <ModalBody p={editMode ? 0 : 6}>
                         {!editMode ? (
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                {text as string}
-                            </ReactMarkdown>
+                            <Container overflowX={editMode ? 'clip' : 'scroll'}>
+                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                    {text as string}
+                                </ReactMarkdown>
+                            </Container>
                         ) : (
                             <Textarea
                                 w={'93%'}
+                                h={'40vh'}
                                 value={newCardValues?.text}
                                 onChange={(e) =>
                                     setNewCardValues({

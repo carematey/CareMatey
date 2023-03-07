@@ -173,9 +173,10 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 <Button
                                     key={0}
                                     h={16}
+                                    textOverflow={'wrap'}
                                     onClick={() => handleClickTags('')}
                                 >
-                                    CLEAR FILTER
+                                    clear filter
                                 </Button>
                                 {/* filter tags */}
                                 {Array.from(tagSet)?.map(
