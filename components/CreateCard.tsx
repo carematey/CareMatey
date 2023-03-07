@@ -105,7 +105,11 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
             `\"`,
             `"`
         );
-        setRecommendations(JSON.parse(aiData));
+        try {
+            setRecommendations(JSON.parse(aiData));
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
@@ -143,8 +147,23 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 </MotionCenter>
             </Card>
             <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
-                <ModalOverlay />
-                <ModalContent bg={'white'}>
+                <ModalOverlay
+                    background={
+                        'linear-gradient(50deg, rgba(255,255,255,.1) 0%, rgba(153,153,255,.1) 100%, rgba(166,240,255,.1) 100%)'
+                    }
+                />
+                <ModalContent
+                    m={'auto'}
+                    bg={'white'}
+                    maxH={'83vh'}
+                    overflowY={'scroll'}
+                    background={
+                        'linear-gradient(50deg, rgba(255,255,255,.05) 0%, rgba(153,153,255,.05) 100%, rgba(166,240,255,.05) 100%)'
+                    }
+                    backdropFilter={'blur( 65.5px )'}
+                    borderRadius={'10px'}
+                    border={'1px solid rgba( 255, 255, 255, 0.18 )'}
+                >
                     <ModalHeader>
                         {true // @todo: use isOwner
                             ? 'Create a new card'
@@ -154,6 +173,7 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                         <FormControl>
                             <VStack>
                                 <Input
+                                    bg={'#ffffff90'}
                                     onChange={(e) =>
                                         setNewCardValues({
                                             ...newCardValues,
@@ -165,6 +185,7 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                 />
 
                                 <Textarea
+                                    bg={'#ffffff90'}
                                     onChange={(e) =>
                                         setNewCardValues({
                                             ...newCardValues,
@@ -175,7 +196,7 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                     h={'40vh'}
                                     isRequired
                                 />
-                                <InputGroup>
+                                <InputGroup bg={'#ffffff90'}>
                                     <Input
                                         value={newTag.toLowerCase()}
                                         onChange={(e) =>
@@ -187,6 +208,7 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                     />
                                     <InputRightElement>
                                         <Button
+                                            colorScheme={'blue'}
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 addTag();

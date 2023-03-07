@@ -7,6 +7,7 @@ export default function Tags({
     tagSize: string;
     tags: string[] | undefined;
 }) {
+    const tagColors = ['pink', 'orange', 'blue', 'purple', 'green', 'red'];
     return (
         <Wrap spacing={2} m={0} p={0} pt={4} alignSelf={'flex-start'}>
             {tags?.map((tag: string, index: number) => (
@@ -17,7 +18,9 @@ export default function Tags({
                         whiteSpace={'nowrap'}
                         overflow={'hidden'}
                         size={tagSize}
-                        colorScheme={'blue'}
+                        colorScheme={
+                            tagColors[tag.toString().length % tagColors.length]
+                        }
                     >
                         {tag.toString().toLowerCase()}
                     </Tag>

@@ -161,20 +161,22 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 pos={'sticky'}
                                 top={'4rem'}
                                 zIndex={4}
-                                pt={4}
                                 boxShadow={'lg'}
                                 borderRadius={'lg'}
-                                bg={'gray.50'}
                                 width={'100%'}
                                 minChildWidth={28}
                                 maxHeight={32}
                                 overflowY={'scroll'}
+                                bg={'white'}
                             >
                                 <Button
                                     key={0}
                                     h={16}
                                     textOverflow={'wrap'}
                                     onClick={() => handleClickTags('')}
+                                    colorScheme={'blue'}
+                                    color={'white'}
+                                    borderRadius={'none'}
                                 >
                                     clear filter
                                 </Button>
@@ -183,6 +185,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                     (tag, index: number) => {
                                         return (
                                             <Button
+                                                borderRadius={'none'}
                                                 key={index + 1}
                                                 h={16}
                                                 onClick={() =>
@@ -190,11 +193,12 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                                         tag as string
                                                     )
                                                 }
-                                                colorScheme={
+                                                bg={
                                                     selectedTags === tag
-                                                        ? 'blue'
-                                                        : 'gray'
+                                                        ? '#ED6A5A'
+                                                        : 'gray.100'
                                                 }
+                                                _hover={{ bg: '#ED6A5A' }}
                                                 whiteSpace={'normal'}
                                             >
                                                 {tag?.toString()?.toLowerCase()}

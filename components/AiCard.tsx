@@ -2,15 +2,7 @@ import {
     ChakraProps,
     Card,
     Heading,
-    Text,
-    Modal,
-    ModalContent,
-    ModalBody,
     useDisclosure,
-    ModalHeader,
-    ModalFooter,
-    ModalOverlay,
-    HStack,
     ButtonGroup,
     Button,
     VStack,
@@ -86,6 +78,7 @@ const AiCard: React.FC<AiCardProps> = (props): JSX.Element => {
                 maxW={{ base: 'inherit', md: '300px' }}
                 justifyContent={'space-between'}
                 justifySelf={'center'}
+                bg={'#81AFB695'}
             >
                 <Card
                     p={4}
@@ -94,8 +87,14 @@ const AiCard: React.FC<AiCardProps> = (props): JSX.Element => {
                     maxW={{ base: 'inherit', md: '300px' }}
                     justifyContent={'space-between'}
                     justifySelf={'center'}
+                    background={
+                        'linear-gradient(50deg, rgba(255,255,255,.05) 0%, rgba(153,153,255,.05) 100%, rgba(166,240,255,.05) 100%)'
+                    }
+                    backdropFilter={'blur( 65.5px )'}
+                    borderRadius={'10px'}
+                    border={'1px solid rgba( 255, 255, 255, 0.18 )'}
                 >
-                    <Heading color={theme.colors.brand.blue.dark}>
+                    <Heading color={theme.colors.brand.blue.dark} size={'md'}>
                         {title}
                     </Heading>
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
