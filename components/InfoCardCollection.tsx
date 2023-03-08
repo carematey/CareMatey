@@ -6,7 +6,6 @@ import {
     Button,
     VStack,
     Box,
-    ButtonGroup,
     Divider,
     Heading,
 } from '@chakra-ui/react';
@@ -14,10 +13,10 @@ import InfoCard from './InfoCard';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
-import theme from '../theme';
 import { useSession } from 'next-auth/react';
 import CreateCard from './CreateCard';
 import AiCard from './AiCard';
+import { motion } from 'framer-motion';
 /*
     dataSource is used to define where the data is coming from.
     Then we fill the InfoCardCollection with all the InfoCards
@@ -44,6 +43,26 @@ import AiCard from './AiCard';
 //     },
 // ];
 
+const container = {
+    hidden: { opacity: 1, scale: 1 },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        transition: {
+            delayChildren: 0.025,
+            staggerChildren: 0.05,
+        },
+    },
+};
+
+const item = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+        y: 0,
+        opacity: 1,
+    },
+};
+
 interface InfoCardCollectionProps extends ChakraProps {
     text?: string;
     title?: string;
@@ -62,6 +81,8 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     const { data: session } = useSession();
     const { spaceId, spaceName, ...rest } = props;
 
+    const MotionBox = motion(Box);
+    const MotionGrid = motion(SimpleGrid);
     const {
         data: cardData,
         error: errorCards,
@@ -146,7 +167,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     return (
         <>
             {isLoading ? (
-                <Center>
+                <Center width={'100%'}>
                     <CircularProgress isIndeterminate />
                 </Center>
             ) : (
@@ -225,7 +246,10 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                             mb={4}
                         />
 
-                        <SimpleGrid
+                        <MotionGrid
+                            variants={container}
+                            initial="hidden"
+                            animate="visible"
                             gridTemplateColumns={
                                 'repeat(auto-fill, minmax(240px,1fr));'
                             }
@@ -242,9 +266,11 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                             {filteredItems?.map(
                                 (content: InfoCardCollectionProps) => {
                                     return (
-                                        <>
+                                        <MotionBox
+                                            key={content.id}
+                                            variants={item}
+                                        >
                                             <InfoCard
-                                                key={content.id}
                                                 cardId={Number(content.id)}
                                                 spaceId={spaceId}
                                                 tags={content.tags}
@@ -260,11 +286,11 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                                           )
                                                 }
                                             />
-                                        </>
+                                        </MotionBox>
                                     );
                                 }
                             )}
-                        </SimpleGrid>
+                        </MotionGrid>
 
                         {recommendations?.length > 0 && (
                             <>

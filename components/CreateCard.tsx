@@ -25,6 +25,8 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { tagColors } from '../utils/tagColors';
+import { handleDeleteTag } from '../utils/handleDeleteTags';
 
 interface InfoCardProps extends ChakraProps {
     text?: string;
@@ -52,6 +54,7 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
     const MotionCenter = motion(Center);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [newTag, setNewTag] = React.useState<string>(''); // TODO: add tags. Tags need to be able to add more than one
+
     const [newCardValues, setNewCardValues] = React.useState<{
         title: string;
         text: string;
@@ -78,12 +81,6 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
             tags: [...newCardValues.tags, newTag],
         });
         setNewTag('');
-    };
-    const handleDeleteTag = (index: number): void => {
-        const newTagValues: string[] = newCardValues.tags.filter((card) => {
-            return card !== newCardValues.tags[index];
-        });
-        setNewCardValues({ ...newCardValues, tags: newTagValues });
     };
 
     const handleAI = async () => {
@@ -225,13 +222,22 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                     {newCardValues.tags.map(
                                         (tag: string, idx: number) => (
                                             <Tag
-                                                colorScheme={'twitter'}
+                                                colorScheme={
+                                                    tagColors[
+                                                        tag.toString().length %
+                                                            tagColors.length
+                                                    ]
+                                                }
                                                 key={idx}
                                             >
                                                 <TagLabel>{tag}</TagLabel>
                                                 <TagCloseButton
                                                     onClick={() =>
-                                                        handleDeleteTag(idx)
+                                                        handleDeleteTag(
+                                                            idx,
+                                                            newCardValues,
+                                                            setNewCardValues
+                                                        )
                                                     }
                                                 />
                                             </Tag>

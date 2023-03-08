@@ -98,8 +98,8 @@ const LandingPage = () => {
                                 }}
                                 animate={{ x: 0, opacity: 1, zIndex: 0 }}
                                 transition={{
-                                    duration: 0.5,
-                                    delay: 0.55,
+                                    duration: 1.1,
+                                    delay: 0.45,
                                     ease: 'easeInOut',
                                 }}
                             >

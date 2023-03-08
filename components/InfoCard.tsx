@@ -15,7 +15,6 @@ import {
     IconButton,
     Input,
     Textarea,
-    Box,
     Container,
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
@@ -102,6 +101,21 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
         onClose();
     };
 
+    const handleDeleteTag = (index: number): void => {
+        const newTagValues: string[] = newCardValues.tags.filter((card) => {
+            return (
+                card.toLocaleLowerCase() !==
+                newCardValues.tags[index].toLocaleLowerCase()
+            );
+        });
+        setNewCardValues({ ...newCardValues, tags: newTagValues });
+    };
+    const handleAddTag = (tag: string): void => {
+        if (tag === '') return;
+        const newTagValues: string[] = [...newCardValues.tags, tag];
+        setNewCardValues({ ...newCardValues, tags: newTagValues });
+    };
+
     useEffect(() => {
         setEditMode(false);
         return () => {};
@@ -110,6 +124,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
     const dt = { time: date };
     const updatedTime = new Date(dt!.time!).toLocaleDateString();
     const MotionIcon = motion(IconButton);
+    const MotionModal = motion(ModalContent);
 
     const gradientAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     return (
@@ -149,148 +164,173 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                     }
                     backdropFilter={'blur( 4px )'}
                 />
-                <ModalContent
-                    m={'auto'}
-                    bg={'white'}
-                    maxH={'83vh'}
-                    overflowY={'scroll'}
-                    background={
-                        'linear-gradient(50deg, rgba(255,255,255,.05) 0%, rgba(153,153,255,.05) 100%, rgba(166,240,255,.05) 100%)'
-                    }
-                    backdropFilter={'blur( 65.5px )'}
-                    borderRadius={'10px'}
-                    border={'1px solid rgba( 255, 255, 255, 0.18 )'}
-                >
-                    <HStack w={'100%'} justifyContent={'space-between'}>
-                        {!editMode ? (
-                            <ModalHeader color={theme.colors.brand.blue.dark}>
-                                {title}
-                            </ModalHeader>
-                        ) : (
-                            <Input
-                                value={newCardValues?.title}
-                                onChange={(e) =>
-                                    setNewCardValues({
-                                        ...newCardValues,
-                                        title: e.target.value,
-                                    })
-                                }
-                                m={4}
-                            />
-                        )}
-                        <Text minW="10ch" p={4}>
-                            <>
-                                Last Updated
-                                <br />
-                                {updatedTime}
-                            </>
-                        </Text>
-                    </HStack>
-                    <ModalBody p={editMode ? 0 : 6}>
-                        {!editMode ? (
-                            <Container overflowX={editMode ? 'clip' : 'scroll'}>
-                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                    {text as string}
-                                </ReactMarkdown>
-                            </Container>
-                        ) : (
-                            <Textarea
-                                w={'93%'}
-                                h={'40vh'}
-                                value={newCardValues?.text}
-                                onChange={(e) =>
-                                    setNewCardValues({
-                                        ...newCardValues,
-                                        text: e.target.value,
-                                    })
-                                }
-                                m={4}
-                            />
-                        )}
-                    </ModalBody>
-                    <ModalFooter>
-                        <HStack
-                            justifyContent={'space-between'}
-                            alignItems={'flex-start'}
-                            w={'100%'}
-                        >
-                            <Tags tags={tags} tagSize={'lg'} />
-
-                            <ButtonGroup alignSelf={'flex-end'}>
-                                {!editMode ? (
-                                    <>
-                                        <MotionIcon
-                                            whileHover={{
-                                                scale: 1.02,
-                                            }}
-                                            whileTap={{
-                                                scale: 0.99,
-                                            }}
-                                            size={'md'}
-                                            aria-label="edit"
-                                            colorScheme={'gray'}
-                                            icon={<EditIcon />}
-                                            onClick={() => {
-                                                setEditMode(true);
-                                            }}
-                                        />
-                                        <MotionIcon
-                                            whileHover={{
-                                                scale: 1.02,
-                                            }}
-                                            whileTap={{
-                                                scale: 0.99,
-                                            }}
-                                            size={'md'}
-                                            aria-label="delete"
-                                            icon={<DeleteIcon />}
-                                            onClick={() => {
-                                                handleDeleteCard();
-                                                onOpen();
-                                            }}
-                                        />
-                                    </>
-                                ) : (
-                                    <>
-                                        <MotionIcon
-                                            whileHover={{
-                                                scale: 1.02,
-                                            }}
-                                            whileTap={{
-                                                scale: 0.99,
-                                            }}
-                                            size={'md'}
-                                            aria-label="cancel"
-                                            colorScheme={'red'}
-                                            opacity={0.9}
-                                            icon={<CloseIcon />}
-                                            onClick={() => {
-                                                setEditMode(false);
-                                            }}
-                                        />
-                                        <MotionIcon
-                                            whileHover={{
-                                                scale: 1.02,
-                                            }}
-                                            whileTap={{
-                                                scale: 0.99,
-                                            }}
-                                            size={'md'}
-                                            aria-label="save"
-                                            colorScheme={'teal'}
-                                            opacity={0.9}
-                                            icon={<CheckIcon />}
-                                            onClick={() => {
-                                                setEditMode(false);
-                                                handleEditCard();
-                                            }}
-                                        />
-                                    </>
-                                )}
-                            </ButtonGroup>
+                {isOpen && (
+                    <MotionModal
+                        initial={{
+                            opacity: isOpen ? 1 : 0, // prevent render while typing from causing an animation
+                            scale: isOpen ? 1 : 0.3,
+                        }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.35 }}
+                        m={'auto'}
+                        bg={'white'}
+                        maxH={'83vh'}
+                        overflowY={'scroll'}
+                        background={
+                            'linear-gradient(50deg, rgba(255,255,255,.05) 0%, rgba(153,153,255,.05) 100%, rgba(166,240,255,.05) 100%)'
+                        }
+                        backdropFilter={'blur( 65.5px )'}
+                        borderRadius={'10px'}
+                        border={'1px solid rgba( 255, 255, 255, 0.18 )'}
+                    >
+                        <HStack w={'100%'} justifyContent={'space-between'}>
+                            {!editMode ? (
+                                <ModalHeader
+                                    color={theme.colors.brand.blue.dark}
+                                >
+                                    {title}
+                                </ModalHeader>
+                            ) : (
+                                <Input
+                                    bg={'#ffffff90'}
+                                    value={newCardValues?.title}
+                                    onChange={(e) =>
+                                        setNewCardValues({
+                                            ...newCardValues,
+                                            title: e.target.value,
+                                        })
+                                    }
+                                    m={4}
+                                />
+                            )}
+                            <Text minW="10ch" p={4}>
+                                <>
+                                    Last Updated
+                                    <br />
+                                    {updatedTime}
+                                </>
+                            </Text>
                         </HStack>
-                    </ModalFooter>
-                </ModalContent>
+                        <ModalBody p={editMode ? 0 : 6}>
+                            {!editMode ? (
+                                <Container
+                                    overflowX={editMode ? 'clip' : 'scroll'}
+                                >
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                        {text as string}
+                                    </ReactMarkdown>
+                                </Container>
+                            ) : (
+                                <Textarea
+                                    w={'93%'}
+                                    h={'40vh'}
+                                    bg={'#ffffff90'}
+                                    value={newCardValues?.text}
+                                    onChange={(e) =>
+                                        setNewCardValues({
+                                            ...newCardValues,
+                                            text: e.target.value,
+                                        })
+                                    }
+                                    m={4}
+                                />
+                            )}
+                        </ModalBody>
+                        <ModalFooter>
+                            <HStack
+                                justifyContent={'space-between'}
+                                alignItems={'flex-start'}
+                                w={'100%'}
+                            >
+                                <Tags
+                                    tags={editMode ? newCardValues.tags : tags}
+                                    tagSize={'lg'}
+                                    editMode={editMode}
+                                    handleAddTag={handleAddTag}
+                                    handleDeleteTag={handleDeleteTag}
+                                />
+
+                                <ButtonGroup alignSelf={'flex-end'}>
+                                    {!editMode ? (
+                                        <>
+                                            <MotionIcon
+                                                whileHover={{
+                                                    scale: 1.02,
+                                                }}
+                                                whileTap={{
+                                                    scale: 0.99,
+                                                }}
+                                                size={'md'}
+                                                aria-label="edit"
+                                                colorScheme={'gray'}
+                                                icon={<EditIcon />}
+                                                onClick={() => {
+                                                    setEditMode(true);
+                                                }}
+                                            />
+                                            <MotionIcon
+                                                whileHover={{
+                                                    scale: 1.02,
+                                                }}
+                                                whileTap={{
+                                                    scale: 0.99,
+                                                }}
+                                                size={'md'}
+                                                aria-label="delete"
+                                                icon={<DeleteIcon />}
+                                                onClick={() => {
+                                                    handleDeleteCard();
+                                                    onOpen();
+                                                }}
+                                            />
+                                        </>
+                                    ) : (
+                                        <>
+                                            <MotionIcon
+                                                whileHover={{
+                                                    scale: 1.02,
+                                                }}
+                                                whileTap={{
+                                                    scale: 0.99,
+                                                }}
+                                                size={'md'}
+                                                aria-label="cancel"
+                                                colorScheme={'red'}
+                                                opacity={0.9}
+                                                icon={<CloseIcon />}
+                                                onClick={() => {
+                                                    setEditMode(false);
+                                                    setNewCardValues({
+                                                        title: title as string,
+                                                        text: text as string,
+                                                        tags: tags as string[],
+                                                    });
+                                                }}
+                                            />
+                                            <MotionIcon
+                                                whileHover={{
+                                                    scale: 1.02,
+                                                }}
+                                                whileTap={{
+                                                    scale: 0.99,
+                                                }}
+                                                size={'md'}
+                                                aria-label="save"
+                                                colorScheme={'teal'}
+                                                opacity={0.9}
+                                                icon={<CheckIcon />}
+                                                onClick={() => {
+                                                    setEditMode(false);
+                                                    handleEditCard();
+                                                }}
+                                            />
+                                        </>
+                                    )}
+                                </ButtonGroup>
+                            </HStack>
+                        </ModalFooter>
+                    </MotionModal>
+                )}
             </Modal>
         </>
     );

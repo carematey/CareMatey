@@ -39,7 +39,7 @@ td {
 .landing-page-section-1::before {
     content: "";
     position: absolute;
-    top: 30vh;
+    top: 60vh;
     left: 17vw;
     width: calc(max(340px, 35vw));
     height:  calc(max(340px, 35vw));
@@ -53,6 +53,19 @@ td {
     content: "";
     position: absolute;
     top: 70vh;
+    left: 80vw;
+    width: calc(max(300px, 35vw));
+    height:  calc(max(300px, 35vw));
+    background: linear-gradient(45deg, #022F5205, #022F5205);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+}
+
+.landing-page-section-1::after {
+    content: "";
+    position: absolute;
+    top: 30vh;
     left: 80vw;
     width: calc(max(300px, 35vw));
     height:  calc(max(300px, 35vw));
