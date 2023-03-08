@@ -413,8 +413,14 @@ export function Sidebar({
                                 ) : null}
                             </ButtonGroup>
                         ))}
-                        <Divider borderColor={'gray.400'} />
-                        <Heading color={'black'} opacity={'0.7'} size={'md'}>
+                        <Divider borderColor={'gray.400'} mt={4} />
+                        <Heading
+                            color={'black'}
+                            opacity={'0.7'}
+                            size={'md'}
+                            textDecoration={'none'}
+                            mt={8}
+                        >
                             shared spaces
                         </Heading>
                         {authorizedSpaces?.map((space: SpaceAuthorization) => (
