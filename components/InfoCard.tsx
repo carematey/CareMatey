@@ -165,13 +165,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                     backdropFilter={'blur( 4px )'}
                 />
                 {isOpen && (
-                    <MotionModal
-                        initial={{
-                            opacity: isOpen ? 1 : 0, // prevent render while typing from causing an animation
-                            scale: isOpen ? 1 : 0.3,
-                        }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.35 }}
+                    <ModalContent
                         m={'auto'}
                         bg={'white'}
                         maxH={'83vh'}
@@ -186,6 +180,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                         <HStack w={'100%'} justifyContent={'space-between'}>
                             {!editMode ? (
                                 <ModalHeader
+                                    flex={1}
                                     color={theme.colors.brand.blue.dark}
                                 >
                                     {title}
@@ -329,7 +324,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                 </ButtonGroup>
                             </HStack>
                         </ModalFooter>
-                    </MotionModal>
+                    </ModalContent>
                 )}
             </Modal>
         </>
