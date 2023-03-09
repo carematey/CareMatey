@@ -150,6 +150,7 @@ export function Sidebar({
                 base: 8,
                 md: '4rem',
             }}
+            mt="4rem"
             w={{
                 base: '100%',
                 md: '27.5vw',
@@ -157,9 +158,9 @@ export function Sidebar({
             alignSelf={'flex-start'}
         >
             <Accordion
+                bg={'gray.50'}
                 defaultIndex={[0]}
                 allowToggle
-                background={'#ffffff'}
                 py={6}
                 maxW={'473px'}
                 w={'100%'}

@@ -1,5 +1,6 @@
 import {
     ChakraProps,
+    Container,
     CircularProgress,
     SimpleGrid,
     Center,
@@ -165,20 +166,17 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
     // const homeName: string = data.space.name;
 
     return (
-        <>
+        <Box w={'100%'} bg={'gray.50'}>
             {isLoading ? (
                 <Center width={'100%'}>
                     <CircularProgress isIndeterminate />
                 </Center>
             ) : (
-                <Box
-                    w={'100%'}
-                    h={'calc(min(750px, 100vh) - 4rem)'}
-                    bg={'whiteAlpha.800'}
-                >
+                <Box w={'100%'} pt={{ base: 0, md: '6rem' }}>
                     <VStack w={'100%'}>
                         {Array.from(tagSet).length > 0 && (
                             <SimpleGrid
+                                id={'filterList'}
                                 pos={'sticky'}
                                 top={'4rem'}
                                 zIndex={4}
@@ -188,7 +186,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 minChildWidth={28}
                                 maxHeight={32}
                                 overflowY={'scroll'}
-                                bg={'white'}
+                                bg={'gray.50'}
                             >
                                 <Button
                                     key={0}
@@ -236,17 +234,9 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 )}
                             </SimpleGrid>
                         )}
-                        <CreateCard
-                            setRecommendations={setRecommendations}
-                            recommendations={recommendations}
-                            spaceId={spaceId}
-                            spaceName={spaceName}
-                            handleSubmission={handleSubmission}
-                            w={'100%'}
-                            mb={4}
-                        />
 
                         <MotionGrid
+                            id="infoCards"
                             variants={container}
                             initial="hidden"
                             animate="visible"
@@ -256,12 +246,21 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                             spacing={3}
                             mx={'auto'}
                             p={{ base: '0px', md: '1vw' }}
-                            boxShadow={'lg'}
-                            borderRadius={'lg'}
+                            // boxShadow={'lg'}
+                            // borderRadius={'lg'}
                             width={'100%'}
                             bg={'gray.50'}
                             zIndex={3}
                         >
+                            <MotionBox key={0} variants={item}>
+                                <CreateCard
+                                    setRecommendations={setRecommendations}
+                                    recommendations={recommendations}
+                                    spaceId={spaceId}
+                                    spaceName={spaceName}
+                                    handleSubmission={handleSubmission}
+                                />
+                            </MotionBox>
                             {/* all cards being displayed */}
                             {filteredItems?.map(
                                 (content: InfoCardCollectionProps) => {
@@ -308,42 +307,48 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 />
                             </>
                         )}
-                        <SimpleGrid
-                            width={'100%'}
-                            gridTemplateColumns={
-                                'repeat(auto-fill, minmax(240px,1fr));'
-                            }
-                            spacing={3}
-                            mx={'auto'}
-                            p={{ base: '0px', md: '1vw' }}
-                            boxShadow={'lg'}
-                            borderRadius={'lg'}
-                            bg={'gray.50'}
-                            zIndex={3}
-                        >
-                            {recommendations?.length > 0 &&
-                                typeof recommendations !== 'string' &&
-                                recommendations?.map(
-                                    (recommendation: any, idx: number) => (
-                                        <AiCard
-                                            recommendation={recommendation}
-                                            setRecommendations={
-                                                setRecommendations
-                                            }
-                                            recommendations={recommendations}
-                                            handleSubmission={handleSubmission}
-                                            key={recommendation.id}
-                                            tags={recommendation.tags}
-                                            title={recommendation.title}
-                                            text={recommendation.text}
-                                        />
-                                    )
-                                )}
-                        </SimpleGrid>
+                        {recommendations?.length > 0 && (
+                            <SimpleGrid
+                                width={'100%'}
+                                gridTemplateColumns={
+                                    'repeat(auto-fill, minmax(240px,1fr));'
+                                }
+                                spacing={3}
+                                mx={'auto'}
+                                p={{ base: '0px', md: '1vw' }}
+                                boxShadow={'lg'}
+                                borderRadius={'lg'}
+                                bg={'gray.50'}
+                                zIndex={3}
+                            >
+                                {recommendations?.length > 0 &&
+                                    typeof recommendations !== 'string' &&
+                                    recommendations?.map(
+                                        (recommendation: any, idx: number) => (
+                                            <AiCard
+                                                recommendation={recommendation}
+                                                setRecommendations={
+                                                    setRecommendations
+                                                }
+                                                recommendations={
+                                                    recommendations
+                                                }
+                                                handleSubmission={
+                                                    handleSubmission
+                                                }
+                                                key={recommendation.id}
+                                                tags={recommendation.tags}
+                                                title={recommendation.title}
+                                                text={recommendation.text}
+                                            />
+                                        )
+                                    )}
+                            </SimpleGrid>
+                        )}
                     </VStack>
                 </Box>
             )}
-        </>
+        </Box>
     );
 };
 

@@ -36,7 +36,7 @@ const Space = () => {
     );
 
     return (
-        <Container h={'100%'} maxW={'100%'}>
+        <Container h={'100vh'} maxW={'100%'} bg={'gray.50'}>
             {session ? (
                 <>
                     <Stack

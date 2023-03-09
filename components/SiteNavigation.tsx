@@ -57,8 +57,9 @@ export default function Navigation() {
                 boxShadow={'sm'}
                 bg={'white'}
                 px={4}
-                position="sticky"
-                top="0"
+                w={'100%'}
+                position="fixed"
+                mt={{ base: '0' }}
                 zIndex={10}
             >
                 <Flex

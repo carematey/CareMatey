@@ -1,6 +1,8 @@
 import { AddIcon } from '@chakra-ui/icons';
 import {
     ChakraProps,
+    Container,
+    Box,
     Card,
     Text,
     Tag,
@@ -108,6 +110,7 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
             console.log(error);
         }
     };
+    const gradientAngles = [0, 45, 90, 135, 180, 225, 270, 315];
 
     return (
         <>
@@ -115,7 +118,6 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 p={4}
                 {...rest}
                 rounded={'lg'}
-                boxShadow={'lg'}
                 cursor={'pointer'}
                 onClick={onOpen}
                 minH={'170px'}
@@ -123,34 +125,26 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 maxW={{ base: 'inherit', md: '300px' }}
                 justifyContent={'space-between'}
                 justifySelf={'center'}
+                background={`linear-gradient(${gradientAngles[5]}deg, rgba(255,255,255,.1) 0%, rgba(153,153,255,.1) 100%, rgba(166,240,255,.1) 100%)`}
+                backdropFilter={'blur( 14.5px )'}
+                borderRadius={'10px'}
+                border={'1px solid rgba( 255, 255, 255, 0.18 )'}
             >
-                <MotionCenter
-                    whileHover={{
-                        scale: 1.01,
-                    }}
-                    whileTap={{
-                        scale: 0.99,
-                    }}
-                    my={'auto'}
-                    boxShadow={'lg'}
-                    borderRadius={'lg'}
-                    p={8}
-                    m={0}
-                >
-                    <VStack>
-                        <AddIcon color="#bbb" boxSize={10} />
-                        <Text textAlign={'center'}>Create a new card</Text>
-                    </VStack>
-                </MotionCenter>
+                <VStack margin={'auto'}>
+                    <AddIcon color="#bbb" boxSize={10} />
+                    <Text textAlign={'center'}>Create a new card</Text>
+                </VStack>
             </Card>
+
             <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
                 <ModalOverlay
                     background={
                         'linear-gradient(50deg, rgba(255,255,255,.1) 0%, rgba(153,153,255,.1) 100%, rgba(166,240,255,.1) 100%)'
                     }
+                    backdropFilter={'blur( 4px )'}
                 />
                 <ModalContent
-                    m={'auto'}
+                    m={{ base: 2, md: 'auto' }}
                     bg={'white'}
                     maxH={'83vh'}
                     overflowY={'scroll'}
@@ -247,8 +241,7 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                 <HStack gap={8}>
                                     <ButtonGroup>
                                         <Button
-                                            p={8}
-                                            className="submitButton"
+                                            className="submit submitButton"
                                             onClick={(e) => {
                                                 onClose();
                                                 handleSubmission(newCardValues);
@@ -263,7 +256,7 @@ const CreateCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                         </Button>
                                         <Button
                                             colorScheme={'blue'}
-                                            className="submitButton"
+                                            className="ai submitButton"
                                             // maxW={'8ch'}
                                             fontSize={'xs'}
                                             onClick={(e) => {
