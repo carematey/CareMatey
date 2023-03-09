@@ -7,14 +7,41 @@ import {
     Stack,
     Text,
     useColorModeValue,
+    useMediaQuery,
 } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
+import {
+    motion,
+    useScroll,
+    useTransform,
+    useViewportScroll,
+} from 'framer-motion';
 import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 const LandingPage = () => {
+    const [isLargeScreen] = useMediaQuery('(min-width: 992px)');
+    const { scrollYProgress } = useViewportScroll();
+    const { scrollYProgress: scrollYSection2 } = useScroll();
+    const xPosition = useTransform(
+        scrollYProgress,
+        isLargeScreen ? [0, 0.35, 0.45] : [0, 0.25, 0.3],
+        [900, 0, 0]
+    );
+    const xPositionText = useTransform(
+        scrollYProgress,
+        isLargeScreen ? [0, 0.35, 0.45] : [0, 0.25, 0.3],
+        [-900, 0, 0]
+    );
+    const xPosition2 = useTransform(
+        scrollYSection2,
+        isLargeScreen
+            ? [0, 0.2, 0.35, 0.4, 0.5, 1]
+            : [0, 0.1, 0.2, 0.35, 0.4, 1],
+        [1800, 1800, 1000, 700, 0, 0]
+    );
+
     const bg = useColorModeValue('gray.50', 'gray.800');
     const textColor = useColorModeValue('gray.700', 'gray.200');
     const { data: session } = useSession();
@@ -141,7 +168,7 @@ const LandingPage = () => {
                 </Container>
             </Flex>
 
-            <MotionBox bg="blue.600" py={24}>
+            <MotionBox bg="blue.600" pb={0} pt={16}>
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -152,10 +179,12 @@ const LandingPage = () => {
                         <MotionBox
                             textAlign={['center', 'center', 'left', 'left']}
                             maxW={'700px'}
-                            initial={{ x: -200, opacity: 0 }}
-                            whileInView={{ x: 0, opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 1, ease: 'easeInOut' }}
+                            style={{ x: xPositionText }}
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{
+                                duration: 0.5,
+                            }}
                         >
                             <Heading size="md" color="white" mb={4}>
                                 For House and Pet Sitters
@@ -177,22 +206,20 @@ const LandingPage = () => {
                                 with peace of mind.
                             </Text>
 
-                            <Button
-                                size="md"
-                                colorScheme="blue"
-                                variant="outline"
-                                mb={4}
-                            >
+                            {/* 
+                            hide button until we have an about page 
+                            <Button size="md" colorScheme="teal" mb={4}>
                                 Learn More
-                            </Button>
+                            </Button> */}
                         </MotionBox>
 
                         <MotionBox
                             mb={8}
-                            initial={{ x: 200, opacity: 0 }}
-                            whileInView={{ x: 0, opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 1, ease: 'easeInOut' }}
+                            style={
+                                isLargeScreen
+                                    ? { y: xPosition }
+                                    : { x: xPosition }
+                            }
                             width={'100%'}
                             height={'400px'}
                             maxW={'500px'}
@@ -209,29 +236,7 @@ const LandingPage = () => {
                 </Container>
             </MotionBox>
 
-            <MotionBox bg="blue.600">
-                <Container px={0} mx={'0 !important'} minW={'100%'}>
-                    <MotionBox
-                        initial={{ x: 200, opacity: 0 }}
-                        whileInView={{ x: 0, opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, ease: 'easeInOut' }}
-                        pos="relative"
-                        w={'100%'}
-                        minW={'100% !important'}
-                        zIndex={10}
-                        height={{ base: 'auto', md: '300px' }}
-                    >
-                        <Image
-                            fill
-                            src="/images/landing1.png"
-                            alt="Happy pets"
-                        />
-                    </MotionBox>
-                </Container>
-            </MotionBox>
-
-            <MotionBox bg="gray.100" py={24}>
+            <MotionBox bg="blue.600" pt={4}>
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -242,10 +247,7 @@ const LandingPage = () => {
                         <MotionBox
                             mb={8}
                             maxW={{ base: '90%', md: '450px' }}
-                            initial={{ x: -40, opacity: 0 }}
-                            whileInView={{ x: 0, opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 1, ease: 'easeInOut' }}
+                            style={{ y: xPosition2 }}
                         >
                             <Image
                                 className="bevel-path"
@@ -259,19 +261,16 @@ const LandingPage = () => {
                         <MotionBox
                             textAlign={['center', 'center', 'left', 'left']}
                             maxW={{ base: '90%', md: '450px' }}
-                            initial={{ x: 40, opacity: 0 }}
-                            whileInView={{ x: 0, opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 1, ease: 'easeInOut' }}
+                            style={{ x: xPosition2 }}
                         >
-                            <Heading size="md" color={textColor} mb={4}>
+                            <Heading size="md" color={'gray.200'} mb={4}>
                                 For Homeowners
                             </Heading>
 
                             <Text
                                 fontSize="lg"
                                 whiteSpace={'pre-wrap'}
-                                color={textColor}
+                                color={'gray.200'}
                                 mb={4}
                             >
                                 For homeowners, Care Matey provides a simple and
@@ -307,7 +306,7 @@ const LandingPage = () => {
                             textAlign={['center', 'center', 'left', 'left']}
                             initial={{ x: -200, opacity: 0 }}
                             whileInView={{ x: 0, opacity: 1 }}
-                            viewport={{ once: true }}
+                            viewport={{ once: true, amount: 0.45 }}
                             transition={{ duration: 1, ease: 'easeInOut' }}
                             maxW={{ base: '90%', md: '450px' }}
                         >
@@ -345,7 +344,7 @@ const LandingPage = () => {
                             mb={8}
                             initial={{ x: 200, opacity: 0 }}
                             whileInView={{ x: 0, opacity: 1 }}
-                            viewport={{ once: true }}
+                            viewport={{ once: true, amount: 0.45 }}
                             transition={{ duration: 1, ease: 'easeInOut' }}
                         >
                             <Image
@@ -365,7 +364,7 @@ const LandingPage = () => {
                 // add easing
                 initial={{ y: 10, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
+                viewport={{ once: true, amount: 0.45 }}
                 transition={{ duration: 0.5, ease: 'easeInOut' }}
             >
                 <Container maxW="container.lg">
