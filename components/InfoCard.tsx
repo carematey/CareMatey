@@ -17,7 +17,7 @@ import {
     Textarea,
     Container,
 } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import theme from '../theme';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -47,6 +47,10 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [editMode, setEditMode] = React.useState<boolean>(false);
     const [newTag, setNewTag] = React.useState<string>(''); // TODO: add tags. Tags need to be able to add more than one
+
+    const newTitleRef = useRef<HTMLInputElement | null>(null);
+    const newTextRef = useRef<HTMLTextAreaElement | null>(null);
+
     const [newCardValues, setNewCardValues] = React.useState<{
         title: string;
         text: string;
@@ -64,8 +68,8 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
             },
 
             body: JSON.stringify({
-                title: newCardValues.title,
-                text: newCardValues.text,
+                title: newTitleRef.current?.value,
+                text: newTextRef.current?.value,
                 tags: newCardValues.tags,
             }),
         });
@@ -75,8 +79,8 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 if (card.id === cardId) {
                     return {
                         ...card,
-                        title: newCardValues.title,
-                        text: newCardValues.text,
+                        title: newTitleRef.current,
+                        text: newTextRef.current,
                         tags: newCardValues.tags,
                     };
                 }
@@ -186,6 +190,7 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                         <HStack w={'100%'} justifyContent={'space-between'}>
                             {!editMode ? (
                                 <ModalHeader
+                                    flex={1}
                                     color={theme.colors.brand.blue.dark}
                                 >
                                     {title}
@@ -193,13 +198,8 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                             ) : (
                                 <Input
                                     bg={'#ffffff90'}
-                                    value={newCardValues?.title}
-                                    onChange={(e) =>
-                                        setNewCardValues({
-                                            ...newCardValues,
-                                            title: e.target.value,
-                                        })
-                                    }
+                                    defaultValue={newCardValues?.title}
+                                    ref={newTitleRef}
                                     m={4}
                                 />
                             )}
@@ -225,13 +225,8 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                                     w={'93%'}
                                     h={'40vh'}
                                     bg={'#ffffff90'}
-                                    value={newCardValues?.text}
-                                    onChange={(e) =>
-                                        setNewCardValues({
-                                            ...newCardValues,
-                                            text: e.target.value,
-                                        })
-                                    }
+                                    defaultValue={newCardValues?.text}
+                                    ref={newTextRef}
                                     m={4}
                                 />
                             )}
