@@ -9,7 +9,12 @@ import {
     useColorModeValue,
     useMediaQuery,
 } from '@chakra-ui/react';
-import { motion, useTransform, useViewportScroll } from 'framer-motion';
+import {
+    motion,
+    useScroll,
+    useTransform,
+    useViewportScroll,
+} from 'framer-motion';
 import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -18,11 +23,25 @@ import { useEffect } from 'react';
 const LandingPage = () => {
     const [isLargeScreen] = useMediaQuery('(min-width: 992px)');
     const { scrollYProgress } = useViewportScroll();
+    const { scrollYProgress: scrollYSection2 } = useScroll();
     const xPosition = useTransform(
         scrollYProgress,
-        isLargeScreen ? [0, 0.35, 0.4, 1] : [0, 0.25, 0.3, 1],
-        [900, 0, 0, -900]
+        isLargeScreen ? [0, 0.35, 0.45] : [0, 0.25, 0.3],
+        [900, 0, 0]
     );
+    const xPositionText = useTransform(
+        scrollYProgress,
+        isLargeScreen ? [0, 0.35, 0.45] : [0, 0.25, 0.3],
+        [-900, 0, 0]
+    );
+    const xPosition2 = useTransform(
+        scrollYSection2,
+        isLargeScreen
+            ? [0, 0.2, 0.35, 0.4, 0.5, 1]
+            : [0, 0.1, 0.2, 0.35, 0.4, 1],
+        [1800, 1800, 1000, 700, 0, 0]
+    );
+
     const bg = useColorModeValue('gray.50', 'gray.800');
     const textColor = useColorModeValue('gray.700', 'gray.200');
     const { data: session } = useSession();
@@ -149,7 +168,7 @@ const LandingPage = () => {
                 </Container>
             </Flex>
 
-            <MotionBox bg="blue.600" py={24}>
+            <MotionBox bg="blue.600" pb={0} pt={16}>
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -160,11 +179,11 @@ const LandingPage = () => {
                         <MotionBox
                             textAlign={['center', 'center', 'left', 'left']}
                             maxW={'700px'}
-                            style={{ x: xPosition }}
+                            style={{ x: xPositionText }}
                             initial={{ opacity: 0 }}
                             whileInView={{ opacity: 1 }}
                             transition={{
-                                duration: 1,
+                                duration: 0.5,
                             }}
                         >
                             <Heading size="md" color="white" mb={4}>
@@ -217,7 +236,7 @@ const LandingPage = () => {
                 </Container>
             </MotionBox>
 
-            <MotionBox bg="gray.200" py={24}>
+            <MotionBox bg="blue.600" pt={4}>
                 <Container maxW="container.lg">
                     <Stack
                         direction={['column', 'column', 'row', 'row']}
@@ -228,13 +247,7 @@ const LandingPage = () => {
                         <MotionBox
                             mb={8}
                             maxW={{ base: '90%', md: '450px' }}
-                            initial={{ x: -40, opacity: 0 }}
-                            whileInView={{ x: 0, opacity: 1 }}
-                            viewport={{ once: true, amount: 0.45 }}
-                            transition={{
-                                duration: 1,
-                                ease: 'easeInOut',
-                            }}
+                            style={{ y: xPosition2 }}
                         >
                             <Image
                                 className="bevel-path"
@@ -248,19 +261,16 @@ const LandingPage = () => {
                         <MotionBox
                             textAlign={['center', 'center', 'left', 'left']}
                             maxW={{ base: '90%', md: '450px' }}
-                            initial={{ x: 40, opacity: 0 }}
-                            whileInView={{ x: 0, opacity: 1 }}
-                            viewport={{ once: true, amount: 0.45 }}
-                            transition={{ duration: 1, ease: 'easeInOut' }}
+                            style={{ x: xPosition2 }}
                         >
-                            <Heading size="md" color={textColor} mb={4}>
+                            <Heading size="md" color={'gray.200'} mb={4}>
                                 For Homeowners
                             </Heading>
 
                             <Text
                                 fontSize="lg"
                                 whiteSpace={'pre-wrap'}
-                                color={textColor}
+                                color={'gray.200'}
                                 mb={4}
                             >
                                 For homeowners, Care Matey provides a simple and
