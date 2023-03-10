@@ -4,8 +4,7 @@ import NextAuth, { type NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import prisma from "../../../lib/prismadb";
 import GoogleProvider from "next-auth/providers/google";
-import AppleProvider from "next-auth/providers/apple";
-import FacebookProvider from "next-auth/providers/facebook";
+
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
