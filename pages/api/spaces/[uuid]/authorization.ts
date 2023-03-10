@@ -7,7 +7,7 @@ export default function SpaceAuthorizationsHandler(
     res: NextApiResponse<SpaceAuthorization[] | SpaceAuthorization | Number  | { error: string }>
 ) {
 
-    async function findUniqueSpaceAuthorization() {
+    async function findAllAuthorizedSpaces() {
         const spaceAuthorizations = await prisma.spaceAuthorization.findMany({
             where: {
                 authorizedUserId: req.query.uuid as string,
@@ -61,7 +61,7 @@ export default function SpaceAuthorizationsHandler(
     // switch case for different methods (GET, POST, PUT, DELETE)
     switch (req.method) {
         case 'GET':
-            return findUniqueSpaceAuthorization()
+            return findAllAuthorizedSpaces()
                 .then(async (data) => {
                     res.status(200).json(data);
                     await prisma.$disconnect();

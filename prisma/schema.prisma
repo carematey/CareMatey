@@ -41,9 +41,9 @@ model User {
   image              String?
   accounts           Account[]
   sessions           Session[]
-  SpaceAuthorization SpaceAuthorization[]
-  Card               Card[]
-  Space              Space[]
+  spaceAuthorization SpaceAuthorization[]
+  card               Card[]
+  space              Space[]
 }
 
 model VerificationToken {
@@ -62,13 +62,11 @@ model Space {
   archivedAt         DateTime?
   deletedAt          DateTime?
   userId             String?
-  SpaceAuthorization SpaceAuthorization[]
+  spaceAuthorization SpaceAuthorization[]
   cards              Card[]
-  User               User?                @relation(fields: [userId], references: [id])
-  Category           Category?            @relation(fields: [categoryId], references: [id])
+  user               User?                @relation(fields: [userId], references: [id])
+  categories         Category[]
   categoryId         Int?
-
-  @@map("space")
 }
 
 model Card {
@@ -85,12 +83,11 @@ model Card {
   deletedAt  DateTime?
   userId     String?
   space      Space     @relation(fields: [spaceId], references: [id])
-  User       User?     @relation(fields: [userId], references: [id])
-  Category   Category? @relation(fields: [categoryId], references: [id])
+  user       User?     @relation(fields: [userId], references: [id])
+  category   Category? @relation(fields: [categoryId], references: [id])
   categoryId Int?
 
   @@index([tags, creatorId])
-  @@map("card")
 }
 
 model SpaceAuthorization {
@@ -111,13 +108,10 @@ model Category {
   Name               String
   description        String?
   displayDescription Boolean @default(true)
-  spaceId            Space[]
+  spaceId            Int
+  Space              Space   @relation(fields: [spaceId], references: [id])
   cards              Card[]
 }
-
-
-
-
 
 //* To push db changes - https://www.prisma.io/docs/concepts/components/prisma-migrate/migrate-development-production
 // comment out DB_URL in .env

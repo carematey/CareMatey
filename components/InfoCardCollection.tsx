@@ -141,16 +141,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
         );
         const data = await res.json();
 
-        mutateCards([
-            ...cardData,
-            {
-                creatorId: session?.user?.id,
-                ownerId: session?.user?.id,
-                title: newCardValues.title,
-                text: newCardValues.text,
-                tags: newCardValues.tags,
-            },
-        ]);
+        mutateCards();
     };
 
     // filter of all items for the InfoCard component
