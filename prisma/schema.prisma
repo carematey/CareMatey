@@ -58,7 +58,7 @@ model Space {
   id                 Int                  @id @default(autoincrement())
   name               String?
   createdAt          DateTime             @default(now())
-  updatedAt          DateTime?
+  updatedAt          DateTime?            @default(now())
   archivedAt         DateTime?
   deletedAt          DateTime?
   userId             String?
@@ -80,7 +80,7 @@ model Card {
   ownerId    String
   creatorId  String
   createdAt  DateTime  @default(now())
-  updatedAt  DateTime?
+  updatedAt  DateTime? @default(now())
   archivedAt DateTime?
   deletedAt  DateTime?
   userId     String?
