@@ -1,14 +1,18 @@
-FROM node:19
+FROM node:alpine
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+COPY prisma ./prisma/
+
+COPY tsconfig.json ./
 
 COPY . .
 
-ENV PORT=3000
+RUN npm install
+
+RUN npx prisma generate
 
 EXPOSE 3000
 

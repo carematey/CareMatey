@@ -114,3 +114,23 @@ model Category {
   spaceId            Space[]
   cards              Card[]
 }
+
+
+
+
+
+//* To push db changes - https://www.prisma.io/docs/concepts/components/prisma-migrate/migrate-development-production
+// comment out DB_URL in .env
+// uncomment the Local Database section in .env
+// Run the database in Docker (~docker-compose up)
+// verify the database is valid with npm run dev and create some content.
+// run npx prisma migrate dev
+// if everything goes well, uncomment the correct DB_URL in .env
+// run npx prisma migrate deploy
+// if everything goes well do the same for the production database
+//
+// errors - 
+// npx prisma migrate reset - will undo the committed change
+// you can edit a migration file to handle errors
+//
+//* you must mark each errored migration as resolved or rolled-back - https://pris.ly/d/migrate-resolve
