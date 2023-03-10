@@ -22,7 +22,8 @@ export default function CardsHandler(
                 data: {
                     creatorId: req.body.creatorId,
                     ownerId: req.body.ownerId,
-                    spaceId: Number(req.query.uuid),
+                    User: {connect: {id: req.body.ownerId}},
+                    space: {connect: {id: req.body.uuid}},
                     title: req.body.title,
                     text: req.body.text,
                     tags: req.body.tags,
