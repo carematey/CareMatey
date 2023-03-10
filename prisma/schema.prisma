@@ -65,6 +65,8 @@ model Space {
   SpaceAuthorization SpaceAuthorization[]
   cards              Card[]
   User               User?                @relation(fields: [userId], references: [id])
+  Category           Category?            @relation(fields: [categoryId], references: [id])
+  categoryId         Int?
 
   @@map("space")
 }
@@ -84,6 +86,8 @@ model Card {
   userId     String?
   space      Space     @relation(fields: [spaceId], references: [id])
   User       User?     @relation(fields: [userId], references: [id])
+  Category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId Int?
 
   @@index([tags, creatorId])
   @@map("card")
@@ -100,4 +104,13 @@ model SpaceAuthorization {
   deletedAt        DateTime?
   authorizedUser   User      @relation(fields: [authorizedUserId], references: [id])
   space            Space     @relation(fields: [spaceId], references: [id])
+}
+
+model Category {
+  id                 Int     @id @unique @default(autoincrement())
+  Name               String
+  description        String?
+  displayDescription Boolean @default(true)
+  spaceId            Space[]
+  cards              Card[]
 }
