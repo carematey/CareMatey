@@ -23,7 +23,8 @@ export default function CardsHandler(
                     creatorId: req.body.creatorId,
                     ownerId: req.body.ownerId,
                     User: {connect: {id: req.body.ownerId}},
-                    space: {connect: {id: req.body.uuid}},
+                    space: {connect: {id: Number(req.query.uuid)}},
+                    // Category: {connect: {id: Number(req.body.categoryId)}}, uncomment when category is implemented
                     title: req.body.title,
                     text: req.body.text,
                     tags: req.body.tags,
