@@ -65,29 +65,28 @@ model Space {
   SpaceAuthorization SpaceAuthorization[]
   cards              Card[]
   User               User?                @relation(fields: [userId], references: [id])
-  Category           Category?            @relation(fields: [categoryId], references: [id])
+  Category           Category[]
   categoryId         Int?
 
   @@map("space")
 }
 
 model Card {
-  id         Int       @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   spaceId    Int
   title      String
   text       String
   tags       String[]
   ownerId    String
   creatorId  String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @default(now())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime?  @default(now())
   archivedAt DateTime?
   deletedAt  DateTime?
   userId     String?
-  space      Space     @relation(fields: [spaceId], references: [id])
-  User       User?     @relation(fields: [userId], references: [id])
-  Category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId Int?
+  space      Space      @relation(fields: [spaceId], references: [id])
+  User       User?      @relation(fields: [userId], references: [id])
+  Category   Category[]
 
   @@index([tags, creatorId])
   @@map("card")
@@ -111,13 +110,10 @@ model Category {
   Name               String
   description        String?
   displayDescription Boolean @default(true)
-  spaceId            Space[]
-  cards              Card[]
+  spaceId            Int
+  Space              Space   @relation(fields: [spaceId], references: [id])
+  Card               Card[]
 }
-
-
-
-
 
 //* To push db changes - https://www.prisma.io/docs/concepts/components/prisma-migrate/migrate-development-production
 // comment out DB_URL in .env
