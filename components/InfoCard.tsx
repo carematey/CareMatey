@@ -74,35 +74,22 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
             }),
         });
 
-        mutate(
-            data?.map((card: any) => {
-                if (card.id === cardId) {
-                    return {
-                        ...card,
-                        title: newTitleRef.current,
-                        text: newTextRef.current,
-                        tags: newCardValues.tags,
-                    };
-                }
-                return card;
-            })
-        );
-        const result = await res.json();
         setEditMode(false);
-
+        mutate();
         onClose();
+        const result = await res.json();
     };
     const handleDeleteCard = async () => {
         const res = await fetch(`/api/cards/${cardId}`, {
             method: 'DELETE',
         });
+        onClose();
         mutate(
             data?.filter((card: any) => {
                 return card.id !== cardId;
             })
         );
         const result = await res.json();
-        onClose();
     };
 
     const handleDeleteTag = (index: number): void => {
@@ -129,7 +116,6 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
     const updatedTime = new Date(dt!.time!).toLocaleDateString();
     const MotionIcon = motion(IconButton);
     const MotionModal = motion(ModalContent);
-
     const gradientAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     return (
         <>
@@ -145,7 +131,9 @@ const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                 justifyContent={'space-between'}
                 justifySelf={'center'}
                 background={`linear-gradient(${
-                    gradientAngles[(cardId as number) % gradientAngles.length]
+                    gradientAngles[
+                        ((cardId as number) || 0) % gradientAngles.length
+                    ]
                 }deg, rgba(255,255,255,.1) 0%, rgba(153,153,255,.1) 100%, rgba(166,240,255,.1) 100%)`}
                 backdropFilter={'blur( 14.5px )'}
                 borderRadius={'10px'}
