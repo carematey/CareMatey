@@ -1,12 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {  Card } from '@prisma/client';
+import { Card } from '@prisma/client';
 import prisma from '../../../lib/prismadb';
 export default function CardsHandler(
     req: NextApiRequest,
     res: NextApiResponse<Card[] | Card | { error: string }>
 ) {
-
     async function findUniqueCard() {
         const cards = await prisma.card.findUniqueOrThrow({
             where: {
@@ -17,47 +16,39 @@ export default function CardsHandler(
     }
     async function createCard() {
         // ... you will write your Prisma Client queries here
-        const card = await prisma.card.create(
-            {
-                data: {
-                    creatorId: req.body.creatorId,
-                    ownerId: req.body.ownerId,
-                    User: {connect: {id: req.body.ownerId}},
-                    space: {connect: {id: req.body.uuid}},
-                    title: req.body.title,
-                    text: req.body.text,
-                    tags: req.body.tags,
-                },
+        const card = await prisma.card.create({
+            data: {
+                creatorId: req.body.creatorId,
+                user: { connect: { id: req.body.ownerId } },
+                space: { connect: { id: Number(req.query.uuid) } },
+                title: req.body.title,
+                text: req.body.text,
+                tags: req.body.tags,
             },
-        );
+        });
         return card;
-        
     }
 
     async function deleteCard() {
-        const card = await prisma.card.delete(
-            {
-                where: {
-                    id: Number(req.query.uuid),
-                },
+        const card = await prisma.card.delete({
+            where: {
+                id: Number(req.query.uuid),
             },
-        );
+        });
         return card;
     }
 
     async function editCard() {
-        const card = await prisma.card.update(
-            {
-                where: {
-                    id: Number(req.query.uuid),
-                },
-                data: {
-                    title: req.body.title,
-                    text: req.body.text,
-                    tags: req.body.tags,
-                },
+        const card = await prisma.card.update({
+            where: {
+                id: Number(req.query.uuid),
             },
-        );
+            data: {
+                title: req.body.title,
+                text: req.body.text,
+                tags: req.body.tags,
+            },
+        });
         return card;
     }
     // switch case for different methods (GET, POST, PUT, DELETE)
@@ -74,7 +65,6 @@ export default function CardsHandler(
                     process.exit(1);
                 });
 
-            
         case 'POST':
             return createCard()
                 .then(async (data) => {
@@ -86,7 +76,7 @@ export default function CardsHandler(
                     await prisma.$disconnect();
                     process.exit(1);
                 });
-            
+
         case 'PUT':
             return editCard()
                 .then(async (data) => {
@@ -98,10 +88,9 @@ export default function CardsHandler(
                     await prisma.$disconnect();
                     process.exit(1);
                 });
-                
-            
+
         case 'DELETE':
-            return deleteCard() 
+            return deleteCard()
                 .then(async (data) => {
                     res.status(200).json(data);
                     await prisma.$disconnect();
