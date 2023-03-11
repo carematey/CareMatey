@@ -566,7 +566,8 @@ export function Sidebar({
                                         setSelectedSpaceId(space.spaceId);
                                     }}
                                 >
-                                    {space.spaceName}
+                                    {/* @todo find many on authorized space:  
+                                    {space.spaceName}  */}
                                 </MotionButton>
                             </ButtonGroup>
                         ))}

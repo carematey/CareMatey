@@ -1,12 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {   SpaceAuthorization } from '@prisma/client';
+import { SpaceAuthorization } from '@prisma/client';
 import prisma from '../../../../lib/prismadb';
 export default function SpaceAuthorizationsHandler(
     req: NextApiRequest,
-    res: NextApiResponse<SpaceAuthorization[] | SpaceAuthorization | Number  | { error: string }>
+    res: NextApiResponse<
+        SpaceAuthorization[] | SpaceAuthorization | Number | { error: string }
+    >
 ) {
-
     async function findUniqueSpaceAuthorization() {
         const spaceAuthorizations = await prisma.spaceAuthorization.findMany({
             where: {
@@ -17,45 +18,35 @@ export default function SpaceAuthorizationsHandler(
     }
     async function createSpaceAuthorization() {
         // ... you will write your Prisma Client queries here
-        const SpaceAuthorization = await prisma.spaceAuthorization.create(
-            {
-                data: {
-                    spaceId: Number(req.query.uuid),
-                    spaceName: req.body.spaceName,
-                    authorizedUserId: req.body.userId,
-                    role: req.body.role,
-
-                },
+        const SpaceAuthorization = await prisma.spaceAuthorization.create({
+            data: {
+                spaceId: Number(req.query.uuid),
+                authorizedUserId: req.body.userId,
+                role: req.body.role,
             },
-        );
+        });
         return SpaceAuthorization;
-        
     }
 
     async function deleteSpaceAuthorization() {
-        const spaceAuthorization = await prisma.spaceAuthorization.deleteMany(
-            {
-                where: {
-                    spaceId: Number(req.query.uuid),
-                },
+        const spaceAuthorization = await prisma.spaceAuthorization.deleteMany({
+            where: {
+                spaceId: Number(req.query.uuid),
             },
-        );
+        });
         return spaceAuthorization;
     }
 
     async function editSpaceAuthorization() {
-        const spaceAuthorization = await prisma.spaceAuthorization.update(
-            {
-                where: {
-                    id: Number(req.query.uuid),
-                },
-                data: {
-                    spaceName: req.body.spaceName,
-                    authorizedUserId: req.body.userId,
-                    role: req.body.role,
-                },
+        const spaceAuthorization = await prisma.spaceAuthorization.update({
+            where: {
+                id: Number(req.query.uuid),
             },
-        );
+            data: {
+                authorizedUserId: req.body.userId,
+                role: req.body.role,
+            },
+        });
         return spaceAuthorization;
     }
     // switch case for different methods (GET, POST, PUT, DELETE)
@@ -72,7 +63,6 @@ export default function SpaceAuthorizationsHandler(
                     process.exit(1);
                 });
 
-            
         case 'POST':
             return createSpaceAuthorization()
                 .then(async (data) => {
@@ -84,7 +74,7 @@ export default function SpaceAuthorizationsHandler(
                     await prisma.$disconnect();
                     process.exit(1);
                 });
-            
+
         case 'PUT':
             return editSpaceAuthorization()
                 .then(async (data) => {
@@ -96,10 +86,9 @@ export default function SpaceAuthorizationsHandler(
                     await prisma.$disconnect();
                     process.exit(1);
                 });
-                
-            
+
         case 'DELETE':
-            return deleteSpaceAuthorization() 
+            return deleteSpaceAuthorization()
                 .then(async (data) => {
                     res.status(200).json(data.count);
                     await prisma.$disconnect();
