@@ -60,17 +60,15 @@ model Card {
   title      String
   text       String
   tags       String[]
-  ownerId    String
   creatorId  String
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @default(now())
-  archivedAt DateTime?
   deletedAt  DateTime?
-  userId     String?
+  userId     String
   categoryId Int?
   category   Category? @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   space      Space     @relation(fields: [spaceId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user       User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user       User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([tags, creatorId], map: "Card_tags_creatorId_idx")
 }
@@ -78,8 +76,7 @@ model Card {
 model SpaceAuthorization {
   id               Int       @id @default(autoincrement())
   spaceId          Int
-  spaceName        String?
-  role             String    @default("READ")
+  role             String    @default("WRITE")
   authorizedUserId String
   createdAt        DateTime  @default(now())
   updatedAt        DateTime? @default(now())
