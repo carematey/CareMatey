@@ -12,6 +12,7 @@ import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
 import { useSession } from 'next-auth/react';
 import { Space } from '@prisma/client';
+import Categories from '../components/Categories';
 
 const Space = () => {
     const { data: session } = useSession();
@@ -36,7 +37,7 @@ const Space = () => {
     );
 
     return (
-        <Container h={'100vh'} maxW={'100%'} bg={'gray.50'}>
+        <Container pt={'5rem'} h={'100vh'} maxW={'100%'} bg={'gray.50'}>
             {session ? (
                 <>
                     <Stack
@@ -56,11 +57,12 @@ const Space = () => {
                             </>
                         ) : (
                             <>
-                                <Sidebar
+                                <Categories />
+                                {/* <Sidebar
                                     selectedSpaceId={selectedSpaceId}
                                     setSelectedSpaceId={setSelectedSpaceId}
                                     selectedSpace={selectedSpace}
-                                />
+                                /> */}
                                 <Divider
                                     display={{ base: 'none', md: 'block' }}
                                     orientation="vertical"

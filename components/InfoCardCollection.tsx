@@ -172,7 +172,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                     <CircularProgress isIndeterminate />
                 </Center>
             ) : (
-                <Box w={'100%'} pt={{ base: 0, md: '6rem' }}>
+                <Box w={'100%'}>
                     <VStack w={'100%'}>
                         {Array.from(tagSet).length > 0 && (
                             <SimpleGrid
@@ -240,7 +240,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                             variants={container}
                             initial="hidden"
                             animate="visible"
-                            gridTemplateColumns={
+                            gridTemplateC   olumns={
                                 'repeat(auto-fill, minmax(240px,1fr));'
                             }
                             spacing={3}

@@ -10,10 +10,10 @@ export default function App({
 }: AppProps) {
     return (
         <SessionProvider session={session}>
-        <ChakraProvider theme={theme}>
-            <SiteNavigation />
-            <Component {...pageProps} />
-        </ChakraProvider>
+            <ChakraProvider theme={theme}>
+                <SiteNavigation />
+                <Component {...pageProps} />
+            </ChakraProvider>
         </SessionProvider>
     );
 }
