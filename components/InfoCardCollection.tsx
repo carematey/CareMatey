@@ -140,18 +140,8 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                 }),
             }
         );
+        mutateCards();
         const data = await res.json();
-
-        mutateCards([
-            ...cardData,
-            {
-                creatorId: session?.user?.id,
-                ownerId: session?.user?.id,
-                title: newCardValues.title,
-                text: newCardValues.text,
-                tags: newCardValues.tags,
-            },
-        ]);
     };
 
     // filter of all items for the InfoCard component
@@ -168,11 +158,6 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
 
     return (
         <Box w={'100%'} bg={'gray.50'}>
-            {isLoading ? (
-                <Center width={'100%'}>
-                    <CircularProgress isIndeterminate />
-                </Center>
-            ) : (
                 <Box w={'100%'}>
                     <VStack w={'100%'}>
                         {Array.from(tagSet).length > 0 && (
@@ -188,167 +173,153 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                                 maxHeight={32}
                                 overflowY={'scroll'}
                                 bg={'gray.50'}
+                            <Button
+                                key={0}
+                                h={16}
+                                textOverflow={'wrap'}
+                                onClick={() => handleClickTags('')}
+                                colorScheme={'blue'}
+                                color={'white'}
+                                borderRadius={'none'}
+                                fontSize={{
+                                    base: 'xs',
+                                    sm: 'sm',
+                                }}
                             >
-                                <Button
-                                    key={0}
-                                    h={16}
-                                    textOverflow={'wrap'}
-                                    onClick={() => handleClickTags('')}
-                                    colorScheme={'blue'}
-                                    color={'white'}
-                                    borderRadius={'none'}
-                                    fontSize={{
-                                        base: 'xs',
-                                        sm: 'sm',
-                                    }}
-                                >
-                                    clear filter
-                                </Button>
-                                {/* filter tags */}
-                                {Array.from(tagSet)?.map(
-                                    (tag, index: number) => {
-                                        return (
-                                            <Button
-                                                borderRadius={'none'}
-                                                key={index + 1}
-                                                h={16}
-                                                onClick={() =>
-                                                    handleClickTags(
-                                                        tag as string
-                                                    )
-                                                }
-                                                colorScheme={
-                                                    selectedTags === tag
-                                                        ? 'teal'
-                                                        : 'gray'
-                                                }
-                                                whiteSpace={'normal'}
-                                                fontSize={{
-                                                    base: 'xs',
-                                                    sm: 'sm',
-                                                }}
-                                            >
-                                                {tag?.toString()?.toLowerCase()}
-                                            </Button>
-                                        );
-                                    }
-                                )}
-                            </SimpleGrid>
-                        )}
+                                clear filter
+                            </Button>
+                            {/* filter tags */}
+                            {Array.from(tagSet)?.map((tag, index: number) => {
+                                return (
+                                    <Button
+                                        borderRadius={'none'}
+                                        key={index + 1}
+                                        h={16}
+                                        onClick={() =>
+                                            handleClickTags(tag as string)
+                                        }
+                                        colorScheme={
+                                            selectedTags === tag
+                                                ? 'teal'
+                                                : 'gray'
+                                        }
+                                        whiteSpace={'normal'}
+                                        fontSize={{
+                                            base: 'xs',
+                                            sm: 'sm',
+                                        }}
+                                    >
+                                        {tag?.toString()?.toLowerCase()}
+                                    </Button>
+                                );
+                            })}
+                        </SimpleGrid>
+                    )}
 
-                        <MotionGrid
-                            id="infoCards"
-                            variants={container}
-                            initial="hidden"
-                            animate="visible"
+                    <MotionGrid
+                        id="infoCards"
+                        variants={container}
+                        initial="hidden"
+                        animate="visible"
+                        gridTemplateColumns={
+                            'repeat(auto-fill, minmax(240px,1fr));'
+                        }
+                        spacing={3}
+                        mx={'auto'}
+                        p={{ base: '0px', md: '1vw' }}
+                        // boxShadow={'lg'}
+                        // borderRadius={'lg'}
+                        width={'100%'}
+                        bg={'gray.50'}
+                        zIndex={3}
+                    >
+                        <CreateCard
+                            setRecommendations={setRecommendations}
+                            recommendations={recommendations}
+                            spaceId={spaceId}
+                            spaceName={spaceName}
+                            handleSubmission={handleSubmission}
+                        />
+
+                        {/* all cards being displayed */}
+                        {filteredItems?.map(
+                            (content: InfoCardCollectionProps) => {
+                                return (
+                                    <MotionBox key={content.id} variants={item}>
+                                        <InfoCard
+                                            cardId={Number(content.id)}
+                                            spaceId={spaceId}
+                                            tags={content.tags}
+                                            title={content.title}
+                                            text={content.text}
+                                            date={
+                                                content.lastUpdated
+                                                    ? new Date(
+                                                          content.lastUpdated
+                                                      )
+                                                    : new Date(
+                                                          content.createdAt as string
+                                                      )
+                                            }
+                                        />
+                                    </MotionBox>
+                                );
+                            }
+                        )}
+                    </MotionGrid>
+
+                    {recommendations?.length > 0 && (
+                        <>
+                            <Heading
+                                mt={'32px !important'}
+                                size={'sm'}
+                                alignSelf={'flex-start'}
+                            >
+                                AI recommendations
+                            </Heading>
+
+                            <Divider
+                                orientation="horizontal"
+                                borderColor={'gray.500'}
+                            />
+                        </>
+                    )}
+                    {recommendations?.length > 0 && (
+                        <SimpleGrid
+                            width={'100%'}
                             gridTemplateColumns={
                                 'repeat(auto-fill, minmax(240px,1fr));'
                             }
                             spacing={3}
                             mx={'auto'}
                             p={{ base: '0px', md: '1vw' }}
-                            // boxShadow={'lg'}
-                            // borderRadius={'lg'}
-                            width={'100%'}
+                            boxShadow={'lg'}
+                            borderRadius={'lg'}
                             bg={'gray.50'}
                             zIndex={3}
                         >
-                            <MotionBox key={0} variants={item}>
-                                <CreateCard
-                                    setRecommendations={setRecommendations}
-                                    recommendations={recommendations}
-                                    spaceId={spaceId}
-                                    spaceName={spaceName}
-                                    handleSubmission={handleSubmission}
-                                />
-                            </MotionBox>
-                            {/* all cards being displayed */}
-                            {filteredItems?.map(
-                                (content: InfoCardCollectionProps) => {
-                                    return (
-                                        <MotionBox
-                                            key={content.id}
-                                            variants={item}
-                                        >
-                                            <InfoCard
-                                                cardId={Number(content.id)}
-                                                spaceId={spaceId}
-                                                tags={content.tags}
-                                                title={content.title}
-                                                text={content.text}
-                                                date={
-                                                    content.lastUpdated
-                                                        ? new Date(
-                                                              content.lastUpdated
-                                                          )
-                                                        : new Date(
-                                                              content.createdAt as string
-                                                          )
-                                                }
-                                            />
-                                        </MotionBox>
-                                    );
-                                }
-                            )}
-                        </MotionGrid>
-
-                        {recommendations?.length > 0 && (
-                            <>
-                                <Heading
-                                    mt={'32px !important'}
-                                    size={'sm'}
-                                    alignSelf={'flex-start'}
-                                >
-                                    AI recommendations
-                                </Heading>
-
-                                <Divider
-                                    orientation="horizontal"
-                                    borderColor={'gray.500'}
-                                />
-                            </>
-                        )}
-                        {recommendations?.length > 0 && (
-                            <SimpleGrid
-                                width={'100%'}
-                                gridTemplateColumns={
-                                    'repeat(auto-fill, minmax(240px,1fr));'
-                                }
-                                spacing={3}
-                                mx={'auto'}
-                                p={{ base: '0px', md: '1vw' }}
-                                boxShadow={'lg'}
-                                borderRadius={'lg'}
-                                bg={'gray.50'}
-                                zIndex={3}
-                            >
-                                {recommendations?.length > 0 &&
-                                    typeof recommendations !== 'string' &&
-                                    recommendations?.map(
-                                        (recommendation: any, idx: number) => (
-                                            <AiCard
-                                                recommendation={recommendation}
-                                                setRecommendations={
-                                                    setRecommendations
-                                                }
-                                                recommendations={
-                                                    recommendations
-                                                }
-                                                handleSubmission={
-                                                    handleSubmission
-                                                }
-                                                key={recommendation.id}
-                                                tags={recommendation.tags}
-                                                title={recommendation.title}
-                                                text={recommendation.text}
-                                            />
-                                        )
-                                    )}
-                            </SimpleGrid>
-                        )}
-                    </VStack>
-                </Box>
-            )}
+                            {recommendations?.length > 0 &&
+                                typeof recommendations !== 'string' &&
+                                recommendations?.map(
+                                    (recommendation: any, idx: number) => (
+                                        <AiCard
+                                            recommendation={recommendation}
+                                            setRecommendations={
+                                                setRecommendations
+                                            }
+                                            recommendations={recommendations}
+                                            handleSubmission={handleSubmission}
+                                            key={recommendation.id}
+                                            tags={recommendation.tags}
+                                            title={recommendation.title}
+                                            text={recommendation.text}
+                                        />
+                                    )
+                                )}
+                        </SimpleGrid>
+                    )}
+                </VStack>
+            </Box>
         </Box>
     );
 };
