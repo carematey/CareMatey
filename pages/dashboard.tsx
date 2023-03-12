@@ -5,6 +5,9 @@ import {
     Text,
     Stack,
     CircularProgress,
+    VStack,
+    Grid,
+    GridItem,
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 import InfoCardCollection from '../components/InfoCardCollection';
@@ -12,6 +15,7 @@ import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
 import { useSession } from 'next-auth/react';
 import { Space } from '@prisma/client';
+import Categories from '../components/Categories';
 
 const Space = () => {
     const { data: session } = useSession();
@@ -36,7 +40,7 @@ const Space = () => {
     );
 
     return (
-        <Container h={'100vh'} maxW={'100%'} bg={'gray.50'}>
+        <Container pt={'5rem'} h={'100vh'} maxW={'100%'} bg={'gray.50'}>
             {session ? (
                 <>
                     <Stack
@@ -56,23 +60,29 @@ const Space = () => {
                             </>
                         ) : (
                             <>
-                                <Sidebar
-                                    selectedSpaceId={selectedSpaceId}
-                                    setSelectedSpaceId={setSelectedSpaceId}
-                                    selectedSpace={selectedSpace}
-                                />
+                                <Categories />
                                 <Divider
-                                    display={{ base: 'none', md: 'block' }}
+                                    display={{
+                                        base: 'none',
+                                        md: 'block',
+                                    }}
                                     orientation="vertical"
                                     borderColor={'whiteAlpha.'}
                                     h={'calc(min(750px, calc(100vh - 4rem)))'}
                                 />
-                                {selectedSpaceId && (
-                                    <InfoCardCollection
-                                        spaceName={selectedSpace?.name}
-                                        spaceId={selectedSpaceId}
+                                <VStack w={'100%'} alignItems={'center'}>
+                                    <Sidebar
+                                        selectedSpaceId={selectedSpaceId}
+                                        setSelectedSpaceId={setSelectedSpaceId}
+                                        selectedSpace={selectedSpace}
                                     />
-                                )}
+                                    {selectedSpaceId && (
+                                        <InfoCardCollection
+                                            spaceName={selectedSpace?.name}
+                                            spaceId={selectedSpaceId}
+                                        />
+                                    )}
+                                </VStack>
                             </>
                         )}
                     </Stack>

@@ -9,6 +9,7 @@ import {
     Box,
     Divider,
     Heading,
+    Text,
 } from '@chakra-ui/react';
 import InfoCard from './InfoCard';
 import React, { useEffect, useState } from 'react';
@@ -157,7 +158,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
 
     return (
         <Box w={'100%'} bg={'gray.50'}>
-            <Box w={'100%'} pt={{ base: 0, md: '6rem' }}>
+            <Box w={'100%'}>
                 <VStack w={'100%'}>
                     {Array.from(tagSet).length > 0 && (
                         <SimpleGrid
