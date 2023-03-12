@@ -158,21 +158,22 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
 
     return (
         <Box w={'100%'} bg={'gray.50'}>
-                <Box w={'100%'}>
-                    <VStack w={'100%'}>
-                        {Array.from(tagSet).length > 0 && (
-                            <SimpleGrid
-                                id={'filterList'}
-                                pos={'sticky'}
-                                top={'4rem'}
-                                zIndex={4}
-                                boxShadow={'lg'}
-                                borderRadius={'lg'}
-                                width={'100%'}
-                                minChildWidth={28}
-                                maxHeight={32}
-                                overflowY={'scroll'}
-                                bg={'gray.50'}
+            <Box w={'100%'}>
+                <VStack w={'100%'}>
+                    {Array.from(tagSet).length > 0 && (
+                        <SimpleGrid
+                            id={'filterList'}
+                            pos={'sticky'}
+                            top={'4rem'}
+                            zIndex={4}
+                            boxShadow={'lg'}
+                            borderRadius={'lg'}
+                            width={'100%'}
+                            minChildWidth={28}
+                            maxHeight={32}
+                            overflowY={'scroll'}
+                            bg={'gray.50'}
+                        >
                             <Button
                                 key={0}
                                 h={16}
