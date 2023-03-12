@@ -1,12 +1,4 @@
-import { SearchIcon } from '@chakra-ui/icons';
-import {
-    Box,
-    Square,
-    Text,
-    Center,
-    IconButton,
-    VStack,
-} from '@chakra-ui/react';
+import { Square, Text, Center, VStack } from '@chakra-ui/react';
 import React from 'react';
 import {
     FaAccessibleIcon,
@@ -51,9 +43,15 @@ export default function CategoryIcon({ categoryName }: Props) {
     };
 
     return (
-        <Square size={'90px'} border={'2px solid black'}>
+        <Square
+            size={'90px'}
+            border={'2px solid black'}
+            onClick={() => console.log(categoryName)}
+            cursor={'pointer'}
+        >
             <Center>
                 <VStack>
+                    {/* @Todo make these icons work when the client wants them to */}
                     {/* <FaDog />
                     <FaCat />
                     <FaPhone />
@@ -84,6 +82,7 @@ export default function CategoryIcon({ categoryName }: Props) {
                     <FaLaptop /> */}
 
                     <Text>{abbreviatedCategory(categoryName)}</Text>
+                    <Text textAlign={'center'}>{categoryName}</Text>
                 </VStack>
             </Center>
         </Square>

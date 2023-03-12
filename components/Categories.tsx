@@ -4,7 +4,27 @@ import CategoryIcon from './CategoryIcon';
 
 type Props = {};
 
-const names = [
+const categoryNames = [
+    'CJ',
+    'Scout',
+    'Emergency Contact',
+    'Wifi',
+    'Emergency Contact',
+    'Wifi',
+    'CJ',
+    'Scout',
+    'Emergency Contact',
+    'Wifi',
+    'Emergency Contact',
+    'Wifi',
+    'Emergency Contact',
+    'Wifi',
+    'CJ',
+    'Scout',
+    'Emergency Contact',
+    'Wifi',
+    'Emergency Contact',
+    'Wifi',
     'CJ',
     'Scout',
     'Emergency Contact',
@@ -31,20 +51,27 @@ export default function Categories({ ...rest }: Props) {
     return (
         <Box
             {...rest}
-            maxH={{ base: '12rem', md: '100vh' }}
             overflowY={'scroll'}
+            overflowX={'hidden'}
+            maxHeight={{ base: '12rem', md: '100vh' }}
+            width={{ base: '100%', md: '100px' }}
         >
             <SimpleGrid
                 columns={{
                     base: 3,
                     sm: 5,
-                    md: 2,
+                    md: 1,
                 }}
                 rowGap={2}
                 justifyItems={'center'}
             >
-                {names.map((name) => {
-                    return <CategoryIcon key={name} categoryName={name} />;
+                {categoryNames.map((categoryName) => {
+                    return (
+                        <CategoryIcon
+                            key={categoryName}
+                            categoryName={categoryName}
+                        />
+                    );
                 })}
             </SimpleGrid>
         </Box>

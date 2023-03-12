@@ -150,16 +150,12 @@ export function Sidebar({
                 base: 8,
                 md: '4rem',
             }}
-            mt="4rem"
-            w={{
-                base: '100%',
-                md: '27.5vw',
-            }}
+            w={'100%'}
             alignSelf={'flex-start'}
         >
             <Accordion
                 bg={'gray.50'}
-                defaultIndex={[0]}
+                defaultIndex={[1]}
                 allowToggle
                 py={6}
                 maxW={'473px'}
@@ -192,106 +188,7 @@ export function Sidebar({
                         </Box>
                     </AccordionButton>
 
-                    <AccordionPanel py={4}>
-                        <ButtonGroup w={'100%'}>
-                            <MotionIcon
-                                whileHover={{
-                                    scale: 1.02,
-                                }}
-                                whileTap={{
-                                    scale: 0.99,
-                                }}
-                                icon={<AddIcon />}
-                                colorScheme={creatingSpace ? 'blue' : 'gray'}
-                                aria-label="Add"
-                                w={'100%'}
-                                my={2}
-                                onClick={() => {
-                                    setCreatingSpace(true);
-                                    setTimeout(() => {
-                                        document
-                                            ?.getElementById('new-space')
-                                            ?.focus();
-                                    }, 100);
-                                }}
-                            />
-                            <MotionIcon
-                                whileHover={{
-                                    scale: 1.02,
-                                }}
-                                whileTap={{
-                                    scale: 0.99,
-                                }}
-                                icon={<EditIcon />}
-                                aria-label="Edit"
-                                colorScheme={editMode ? 'blue' : 'gray'}
-                                w={'100%'}
-                                my={2}
-                                onClick={() => {
-                                    setEditNameId(null);
-                                    setEditMode(!editMode);
-                                }}
-                            />
-                        </ButtonGroup>
-                    </AccordionPanel>
-
-                    {creatingSpace && (
-                        <>
-                            <AccordionPanel
-                                pt={4}
-                                display={'flex'}
-                                flexDir={'column'}
-                                pb={'0 !important'}
-                            >
-                                <InputGroup pb={'0 !important'}>
-                                    <Input
-                                        onChange={(e) => {
-                                            setNewSpaceName(e.target.value);
-                                        }}
-                                        id={'new-space'}
-                                        w={'100%'}
-                                        mb={2}
-                                    />
-                                    <InputRightElement>
-                                        <ButtonGroup isAttached pr={10}>
-                                            <MotionIcon
-                                                whileHover={{
-                                                    scale: 1.02,
-                                                }}
-                                                whileTap={{
-                                                    scale: 0.99,
-                                                }}
-                                                aria-label="cancel"
-                                                colorScheme={'red'}
-                                                opacity={0.9}
-                                                icon={<CloseIcon />}
-                                                onClick={() => {
-                                                    setCreatingSpace(false);
-                                                    setNewSpaceName('');
-                                                }}
-                                            />
-                                            <MotionIcon
-                                                whileHover={{
-                                                    scale: 1.02,
-                                                }}
-                                                whileTap={{
-                                                    scale: 0.99,
-                                                }}
-                                                aria-label="save"
-                                                colorScheme={'teal'}
-                                                opacity={0.9}
-                                                icon={<CheckIcon />}
-                                                onClick={() => {
-                                                    handleCreateSpace();
-                                                }}
-                                            />
-                                        </ButtonGroup>
-                                    </InputRightElement>
-                                </InputGroup>
-                            </AccordionPanel>
-                        </>
-                    )}
-                    <AccordionPanel pb={4} pt={0}>
+                    <AccordionPanel id="my-spaces" pb={4} pt={0}>
                         {/* map spaces here */}
                         {spaces?.map((space: Space) => (
                             <ButtonGroup
@@ -329,7 +226,9 @@ export function Sidebar({
                                             setSelectedSpaceId(space.id);
                                         }}
                                     >
-                                        {space.name}
+                                        <AccordionButton w="100%">
+                                            {space.name}
+                                        </AccordionButton>
                                     </MotionButton>
                                 )}
                                 {editMode ? (
@@ -414,7 +313,51 @@ export function Sidebar({
                                 ) : null}
                             </ButtonGroup>
                         ))}
-                        <Divider borderColor={'gray.400'} mt={4} />
+
+                        <ButtonGroup w={'100%'}>
+                            <MotionIcon
+                                whileHover={{
+                                    scale: 1.02,
+                                }}
+                                whileTap={{
+                                    scale: 0.99,
+                                }}
+                                icon={<AddIcon />}
+                                colorScheme={creatingSpace ? 'blue' : 'gray'}
+                                aria-label="Add"
+                                w={'100%'}
+                                my={2}
+                                onClick={() => {
+                                    setCreatingSpace(true);
+                                    setTimeout(() => {
+                                        document
+                                            ?.getElementById('new-space')
+                                            ?.focus();
+                                    }, 100);
+                                }}
+                            />
+                            <MotionIcon
+                                whileHover={{
+                                    scale: 1.02,
+                                }}
+                                whileTap={{
+                                    scale: 0.99,
+                                }}
+                                icon={<EditIcon />}
+                                aria-label="Edit"
+                                colorScheme={editMode ? 'blue' : 'gray'}
+                                w={'100%'}
+                                my={2}
+                                onClick={() => {
+                                    setEditNameId(null);
+                                    setEditMode(!editMode);
+                                }}
+                            />
+                        </ButtonGroup>
+                    </AccordionPanel>
+
+                    <Divider borderColor={'gray.400'} mt={4} />
+                    <AccordionPanel id="shared-spacess" pb={4} pt={0}>
                         <Heading
                             color={'black'}
                             opacity={'0.7'}
@@ -422,7 +365,7 @@ export function Sidebar({
                             textDecoration={'none'}
                             mt={8}
                         >
-                            shared spaces
+                            Spaces shared with you
                         </Heading>
                         {authorizedSpaces?.map((space: SpaceAuthorization) => (
                             <ButtonGroup
@@ -572,6 +515,63 @@ export function Sidebar({
                             </ButtonGroup>
                         ))}
                     </AccordionPanel>
+
+                    {creatingSpace && (
+                        <>
+                            <AccordionPanel
+                                pt={4}
+                                display={'flex'}
+                                flexDir={'column'}
+                                pb={'0 !important'}
+                            >
+                                <InputGroup pb={'0 !important'}>
+                                    <Input
+                                        onChange={(e) => {
+                                            setNewSpaceName(e.target.value);
+                                        }}
+                                        id={'new-space'}
+                                        w={'100%'}
+                                        mb={2}
+                                    />
+                                    <InputRightElement>
+                                        <ButtonGroup isAttached pr={10}>
+                                            <MotionIcon
+                                                whileHover={{
+                                                    scale: 1.02,
+                                                }}
+                                                whileTap={{
+                                                    scale: 0.99,
+                                                }}
+                                                aria-label="cancel"
+                                                colorScheme={'red'}
+                                                opacity={0.9}
+                                                icon={<CloseIcon />}
+                                                onClick={() => {
+                                                    setCreatingSpace(false);
+                                                    setNewSpaceName('');
+                                                }}
+                                            />
+                                            <MotionIcon
+                                                whileHover={{
+                                                    scale: 1.02,
+                                                }}
+                                                whileTap={{
+                                                    scale: 0.99,
+                                                }}
+                                                aria-label="save"
+                                                colorScheme={'teal'}
+                                                opacity={0.9}
+                                                icon={<CheckIcon />}
+                                                onClick={() => {
+                                                    handleCreateSpace();
+                                                }}
+                                            />
+                                        </ButtonGroup>
+                                    </InputRightElement>
+                                </InputGroup>
+                            </AccordionPanel>
+                        </>
+                    )}
                 </AccordionItem>
             </Accordion>
             <Modal isOpen={isOpen} onClose={onClose}>

@@ -9,6 +9,7 @@ import {
     Box,
     Divider,
     Heading,
+    Text,
 } from '@chakra-ui/react';
 import InfoCard from './InfoCard';
 import React, { useEffect, useState } from 'react';
@@ -240,7 +241,7 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
                             variants={container}
                             initial="hidden"
                             animate="visible"
-                            gridTemplateC   olumns={
+                            gridTemplateColumns={
                                 'repeat(auto-fill, minmax(240px,1fr));'
                             }
                             spacing={3}
