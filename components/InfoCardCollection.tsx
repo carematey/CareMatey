@@ -154,11 +154,25 @@ const InfoCardCollection: React.FC<InfoCardCollectionProps> = (
 
     // Pull this from the DB
     // const homeName: string = data.space.name;
-
+    const handleSendEmail = async () => {
+        const res = await fetch(`/api/email/${session?.user?.email}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                email: session?.user?.email,
+            }),
+        });
+        const data = await res.json();
+        console.log(data);
+    };
     return (
         <Box w={'100%'} bg={'gray.50'}>
             <Box w={'100%'} pt={{ base: 0, md: '6rem' }}>
                 <VStack w={'100%'}>
+                    <Button onClick={handleSendEmail}>send email</Button>
                     {Array.from(tagSet).length > 0 && (
                         <SimpleGrid
                             id={'filterList'}
