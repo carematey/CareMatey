@@ -4,7 +4,7 @@ import { Category } from '@prisma/client';
 import prisma from '../../../../lib/prismadb';
 import { NextRequest } from 'next/server';
 
-export default function SpaceHandler(
+export default function CategoryHandler(
     req: NextApiRequest,
     res: NextApiResponse<Category[] | Category | { error: string }>
 ) {
@@ -20,6 +20,52 @@ export default function SpaceHandler(
         return categories;
     }
 
+    async function createCategory() {
+        const category = await prisma.category.create({
+            data: {
+                space: { connect: { id: Number(req.query.uuid) } },
+                name: req.body.name,
+                description: req.body.description,
+                image: req.body.image,
+            },
+        });
+        return category;
+    }
+
+    async function updateCategoryPositions() {
+        interface CategoryPosition {
+            categoryId: number;
+            newPosition: number;
+        }
+
+        interface UpdateCategoryPositionsRequest {
+            categoryPositions: CategoryPosition[];
+        }
+
+        const { categoryPositions } =
+            req.body as UpdateCategoryPositionsRequest;
+
+        // Use a transaction to update all categories in a single atomic operation
+        const updatedCategories = await prisma.$transaction(
+            categoryPositions.map(({ categoryId, newPosition }) =>
+                prisma.category.update({
+                    where: { id: categoryId },
+                    data: { position: newPosition },
+                })
+            )
+        );
+
+        return updatedCategories;
+    }
+    //  Deletion needs to be handled in a separate api call
+    // async function deleteCategory() {
+    //     const category = await prisma.category.delete({
+    //         where: {
+    //             id: Number(req.query.uuid),
+    //         },
+    //     });
+    // }
+
     // switch case for different methods (GET, POST, PUT, DELETE)
     switch (req.method) {
         case 'GET':
@@ -33,13 +79,18 @@ export default function SpaceHandler(
                     await prisma.$disconnect();
                     process.exit(1);
                 });
-
             break;
         case 'POST':
-            // postCategories(req, res)
+            return createCategory().then(async (data) => {
+                res.status(201).json(data);
+                await prisma.$disconnect();
+            });
             break;
         case 'PUT':
-            // putCategories(req, res)
+            return updateCategoryPositions().then(async (data) => {
+                res.status(200).json(data);
+                await prisma.$disconnect;
+            });
             break;
         case 'DELETE':
             // deleteCategories(req, res)
