@@ -60,7 +60,7 @@ const Space = () => {
                             </>
                         ) : (
                             <>
-                                <Categories />
+                                <Categories spaceId={selectedSpaceId} />
                                 <Divider
                                     display={{
                                         base: 'none',

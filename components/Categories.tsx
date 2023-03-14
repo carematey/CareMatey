@@ -1,79 +1,51 @@
-import { Box, SimpleGrid, Square, Text } from '@chakra-ui/react';
-import React from 'react';
+import { Box, Wrap, Text, VStack } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import useSWR from 'swr';
+import { fetcher } from '../utils/fetcher';
 import CategoryIcon from './CategoryIcon';
 
-type Props = {};
+type Props = { spaceId: number | null };
 
-const categoryNames = [
-    'CJ',
-    'Scout',
-    'Emergency Contact',
-    'Wifi',
-    'Emergency Contact',
-    'Wifi',
-    'CJ',
-    'Scout',
-    'Emergency Contact',
-    'Wifi',
-    'Emergency Contact',
-    'Wifi',
-    'Emergency Contact',
-    'Wifi',
-    'CJ',
-    'Scout',
-    'Emergency Contact',
-    'Wifi',
-    'Emergency Contact',
-    'Wifi',
-    'CJ',
-    'Scout',
-    'Emergency Contact',
-    'Wifi',
-    'Emergency Contact',
-    'Wifi',
-    'CJ',
-    'Scout',
-    'Emergency Contact',
-    'Wifi',
-    'Emergency Contact',
-    'Wifi',
-    'Emergency Contact',
-    'Wifi',
-    'CJ',
-    'Scout',
-    'Emergency Contact',
-    'Wifi',
-    'Emergency Contact',
-    'Wifi',
-];
+export default function Categories({ spaceId, ...rest }: Props) {
+    const {
+        data: categories,
+        error: errorCategories,
+        isLoading: isLoading,
+    } = useSWR(!!spaceId && `/api/spaces/${spaceId}/categories`, fetcher);
 
-export default function Categories({ ...rest }: Props) {
     return (
         <Box
+            position={'sticky'}
+            top={0}
             {...rest}
             overflowY={'scroll'}
-            overflowX={'hidden'}
-            maxHeight={{ base: '12rem', md: '100vh' }}
-            width={{ base: '100%', md: '100px' }}
+            maxHeight={{ base: '8rem', md: '100vh' }}
+            width={{ base: '100%', md: '5.5rem' }}
         >
-            <SimpleGrid
-                columns={{
-                    base: 3,
-                    sm: 5,
-                    md: 1,
-                }}
-                rowGap={2}
-                justifyItems={'center'}
+            <Wrap
+                spacing={{ base: 1, md: 3 }}
+                justify={'center'}
+                shouldWrapChildren
             >
-                {categoryNames.map((categoryName) => {
+                {categories?.map((category: any) => {
                     return (
-                        <CategoryIcon
-                            key={categoryName}
-                            categoryName={categoryName}
-                        />
+                        <VStack key={category.id}>
+                            <CategoryIcon
+                                categoryName={category.name}
+                                src={category.name}
+                                category={category.name}
+                                categoryId={category.id}
+                            />
+                            <Text
+                                casing={'capitalize'}
+                                wordBreak={'break-word'}
+                            >
+                                {category.name}
+                            </Text>
+                        </VStack>
                     );
                 })}
-            </SimpleGrid>
+            </Wrap>
         </Box>
     );
 }
